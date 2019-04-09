@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjezyy.mapper.wms.TmsTrDocMapper" >
+    <resultMap id="TmsTrDoc" type="com.zjezyy.entity.TmsTrDoc" >
+        <id column="trid" property="trid" jdbcType="BIGINT" />
+        <result column="warehid" property="warehid" jdbcType="INTEGER" />
+        <result column="credate" property="credate" jdbcType="VARCHAR" />
+        <result column="operationtype" property="operationtype" jdbcType="SMALLINT" />
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        trid,warehid,credate ,operationtype
+    </sql>
+
+    <!-- <select id="getAll" resultMap="BaseResultMap"  >
+       SELECT 
+       <include refid="Base_Column_List" />
+	   FROM users
+    </select> -->
+
+    <select id="getOne" parameterType="java.lang.Integer" resultMap="TmsTrDoc" >
+        SELECT 
+       <include refid="Base_Column_List" />
+	   FROM Tms_tr_doc
+	   WHERE trid = #{trid}
+    </select>
+
+    <!-- <insert id="insert" parameterType="com.neo.entity.UserEntity" >
+       INSERT INTO 
+       		users
+       		(userName,passWord,user_sex) 
+       	VALUES
+       		(#{userName}, #{passWord}, #{userSex})
+    </insert>
+    
+    <update id="update" parameterType="com.neo.entity.UserEntity" >
+       UPDATE 
+       		users 
+       SET 
+       	<if test="userName != null">userName = #{userName},</if>
+       	<if test="passWord != null">passWord = #{passWord},</if>
+       	nick_name = #{nickName}
+       WHERE 
+       		id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="java.lang.Long" >
+       DELETE FROM
+       		 users 
+       WHERE 
+       		 id =#{id}
+    </delete> -->
+
+</mapper>

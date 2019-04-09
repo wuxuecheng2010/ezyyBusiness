@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>非模块化方式使用layui</title>
+<link rel="stylesheet" th:href="@{/static/plugs/layui/css/layui.css}">
+<link rel="stylesheet"
+	th:href="@{/static/plugs/bootstrap-3.3.7/css/bootstrap.min.css}">
+
+<style type="text/css">
+html, body {
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+}
+
+.container {
+	height: 100%;
+	width: 100%;
+}
+
+
+
+.item {
+	background-color: white;
+	height: 200px;
+}
+
+
+.container .row .clearfix {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.pblock {
+	height: 48px;
+}
+
+footer {
+	background-color: black;
+	text-align: center;
+	color: white;
+}
+</style>
+</head>
+<body>
+
+	<div class="container" style="background-color: gray;">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-inverse navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span><span
+								class="icon-bar"></span><span class="icon-bar"></span><span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">Brand</a>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<div class="pblock"></div>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="row clearfix">
+					<div class="col-md-3 column">
+						<div id="main" class="item"></div>
+					</div>
+					<div class="col-md-3 column">
+						<div id="main2" class="item"></div>
+					</div>
+					<div class="col-md-3 column">
+						<div id="main3" class="item"></div>
+					</div>
+					<div class="col-md-3 column">
+						<div id="main4" class="item"></div>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-3 column">
+						<div id="main5" class="item"></div>
+					</div>
+
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-3 column">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<footer class="navbar-fixed-bottom">
+					<div class="container">
+					<h5>版权所有@恩泽医药</h5>
+					</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<script th:src="@{/static/plugs/layui/layui.all.js}"></script>
+	<script th:src="@{/static/plugs/echarts/echarts.js}"></script>
+	<script th:src="@{/static/plugs/jquery-2.1.1/jquery-2.1.1.min.js}"></script>
+	<script th:src="@{/static/plugs/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+	<!--[if lt IE 9]>
+  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+	<script>
+//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+;!function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  
+  layer.msg('Hello World');
+  
+  
+  
+}();
+</script>
+
+	<script type="text/javascript">
+
+//基于准备好的dom，初始化echarts实例
+var myChart = echarts.init(document.getElementById('main'));
+var myChart2 = echarts.init(document.getElementById('main2'));
+var myChart3 = echarts.init(document.getElementById('main3'));
+var myChart4 = echarts.init(document.getElementById('main4'));
+var myChart5 = echarts.init(document.getElementById('main5'));
+
+// 指定图表的配置项和数据
+var option = {
+    title: {
+        text: '订单状态'
+    },
+    tooltip: {},
+    legend: {data:['行数']},
+    xAxis: {
+        data: ['下单','拣货中','完成','wx']
+    },
+    yAxis: {},
+    series: [{
+        name: '行数',
+        type: 'bar',
+        data: [[${types}]]
+    }]
+};
+
+// 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+myChart2.setOption(option);
+myChart3.setOption(option);
+myChart4.setOption(option);
+myChart5.setOption(option);
+</script>
+
+</body>
+</html>

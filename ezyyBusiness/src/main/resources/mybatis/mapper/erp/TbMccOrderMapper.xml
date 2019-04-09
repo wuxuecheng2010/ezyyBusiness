@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjezyy.mapper.erp.TbMccOrderMapper" >
+    <resultMap id="TbMccOrder" type="com.zjezyy.entity.erp.TbMccOrder" >
+        <id column="impid" property="impid" jdbcType="BIGINT" />
+        <result column="mcc_order_id" property="mcc_order_id" jdbcType="INTEGER" />
+        <result column="mcc_store_id" property="mcc_store_id" jdbcType="INTEGER" />
+        <result column="mcc_store_name" property="mcc_store_name" jdbcType="VARCHAR" />
+        
+        <result column="mcc_customer_id" property="mcc_customer_id" jdbcType="INTEGER" />
+        <result column="impdate" property="impdate" jdbcType="DATE" />
+        <result column="mcc_customer_group_id" property="mcc_customer_group_id" jdbcType="INTEGER" />
+        <result column="mcc_fullname" property="mcc_fullname" jdbcType="VARCHAR" />
+        <result column="mcc_email" property="mcc_email" jdbcType="VARCHAR" />
+        <result column="mcc_telephone" property="mcc_telephone" jdbcType="VARCHAR" />
+        <result column="mcc_total" property="mcc_total" jdbcType="NUMERIC" />
+        <result column="erp_icustomerid" property="erp_icustomerid" jdbcType="INTEGER" />
+        <result column="erp_vccustomername" property="erp_vccustomername" jdbcType="VARCHAR" />
+        <result column="mcc_shipping_zone" property="mcc_shipping_zone" jdbcType="VARCHAR" />
+        <result column="mcc_shipping_city" property="mcc_shipping_city" jdbcType="VARCHAR" />
+        <result column="mcc_shipping_district" property="mcc_shipping_district" jdbcType="VARCHAR" />
+        <result column="mcc_shipping_address" property="mcc_shipping_address" jdbcType="VARCHAR" />
+        <result column="mcc_comment" property="mcc_comment" jdbcType="VARCHAR" />
+    </resultMap>
+    
+
+
+
+    
+    
+
+    <insert id="insert" parameterType="com.zjezyy.entity.erp.TbMccOrder" >
+
+	    <selectKey keyProperty="impid" resultType="DECIMAL" order="BEFORE">  
+	            select s_tb_mcc_order.nextval from dual  
+	    </selectKey>
+	    
+	    insert into tb_mcc_order (impid,mcc_order_id,mcc_store_id,mcc_store_name,mcc_customer_id,impdate,
+	    mcc_customer_group_id,mcc_fullname,mcc_email,mcc_telephone,mcc_total,erp_icustomerid,
+	    erp_vccustomername,mcc_shipping_zone,mcc_shipping_city,mcc_shipping_district,mcc_shipping_address,mcc_comment)
+	    values (#{impid},#{mcc_order_id},#{mcc_store_id},#{mcc_store_name},#{mcc_customer_id},sysdate,
+	    #{mcc_customer_group_id},#{mcc_fullname},#{mcc_email},#{mcc_telephone},#{mcc_total},#{erp_icustomerid},
+	    #{erp_vccustomername},#{mcc_shipping_zone},#{mcc_shipping_city},#{mcc_shipping_district},#{mcc_shipping_address},#{mcc_comment})
+      
+    </insert>
+    
+     <!--
+    <update id="update" parameterType="com.neo.entity.UserEntity" >
+       UPDATE 
+       		users 
+       SET 
+       	<if test="userName != null">userName = #{userName},</if>
+       	<if test="passWord != null">passWord = #{passWord},</if>
+       	nick_name = #{nickName}
+       WHERE 
+       		id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="java.lang.Long" >
+       DELETE FROM
+       		 users 
+       WHERE 
+       		 id =#{id}
+    </delete> -->
+
+</mapper>

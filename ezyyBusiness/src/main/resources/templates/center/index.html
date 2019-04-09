@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>浙江恩泽医药</title>
+<link rel="stylesheet" th:href="@{/static/plugs/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/static/plugs/bootstrap-3.3.7/css/bootstrap.min.css}">
+	
+
+<style type="text/css">
+html, body {
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+}
+
+.container {
+	height: 100%;
+	width: 100%;
+}
+
+
+.container .row .clearfix {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.pblock {
+	height: 48px;
+	//height: 8px;
+}
+
+footer {
+	background-color: black;
+	text-align: center;
+	color: white;
+}
+
+.sysinfo{
+color: white;
+font-size: 16px;
+text-align: right;
+}
+
+
+
+</style>
+
+
+
+
+</head>
+<body>
+
+	<div class="container" style="background-color: gray;">
+		 <div class="row clearfix" id="header">
+			<div class="col-md-12 column">
+				<nav class="navbar navbar-default navbar-inverse navbar-fixed-top"
+					role="navigation">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span><span
+								class="icon-bar"></span><span class="icon-bar"></span><span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">物流中心-信息看板</a>
+						
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							 <div class="sysinfo">
+							    <span id="socketsupport"  ></span>
+							    <br/>
+							 	<span id="time"></span>
+							 </div> 
+						</li>
+						<li>
+							 <a href="#"></a>
+						</li>
+					</ul>
+				</div>
+				</nav>
+			</div>
+		</div> 
+		<div class="pblock"></div>
+		<div class="row clearfix" id="center">
+			<div class="col-md-4 column">
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<div id="outwork" class="item"></div>
+					</div>
+					
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-12 column">
+						<div id="inwork" class="item"></div>
+					</div>
+
+				</div>
+
+			</div>
+			<div class="col-md-8 column" >
+				<div class="row clearfix" style="margin:8px 0 0 0px;">
+					<div class="col-md-12 column">
+						<div id="map" ></div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-0 column" style="display: none;">
+				<div class="row clearfix" style="margin:8px 0 0 0px;">
+					<div class="col-md-12 column">
+						<div id="message" style="height: 500px;background-color: gray;">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="row clearfix" id="footer">
+			<div class="col-md-12 column">
+				<footer class="navbar-fixed-bottom">
+					<div class="container">
+					<h5>版权所有@恩泽医药</h5>
+					</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+<script th:src="@{/static/plugs/net/sockjs.min.js}"></script>
+<script th:src="@{/static/plugs/net/stomp.min.js}"></script>
+<script th:src="@{/static/plugs/layui/layui.all.js}"></script>
+<script th:src="@{/static/plugs/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/plugs/jquery-2.1.1/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/static/plugs/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/js/init.js}"></script>
+<script th:src="@{/static/js/center.js}"></script>
+<script th:src="@{/static/js/time.js}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=3.0&ak=rsQL4CUkAClgjVOhwTyWEqEhFkUc9Thz"></script>
+
+
+	<script type="text/javascript">
+   
+   //alert(socketServer);
+
+	$(function(){
+
+		//socket服务器地址
+		var socketServer="[[${socketServer}]]";
+		
+		//初始化Socket
+		initSocket(socketServer);
+		
+		//初始化卡片宽高
+		initItemSize();  
+		//创建出库工作中心
+		createOutWork();
+		//创建入库工作中心
+		createInWork();
+		
+		//创建地图
+		createMap();
+		  
+	  })
+	  
+	  
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

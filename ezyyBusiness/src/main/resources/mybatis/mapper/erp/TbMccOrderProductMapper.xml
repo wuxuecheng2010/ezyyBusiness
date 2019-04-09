@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjezyy.mapper.erp.TbMccOrderProductMapper" >
+    <resultMap id="TbMccOrderProduct" type="com.zjezyy.entity.erp.TbMccOrderProduct" >
+        <id column="impdtlid" property="impdtlid" jdbcType="BIGINT" />
+        <result column="impid" property="impid" jdbcType="BIGINT" />
+        <result column="mcc_order_id" property="mcc_order_id" jdbcType="INTEGER" />
+        <result column="mcc_order_product_id" property="mcc_order_product_id" jdbcType="INTEGER" />
+        <result column="mcc_product_id" property="mcc_product_id" jdbcType="INTEGER" />
+        <result column="erp_iproductid" property="erp_iproductid" jdbcType="INTEGER" />
+        <result column="mcc_name" property="mcc_name" jdbcType="VARCHAR" />
+        <result column="mcc_model" property="mcc_model" jdbcType="VARCHAR" />
+        <result column="mcc_quantity" property="mcc_quantity" jdbcType="NUMERIC" />
+        <result column="mcc_price" property="mcc_price" jdbcType="NUMERIC" />
+        <result column="mcc_total" property="mcc_total" jdbcType="NUMERIC" />
+        <result column="mcc_tax" property="mcc_tax" jdbcType="NUMERIC" />
+        <result column="erp_numsaletaxrate" property="erp_numsaletaxrate" jdbcType="NUMERIC" />
+    </resultMap>
+    
+
+    <insert id="insert" parameterType="com.zjezyy.entity.erp.TbMccOrderProduct" >
+
+	    <selectKey keyProperty="impdtlid" resultType="DECIMAL" order="BEFORE">  
+	            select s_tb_mcc_order_product.nextval from dual  
+	    </selectKey>
+	    
+	   insert into TB_MCC_ORDER_PRODUCT(
+			impdtlid,impid,mcc_order_id,mcc_order_product_id,mcc_product_id,
+			erp_iproductid,mcc_name,mcc_model,mcc_quantity,mcc_price,mcc_total,mcc_tax,erp_numsaletaxrate
+			)values(
+			#{impdtlid},#{impid},#{mcc_order_id},#{mcc_order_product_id},#{mcc_product_id},
+			#{erp_iproductid},#{mcc_name},#{mcc_model},#{mcc_quantity},#{mcc_price},
+			#{mcc_total},#{mcc_tax},#{erp_numsaletaxrate}
+			)
+    </insert>
+    
+     <!--
+    <update id="update" parameterType="com.neo.entity.UserEntity" >
+       UPDATE 
+       		users 
+       SET 
+       	<if test="userName != null">userName = #{userName},</if>
+       	<if test="passWord != null">passWord = #{passWord},</if>
+       	nick_name = #{nickName}
+       WHERE 
+       		id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="java.lang.Long" >
+       DELETE FROM
+       		 users 
+       WHERE 
+       		 id =#{id}
+    </delete> -->
+
+</mapper>

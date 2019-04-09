@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zjezyy.mapper.erp.TbProductinfoMapper" >
+    <resultMap id="TbProductinfo" type="com.zjezyy.entity.erp.TbProductinfo" >
+        <id column="iproductid" property="iproductid" jdbcType="BIGINT" />
+        <result column="vcproductname" property="vcproductname" jdbcType="VARCHAR" />
+        <result column="vcproductcode" property="vcproductcode" jdbcType="VARCHAR" />
+        <result column="vcuniversalname" property="vcuniversalname" jdbcType="VARCHAR" />
+        <result column="vcstandard" property="vcstandard" jdbcType="VARCHAR" />
+        <result column="iproductunitid" property="iproductunitid" jdbcType="INTEGER" />
+        <result column="numsaletaxrate" property="numsaletaxrate" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		iproductid,vcproductname,vcproductcode,vcuniversalname,
+		vcstandard,iproductunitid,numsaletaxrate
+	</sql>
+
+
+	<select id="getOne" parameterType="java.lang.Integer"
+		resultMap="TbProductinfo">
+		SELECT
+		 <include refid="Base_Column_List" />
+		FROM tb_productinfo  where iproductid=#{iproductid}
+	</select>
+    
+
+</mapper>
