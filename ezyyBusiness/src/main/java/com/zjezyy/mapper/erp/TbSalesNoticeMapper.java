@@ -11,11 +11,11 @@ import com.zjezyy.entity.erp.TbSalesNotice;
 @Mapper
 public interface TbSalesNoticeMapper {
 	
-	String SELECT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,dtsenddate,vcddbh,icustomeraidid";
+	String SELECT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,dtsenddate,vcddbh,icustomeraidid,nummoney,isendtype,dtsenddate";
 
-	String INSERT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby";
+	String INSERT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,nummoney,dtsenddate";
 
-	String INSERT_VALUES="#{ibillid,jdbcType=INTEGER},#{vcbillcode,jdbcType=VARCHAR},#{isourceid,jdbcType=INTEGER},#{itypeid,jdbcType=INTEGER},#{icustomerid,jdbcType=INTEGER},#{isalerid,jdbcType=NUMERIC},#{igathermode,jdbcType=INTEGER},#{vcaddress,jdbcType=VARCHAR},#{isendtype,jdbcType=INTEGER},#{flagurgent,jdbcType=CHAR},#{vcmemo,jdbcType=VARCHAR},sysdate,#{vccreatedby,jdbcType=VARCHAR},sysdate,#{vclastupdatedby,jdbcType=VARCHAR}";
+	String INSERT_VALUES="#{ibillid,jdbcType=INTEGER},#{vcbillcode,jdbcType=VARCHAR},#{isourceid,jdbcType=INTEGER},#{itypeid,jdbcType=INTEGER},#{icustomerid,jdbcType=INTEGER},#{isalerid,jdbcType=NUMERIC},#{igathermode,jdbcType=INTEGER},#{vcaddress,jdbcType=VARCHAR},#{isendtype,jdbcType=INTEGER},#{flagurgent,jdbcType=CHAR},#{vcmemo,jdbcType=VARCHAR},sysdate,#{vccreatedby,jdbcType=VARCHAR},sysdate,#{vclastupdatedby,jdbcType=VARCHAR},#{nummoney,jdbcType=NUMERIC},sysdate+1";
 
 	String TABLE_NAME="tb_salesnotice";
 	

@@ -249,6 +249,7 @@ public class OrderServiceImpl implements OrderService {
 		return map;
 	}
 
+	@Transactional
 	@Override
 	public void makeTbSalesOrderToTbSalesNotice(Map<TbSalesOrder, List<TbSalesOrderS>> map) throws RuntimeException {
 		Set<Entry<TbSalesOrder, List<TbSalesOrderS>>> set= map.entrySet();
@@ -264,13 +265,14 @@ public class OrderServiceImpl implements OrderService {
 			TbSalesNotice tbSalesNotice=new TbSalesNotice( tbSalesOrder, vcbillcode,
 					 itypeid, isalerid, igathermode, flagurgent);
 			tbSalesNoticeMapper.insert(tbSalesNotice);
-			int ibillid=tbSalesOrder.getIbillid();
+			int ibillid=tbSalesNotice.getIbillid();
 					
 			//List<TbSalesOrderS> list=tbSalesOrderSMapper.getTbSalesOrderSList(ibillid);
 			List<TbSalesOrderS> list=entry.getValue();
 			float numqueue=1.0f;
 			for(TbSalesOrderS tbSalesOrderS:list) {
-				
+				//BigDecimal _price=tbSalesOrderS.getNumprice();
+				//BigDecimal _quantity=tbSalesOrderS.getNumquantity()
 				//BigDecimal numquantity=new BigDecimal(1);
 				//获取库存列表
 				List<TbStocks> stocklist= tbStocksMapper.getListByIproductid(tbSalesOrderS.getIproductid());
@@ -287,11 +289,14 @@ public class OrderServiceImpl implements OrderService {
 				TbProductinfo tbProductinfo=tbProductinfoMapper.getOne(tbSalesOrderS.getIproductid());
 				BigDecimal numcountryprice=tbProductinfo.getNumcountryprice();
 				
+				
 				for(Entry<BigDecimal, TbStocks> e :stockset) {
 					
-					BigDecimal numquantity=e.getKey();
+					BigDecimal numapplications=e.getKey();
+					
+					
 					TbSalesNoticeS _tbSalesNoticeS=new TbSalesNoticeS( 
-							ibillid, numqueue, numquantity,
+							ibillid, numqueue, numapplications,
 							 tbSalesOrderS, e.getValue(),
 							 tbCustomerKindPrice,
 							 numlastprice, numcountryprice

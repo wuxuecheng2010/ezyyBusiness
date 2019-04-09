@@ -1,5 +1,7 @@
 package com.zjezyy.entity.erp;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
@@ -22,7 +24,7 @@ public class TbSalesNotice {
 	private String dtsenddate;
 	private String vcddbh;
 	private String icustomeraidid;
-	
+	private BigDecimal nummoney;
 	
 	public TbSalesNotice() {
 		super();
@@ -38,13 +40,14 @@ public class TbSalesNotice {
 		this.isalerid=isalerid;
 		this.igathermode=igathermode;//1现金 2非现金
 		this.vcaddress=tbSalesOrder.getVcaddress();
-		//private Integer isendtype;
+		this.isendtype=1;
 		this.flagurgent=flagurgent;//加急
 		this.vcmemo=tbSalesOrder.getVcmemo();
 		//private String dtcreationdate;
 		this.vccreatedby=tbSalesOrder.getVccreatedby();
 		//private String dtlastupdatedate;
 		this.vclastupdatedby=tbSalesOrder.getVccreatedby();
+		this.nummoney=tbSalesOrder.getNummoney();
 		//private String dtsenddate;
 		//private String vcddbh;
 		//private String icustomeraidid;

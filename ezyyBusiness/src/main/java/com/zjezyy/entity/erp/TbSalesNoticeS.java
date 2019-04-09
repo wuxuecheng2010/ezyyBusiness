@@ -17,6 +17,7 @@ public class TbSalesNoticeS {
 	private Integer ibatchid;
 	private BigDecimal numprice;
 	private BigDecimal numquantity;
+	private BigDecimal numapplications;
 	private BigDecimal numsaletaxrate;
 	private BigDecimal numinprice;
 	private BigDecimal numpurchasetaxrate;
@@ -38,6 +39,8 @@ public class TbSalesNoticeS {
 	private String dtusefullife;
 	
 	
+	
+	
 	private BigDecimal numguideprice;
 	private BigDecimal numlastprice;
 	private BigDecimal numlowprice;
@@ -45,11 +48,17 @@ public class TbSalesNoticeS {
 	private BigDecimal numassesscost;
 	
 	
+	private BigDecimal numwriteoff;
+	private BigDecimal numreturn;
+	private BigDecimal numpiece;
+	private BigDecimal numrealout;
+	
+	
 	public TbSalesNoticeS() {
 		super();
 	}
 	
-	public TbSalesNoticeS(int ibillid,float numqueue,BigDecimal numquantity,
+	public TbSalesNoticeS(int ibillid,float numqueue,BigDecimal numapplications,
 			TbSalesOrderS tbSalesOrderS,TbStocks tbStocks,
 			TbCustomerKindPrice tbCustomerKindPrice,
 			BigDecimal numlastprice,BigDecimal numcountryprice
@@ -64,7 +73,8 @@ public class TbSalesNoticeS {
 		this.iunitid=tbSalesOrderS.getIunitid();
 		this.ibatchid=tbStocks.getIbatchid();
 		this.numprice=tbSalesOrderS.getNumprice();
-		this.numquantity=numquantity;
+		this.numquantity=BigDecimal.ZERO;
+		this.numapplications=numapplications;
 		this.numsaletaxrate=tbStocks.getNumsaletaxrate();
 		this.numinprice=tbStocks.getNumprice();//进价
 		this.numpurchasetaxrate=tbStocks.getNumpurchasetaxrate();
@@ -91,6 +101,13 @@ public class TbSalesNoticeS {
 		this.numlowprice=tbCustomerKindPrice.getNumlowprice();
 		this.numcountryprice=numcountryprice;
 		this.numassesscost=tbCustomerKindPrice.getNumassesscost();
+		
+		this.numwriteoff=BigDecimal.ZERO;
+		this.numreturn=BigDecimal.ZERO;
+		this.numpiece=BigDecimal.ZERO;
+		this.numrealout=BigDecimal.ZERO;
+		
+		this.istorepositionid=0;
 		
 	}
 

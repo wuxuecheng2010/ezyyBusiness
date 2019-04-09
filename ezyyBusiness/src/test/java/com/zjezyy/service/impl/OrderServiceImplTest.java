@@ -4,10 +4,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
-
-import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -92,4 +91,12 @@ public class OrderServiceImplTest {
 	}
 	
 
+	@Test
+	public void testpayExpired() {
+		orderServiceImpl.payExpired(95);
+	}
+	
+	
+	
+	
 }
