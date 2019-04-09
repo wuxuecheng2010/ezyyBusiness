@@ -43,14 +43,16 @@ public class OrderController extends BaseController {
 		return ResultUtil.success();
 	}
 	
-/*	
+	
+	
+	
 	@RequestMapping(value = "/fetchcode", method = RequestMethod.GET)
 	public Result fetchCode(HttpServletRequest request, HttpServletResponse response) {
 		String prefix = request.getParameter("prefix");
 		String code=systemServiceImpl.genBillCode(prefix);
 		return ResultUtil.success(code);
 	}
-	*/
+	
 
 
 }
