@@ -66,7 +66,7 @@ public class SynchronizeTask {
 	}
 
 	// 2、同步B2B商品价格 如果发现ERP没有B2B价格集合 直接下架
-	@Scheduled(initialDelay = 2000, fixedRate = 150000)
+	//@Scheduled(initialDelay = 2000, fixedRate = 150000)
 	public void b2bPrice() throws Exception {
 		// 获得当前类名
 		String clazz = Thread.currentThread().getStackTrace()[1].getClassName();

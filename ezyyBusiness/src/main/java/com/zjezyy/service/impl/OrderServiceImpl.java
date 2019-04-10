@@ -383,6 +383,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			//3、保存付款记录
 			mccPayResultMapper.insert( mccPayResult );
+			log.info(String.format("订单：%d %s", order_id,OrderComment.SUCCESS));
 		}
 		
 	}
@@ -396,6 +397,8 @@ public class OrderServiceImpl implements OrderService {
 	   
 	   // 2、更新ERP销售开票作废
 	   setTbSalesNoticeCancelByMccOrderID(order_id);
+	   
+	   log.info(String.format("订单：%d %s", order_id,OrderComment.EXPIRED));
 	   
 	}
 	

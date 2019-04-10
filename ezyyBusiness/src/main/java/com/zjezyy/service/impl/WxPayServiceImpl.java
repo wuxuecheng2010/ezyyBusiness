@@ -90,7 +90,7 @@ public class WxPayServiceImpl implements PayService {
 				payinfo.setAttach((String) map.get("attach"));
 				payinfo.setOrder_id(order_id);
 				String total_fee = (String) map.get("total_fee");
-				BigDecimal fee = new BigDecimal(total_fee).divide(new BigDecimal(100));
+				BigDecimal fee = new BigDecimal(total_fee).divide(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
 				payinfo.setFee(fee.toString());
 				String time_end = (String) map.get("time_end");
 				String payDate = DateUtils.formatSimpleStrToDefaultStr(time_end);
