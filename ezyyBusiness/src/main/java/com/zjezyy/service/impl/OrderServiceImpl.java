@@ -8,11 +8,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zjezyy.entity.b2b.MccOrder;
 import com.zjezyy.entity.b2b.MccOrderHistory;
 import com.zjezyy.entity.b2b.MccOrderProduct;
@@ -31,6 +34,7 @@ import com.zjezyy.entity.erp.TbStocks;
 import com.zjezyy.enums.BusinessInterfaceType;
 import com.zjezyy.enums.DeployPolicyEnum;
 import com.zjezyy.enums.ExceptionEnum;
+import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.OrderComment;
 import com.zjezyy.enums.PayResult;
 import com.zjezyy.exception.BusinessException;
@@ -52,7 +56,9 @@ import com.zjezyy.service.CustomerService;
 import com.zjezyy.service.OrderService;
 import com.zjezyy.service.PayService;
 import com.zjezyy.service.ProductService;
+import com.zjezyy.service.SettingService;
 import com.zjezyy.service.SystemService;
+import com.zjezyy.utils.HttpClientUtil;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -106,9 +112,12 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	MccPayResultMapper mccPayResultMapper;
 	
+	@Autowired
+	SettingService settingServiceImpl;
+	
 
 	@Value("${erp.system.default.user}")
-	private String vccreatedby;// 默认的系统建单账号
+	private String  defaultuser;//vccreatedby;// 默认的系统建单账号
 	
 	@Value("${erp.salesorder.vcbillcode.prefix}")
 	private String salesOrderBillPrefix;//
@@ -119,11 +128,24 @@ public class OrderServiceImpl implements OrderService {
 	@Value("${b2b.product.price.icustomerkindid}")
 	private Integer icustomerkindid;
 	
-	@Value("${b2b.order.payed.status}")
+	@Value("${erp.salesnotice.approval.url}")
+	private String salesnoticeApprovalUrl;
+	
+	
+/*	@Value("${setting.ezyy.code}")
+	private String setting_code;
+	
+	@Value("${setting.ezyy.key.b2b.order.expire.status}")
+	private String setting_key_order_expire_status;
+	
+	@Value("${setting.ezyy.key.b2b.order.payed.status}")
+	private String setting_key_order_payed_status;*/
+	
+	/*@Value("${b2b.order.payed.status}")
 	private Integer order_payed_status;
 	
 	@Value("${b2b.order.expire.status}")
-	private Integer order_expire_status;
+	private Integer order_expire_status;*/
 
 	@Override
 	public void checkOrderPlaceParam(String oc_order_id, String token) throws RuntimeException {
@@ -203,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
 		for (Entry<BigDecimal, List<TbMccOrderProduct>> entry : set) {
 			//销售订单主单
 			String vcbillcode =systemServiceImpl.genBillCodeForTransactional(salesOrderBillPrefix);
-			TbSalesOrder tbSalesOrder=new TbSalesOrder(tbMccOrder,vcbillcode, itypeid, vccreatedby);
+			TbSalesOrder tbSalesOrder=new TbSalesOrder(tbMccOrder,vcbillcode, itypeid, defaultuser);
 			tbSalesOrderMapper.insert(tbSalesOrder);
 			
 			//销售订单明细
@@ -219,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
 				TbProductinfo_Eo tbProductinfo_Eo=tbProductinfoMapper.getOneEo(iproductid, icustomerkindid);
 				
 				TbSalesOrderS tbSalesOrderS=new TbSalesOrderS(tbMccOrderProduct,ibillid, numqueue, tbProductinfo_Eo.getIproductunitid(), 
-						vccreatedby, tbProductinfo_Eo.getVcproductcode(), tbProductinfo_Eo.getVcuniversalname(), 
+						defaultuser, tbProductinfo_Eo.getVcproductcode(), tbProductinfo_Eo.getVcuniversalname(), 
 						tbProductinfo_Eo.getVcstandard(), tbProductinfo_Eo.getVcunitname(), tbProductinfo_Eo.getVcproducername());
 				tbSalesOrderSMapper.insert(tbSalesOrderS);
 				tbSalesOrderSList.add(tbSalesOrderS);
@@ -255,6 +277,12 @@ public class OrderServiceImpl implements OrderService {
 		Set<Entry<TbSalesOrder, List<TbSalesOrderS>>> set= map.entrySet();
 		for(Entry<TbSalesOrder, List<TbSalesOrderS>> entry:set) {
 			TbSalesOrder tbSalesOrder=entry.getKey();
+			
+			//验证销售订单flagapp状态  如果为Y则抛出订单不能重复生成销售开票
+			if(isTbSalesOrderFlagAppY(tbSalesOrder.getIbillid())) {
+				throw new BusinessException(ExceptionEnum.ERP_ORDER_IS_USED_TO_NOTICE);
+			}
+			
 			
 			TbCustomer tbCustomer =tbCustomerMapper.getOne(tbSalesOrder.getIcustomerid());
 			String vcbillcode=systemServiceImpl.genBillCodeForTransactional(salesnoticeBillPrefix);
@@ -305,6 +333,10 @@ public class OrderServiceImpl implements OrderService {
 				}
 				numqueue+=0.1;
 			}
+			
+			//销售订单->销售开票之后的处理
+			tbSalesOrderMapper.update(tbSalesOrder.getIbillid(), defaultuser);
+			
 		}
 		
 	}
@@ -370,28 +402,51 @@ public class OrderServiceImpl implements OrderService {
 		return list;
 	} 
 
-	@Transactional
+	/**
+	 * 安全起见 这里还是不要事务回滚了 
+	 */
+
 	@Override
 	public void payResultQuery(PayService payService, int order_id) throws RuntimeException {
 		MccPayResult mccPayResult = payService.payResultQuery(order_id);
 
 		if(mccPayResult!=null && PayResult.SUCCESS.getCode().equals(mccPayResult.getTradestatus())) {//付款成功
-			//1、更新b2b订单状态 支付成功
-			setMccOrderStatus( order_id,  order_payed_status, OrderComment.SUCCESS, 0);
+			
+			//1更新b2b订单为已付款  这里必须及时 涉及到用户端付款之后页面检查是否付款的字段
+			 updateMccOrderPayedAndCreateResult(order_id, mccPayResult);
 			
 			//2、erp订单状态 扮演审核的角色  调用ERP存储过程
-			
-			//3、保存付款记录
-			mccPayResultMapper.insert( mccPayResult );
-			log.info(String.format("订单：%d %s", order_id,OrderComment.SUCCESS));
+			 List<TbSalesNotice> list=tbSalesNoticeMapper.getListByMccOrderID(order_id,BusinessInterfaceType.B2BToERPOnLine.getCode());
+			 for(TbSalesNotice tbSalesNotice:list) {
+				 httpApproval(tbSalesNotice.getIbillid(),defaultuser);
+			 }
+			 
+			 
 		}
 		
 	}
 	
 	@Transactional
+	private void updateMccOrderPayedAndCreateResult(int order_id, MccPayResult mccPayResult) {
+		//1、更新b2b订单状态 支付成功
+		 String order_payed_status=settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_PAYED_STATUS);
+		 setMccOrderStatus( order_id,  order_payed_status, OrderComment.SUCCESS, 0);
+		
+		//2、保存付款记录
+		mccPayResultMapper.insert( mccPayResult );
+		log.info(String.format("订单：%d %s", order_id,OrderComment.SUCCESS));
+	}
+	
+	
+	
+	
+	
+	
+	@Transactional
 	@Override
 	public void payExpired(int order_id) throws RuntimeException {
 		
+	   String order_expire_status=settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_EXPIRE_STATUS);
 	   // 1、更新b2b订单状态为取消
 	   setMccOrderStatus( order_id,  order_expire_status, OrderComment.EXPIRED, 0);
 	   
@@ -403,7 +458,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public void setMccOrderStatus(int order_id, int order_status_id, OrderComment comment, int notify)
+	public void setMccOrderStatus(int order_id, String order_status_id, OrderComment comment, int notify)
 			throws RuntimeException {
 
 		//更新订单状态
@@ -414,7 +469,7 @@ public class OrderServiceImpl implements OrderService {
 		mccOrderHistory.setComment(comment.getComment());
 		mccOrderHistory.setNotify(notify);
 		mccOrderHistory.setOrder_id(order_id);
-		mccOrderHistory.setOrder_status_id(order_status_id);
+		mccOrderHistory.setOrder_status_id(Integer.valueOf(order_status_id));
 		mccOrderHistoryMapper.insert(mccOrderHistory);
 		
 	}
@@ -436,7 +491,117 @@ public class OrderServiceImpl implements OrderService {
 		
 		
 	}
+
+	@SuppressWarnings("unlikely-arg-type")
+	@Override
+	public boolean isTbSalesOrderFlagAppY(int salesorder_ibillid) {
+		TbSalesOrder tbSalesOrder=tbSalesOrderMapper.getOne(salesorder_ibillid);
+		return tbSalesOrder!=null&&"Y".equals(tbSalesOrder.getFlagapp())?true:false;
+	}
+
+	@Override
+	public Map<String,Object> approval(int salesnotice_ibillid,String user ) throws RuntimeException {
+		
+		Map<String ,Object > map =new HashMap<String,Object>();
+		map.put("DocNo_in", salesnotice_ibillid);
+		map.put("AppUser_in", user);
+		map.put("iResult_out", 0);
+		map.put("ErrMsg_Out", "");
+		tbSalesNoticeMapper.approval(map);
+		//分析执行结果信息  该抛出异常的抛出异常
+		if((Integer)map.get("iResult_out")!=0) {
+			throw new BusinessException((String)map.get("ErrMsg_Out"),-9999);
+		}
+		return map;
+	}
+
+	@Override
+	public boolean checkSalesNoticeAppParams(String salesnotice_ibillid) throws RuntimeException {
+		//获取销售开票订单信息 ，检查单据状态
+		TbSalesNotice tbSalesNotice=tbSalesNoticeMapper.getOne(Integer.valueOf(salesnotice_ibillid));
+		if(tbSalesNotice==null ) 
+			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_NOT_EXISIT);
+		
+		if("Y".equals(tbSalesNotice.getFlagapp())) 
+			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_IS_APPED);
+		
+		if("Y".equals(tbSalesNotice.getFlagtowms()))
+			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_IS_TO_WMS);
+		
+		//追溯b2b订单是否为已付款状态
+		Integer salesorder_ibillid=tbSalesNotice.getIsourceid();
+		if(salesorder_ibillid==null)
+			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_HAS_NO_SOURCEID);
+		MccOrder mccOrder=getMccOrderBySalesOrderIbillid(salesorder_ibillid);
+		return mccOrder!=null;
+	}
 	
+	
+	public MccOrder getMccOrderBySalesOrderIbillid(int salesorder_ibillid) throws RuntimeException {
+		
+		//订单不存在
+		TbSalesOrder tbSalesOrder=tbSalesOrderMapper.getOne(salesorder_ibillid);
+		if(tbSalesOrder==null){
+			throw new BusinessException(ExceptionEnum.ERP_ORDER_NOT_EXISIT);
+		}
+		
+		//订单单据类型不对
+		Integer impid=tbSalesOrder.getIsourceid();
+		Integer itypeid=tbSalesOrder.getItypeid();
+		if(impid==null || BusinessInterfaceType.B2BToERPOnLine.getCode()!=itypeid) {
+			throw new BusinessException(ExceptionEnum.ERP_ORDER_ITYPEID_WRONG);
+		}
+		
+		//b2b到erp中间表数据不存在
+		TbMccOrder  tbMccOrder =tbMccOrderMapper.getOne(impid);
+		if(tbMccOrder==null)
+			throw new BusinessException(ExceptionEnum.ERP_ORDER_TBMCC_NOT_EXISIT);
+		
+		//检查订单状态
+		Integer mcc_order_id=tbMccOrder.getMcc_order_id();
+		MccOrder mccOrder=mccOrderMapper.getOne(mcc_order_id);
+		Integer order_status_id=mccOrder.getOrder_status_id();
+		String payed_status_id=settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_PAYED_STATUS);
+		if(order_status_id==null ||!payed_status_id.equals(order_status_id.toString()))
+			throw new BusinessException(ExceptionEnum.B2B_ORDER_NOT_PAYED);
+		
+		return mccOrder;
+		
+	}
+
+	@Override
+	public void httpApproval(int salesnotice_ibillid, String user) throws RuntimeException {
+		//获取管理员电话号码
+		String tels=settingServiceImpl.getEzyySettingValue(EzyySettingKey.B2B_MANAGER_TELS);
+		tels=tels==null||"".equals(tels)?"15990683720":tels;
+		String[] arr=tels.split(",") ;
+		List<String> tellist=new ArrayList<String>();
+		for(String s:arr)
+			tellist.add(s);
+		
+		Map<String ,String > map=new HashMap<String ,String >();
+		map.put("ibillid",String.valueOf(salesnotice_ibillid));
+		map.put("user", user);
+		String resStr=HttpClientUtil.postMap(salesnoticeApprovalUrl,map );
+		JSONObject jsonObject=null;
+		if(resStr!=null) {
+			jsonObject = JSON.parseObject(resStr);
+			int status=jsonObject.getInteger("status");
+			String msg=jsonObject.getString("msg");
+			if(status!=0) {
+				String error=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核失败，影响发货，请人工退款或者继续人工审核,原因：%s", salesnotice_ibillid,msg);
+				log.error(error);
+				systemServiceImpl.sendTelMsg(error, tellist);
+				throw new BusinessException(msg,-9998);
+			}
+		}else {
+			String error=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核失败，原因：%s", salesnotice_ibillid,ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL.getMsg());
+			log.error(error);
+			systemServiceImpl.sendTelMsg(error, tellist);
+			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL);
+		}
+		
+	}
 
 
 

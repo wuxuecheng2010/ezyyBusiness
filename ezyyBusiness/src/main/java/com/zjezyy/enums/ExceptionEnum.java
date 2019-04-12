@@ -11,6 +11,7 @@ public enum ExceptionEnum {
 	
     B2B_ORDER_ID_LACK(-1101,"B2B订单ID缺失或者不存在"),
     B2B_ORDER_NOT_IN_ERP_TMP(-1102,"B2B订单未在接口表中找到"),
+    B2B_ORDER_NOT_PAYED(-1103,"B2B订单不是支付状态"),
     
     B2B_PRODUCT_UNRELATED(-1201,"B2B商品信息不完整"),//B2B商品与ERP商品未做关联
     B2B_PRODUCT_RELATED_ERROR(-1202,"B2B商品信息有误"),//B2B商品与ERP商品关联不正确
@@ -22,11 +23,20 @@ public enum ExceptionEnum {
     
     ERP_ORDER_CODE_CREATE_FAIL(-2101,"创建销售单据号失败"),//创建ERP销售订单号失败
     ERP_ORDER_CODE_CREATE_HTTP_FAIL(-2102,"创建销售单据号http失败"),//创建ERP销售订单号失败
-    ERP_PRODUCT_PRICE_LQ_ZERO(-2201,"系统商品价格有误"),//ERP商品价格<=0
+    ERP_ORDER_IS_USED_TO_NOTICE(-2103,"销售订单已经转为销售开票，不能重复转"),//ERP销售订单flagapp=Y表示 已经转到销售开票了
+    ERP_ORDER_NOT_EXISIT(-2104,"销售订单不存在"),//
+    ERP_ORDER_ITYPEID_WRONG(-2105,"销售订单单据类型不为4"),// 单据itypeid不=4 参考BusinessInterfaceType
+    ERP_ORDER_TBMCC_NOT_EXISIT(-2106,"销售订单中间表数据不存在"),
     
+    ERP_PRODUCT_PRICE_LQ_ZERO(-2201,"系统商品价格有误"),//ERP商品价格<=0
     ERP_PRODUCT_STOCK_SHORT(-2202,"商品库存不足"),
     
-;
+    ERP_SALESNOTICE_NOT_EXISIT(-3101,"销售开票单据不存在"),
+    ERP_SALESNOTICE_IS_APPED(-3102,"销售开票单据已审核"),
+    ERP_SALESNOTICE_HAS_NO_SOURCEID(-3103,"销售开票单据不存在上级单据号"),
+    ERP_SALESNOTICE_IS_TO_WMS(-3104,"销售开票单据已经传入到WMS"),
+    ERP_SALESNOTICE_HTTP_APPROVAL_FAIL(-3105,"销售开票单据HTTP请求审核失败"),
+    ;
 
     private Integer code;
 

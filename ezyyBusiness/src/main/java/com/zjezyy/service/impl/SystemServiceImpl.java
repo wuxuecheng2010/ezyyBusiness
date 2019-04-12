@@ -1,6 +1,7 @@
 package com.zjezyy.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,12 @@ public  class SystemServiceImpl implements SystemService {
 			break;
 		}
 		return itypeid;
+	}
+
+	@Override
+	public void sendTelMsg(String msg, List<String> tels) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

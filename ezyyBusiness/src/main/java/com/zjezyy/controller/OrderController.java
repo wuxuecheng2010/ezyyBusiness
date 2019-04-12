@@ -1,5 +1,7 @@
 package com.zjezyy.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,8 +27,9 @@ public class OrderController extends BaseController {
 	SystemService systemServiceImpl;
 	
 
+	//下单接口
 	//http://localhost:8099/bi/order/place?oc_order_id=95&bif=b2b-online&token=123456
-	@RequestMapping(value = "/place", method = RequestMethod.GET)
+	@RequestMapping(value = "/place", method = RequestMethod.POST)
 	public Result place(HttpServletRequest request, HttpServletResponse response) {
 
 		String oc_order_id = request.getParameter("oc_order_id");
@@ -45,12 +48,25 @@ public class OrderController extends BaseController {
 	
 	
 	
-	
+	//获取ERP单据号
 	@RequestMapping(value = "/fetchcode", method = RequestMethod.GET)
 	public Result fetchCode(HttpServletRequest request, HttpServletResponse response) {
 		String prefix = request.getParameter("prefix");
 		String code=systemServiceImpl.genBillCode(prefix);
 		return ResultUtil.success(code);
+	}
+	
+	//审核销售开票
+	@RequestMapping(value = "/approval", method = RequestMethod.POST)
+	public Result approval(HttpServletRequest request, HttpServletResponse response) {
+		//1、获取参数
+		String ibillid = request.getParameter("ibillid");
+		String user=request.getParameter("user");
+		//2、检查参数的合法性
+		orderServiceImpl.checkSalesNoticeAppParams(ibillid);
+		//3、执行审核并返回结果集
+		Map<String,Object> map=orderServiceImpl.approval(Integer.valueOf(ibillid), user);
+		return ResultUtil.success();
 	}
 	
 

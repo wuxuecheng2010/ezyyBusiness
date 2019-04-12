@@ -11,11 +11,14 @@ import org.springframework.stereotype.Component;
 
 import com.zjezyy.entity.b2b.MccOrder;
 import com.zjezyy.entity.b2b.MccProduct;
+import com.zjezyy.entity.b2b.MccSetting;
 import com.zjezyy.entity.erp.TbProductinfo;
+import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.Payment;
 import com.zjezyy.service.OrderService;
 import com.zjezyy.service.PayService;
 import com.zjezyy.service.ProductService;
+import com.zjezyy.service.SettingService;
 import com.zjezyy.utils.HttpClientUtil;
 import com.zjezyy.utils.business.LogUtil;
 
@@ -30,6 +33,9 @@ public class SynchronizeTask {
 
 	@Autowired
 	OrderService orderServiceImpl;
+	
+	@Autowired
+	SettingService settingServiceImpl;
 
 	@Resource(name = "wxPayServiceImpl")
 	PayService wxPayServiceImpl;
@@ -37,12 +43,22 @@ public class SynchronizeTask {
 	@Value("${erp.to.b2b.product.import.url}")
 	private String productRemoteServiceUrl;
 
-	@Value("${b2b.order.expire.time}")
+/*	@Value("${setting.ezyy.code}")
+	private String setting_code;
+	
+	@Value("${setting.ezyy.key.b2b.order.expire.time}")
+	private String setting_key_order_expire_time;
+	
+	@Value("${setting.ezyy.key.b2b.order.unpay.status}")
+	private String setting_key_order_unpay_status;*/
+	
+	
+	/*@Value("${b2b.order.expire.time}")
 	private int order_expire_time;// 订单从下单到付款的时间限制
 
 	@Value("${b2b.order.unpay.status}")
 	private int order_unpay_status;// 订单未付款的状态码
-
+*/
 	// 1、低储信息、b2b价格是否维护 同步B2B上下架
 	@Scheduled(initialDelay = 1000, fixedRate = 150000)
 	public void lowStorage() throws Exception {
@@ -138,7 +154,8 @@ public class SynchronizeTask {
 	// 5、定时检查支付状态 及相应处理
 	@Scheduled(initialDelay = 100, fixedRate = 3000)
 	public void unpayOrderStatusQuery() throws Exception {
-
+		int order_expire_time=Integer.valueOf(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_EXPIRE_TIME));
+		int order_unpay_status=Integer.valueOf(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_UNPAY_STATUS));
 		// 获取未付款的订单数据
 		List<MccOrder> list = orderServiceImpl.getUnPayMccOrderList(order_expire_time);
 		for (MccOrder mccOrder : list) {
@@ -159,16 +176,16 @@ public class SynchronizeTask {
 	// 6、定时检查支付状态 及相应处理
 	@Scheduled(initialDelay = 50, fixedRate = 3000)
 	public void unpayExpireOrderStatusQuery() throws Exception {
-
+		//log.info("6、定时检查支付状态 及相应处理");
+		int order_expire_time=Integer.valueOf(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_EXPIRE_TIME));
+		int order_unpay_status=Integer.valueOf(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_UNPAY_STATUS));
 		// 获取未付款的订单数据
 		List<MccOrder> list = orderServiceImpl.getUnPayExpireMccOrderList(order_expire_time);
 		for (MccOrder mccOrder : list) {
 			int order_status_id = mccOrder.getOrder_status_id();
 			int order_id = mccOrder.getOrder_id();
 			if (order_status_id == order_unpay_status) {
-				
 				orderServiceImpl.payExpired(order_id);
-
 			}
 
 		}

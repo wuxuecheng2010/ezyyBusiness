@@ -30,6 +30,6 @@ public interface MccOrderMapper {
 	
 	//将订单保存为已付款待发货状态
 	@Update({"update mcc_order set order_status_id=#{order_status_id} where order_id=#{order_id}"})
-	int updateMccOrderStatus(int order_id,int order_status_id);
+	int updateMccOrderStatus(int order_id,String order_status_id);
 	
 }

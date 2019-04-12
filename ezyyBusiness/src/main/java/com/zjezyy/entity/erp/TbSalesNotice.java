@@ -16,6 +16,8 @@ public class TbSalesNotice {
 	private String vcaddress;
 	private Integer isendtype;
 	private char flagurgent;
+	private char flagapp;
+	private char flagtowms;
 	private String vcmemo;
 	private String dtcreationdate;
 	private String vccreatedby;

@@ -1,17 +1,24 @@
 package com.zjezyy.mapper.erp;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
 
+import com.zjezyy.entity.erp.TbMccOrder;
 import com.zjezyy.entity.erp.TbSalesNotice;
 @Repository
 @Mapper
 public interface TbSalesNoticeMapper {
 	
-	String SELECT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,dtsenddate,vcddbh,icustomeraidid,nummoney,isendtype,dtsenddate";
+	String SELECT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,dtsenddate,vcddbh,icustomeraidid,nummoney,isendtype,dtsenddate,flagapp,flagtowms";
 
 	String INSERT_FIELDS="ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,vcaddress,isendtype,flagurgent,vcmemo,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,nummoney,dtsenddate";
 
@@ -27,6 +34,26 @@ public interface TbSalesNoticeMapper {
 	@Update({"update  tb_salesnotice a set flagapp='Y'  where exists(select 1 from tb_salesorder b where a.isourceid=b.ibillid and  b.isourceid=#{impid} and b.itypeid=#{itypeid})"})
 	int cancelTbSalesNotice(int impid,int itypeid);
 	
+	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where ibillid=#{ibillid}"})
+	TbSalesNotice getOne(int ibillid);
 	
+	@Select({"select ",SELECT_FIELDS," from tb_salesnotice where isourceid in (" , 
+			"select ibillid from tb_salesorder where itypeid=#{itypeid} and   isourceid in (" , 
+			" select impid from tb_mcc_order where mcc_order_id=#{mcc_order_id}))"})
+	List<TbSalesNotice> getListByMccOrderID(int mcc_order_id,int itypeid);
+	
+	/**
+	 * 调用存储过程，审核销售开票
+	 * @param params={v_prefix 单据前缀}
+	 * @return params={v_billcode 单据号}
+	 */
+	@Select({ "call App_SalesNotice(",
+		     "#{DocNo_in,mode=IN,jdbcType=INTEGER},",
+			 "#{AppUser_in,mode=IN,jdbcType=VARCHAR},",
+			 "#{iResult_out,mode=OUT,jdbcType=INTEGER},",
+			 "#{ErrMsg_Out,mode=OUT,jdbcType=VARCHAR}",
+			  ")" })
+	@Options(statementType=StatementType.CALLABLE)
+	void approval(Map<String,Object> params);
 	
 }

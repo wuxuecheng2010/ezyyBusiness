@@ -4,10 +4,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
-import com.zjezyy.entity.erp.TbCustomer;
-import com.zjezyy.entity.erp.TbMccOrder;
 import com.zjezyy.entity.erp.TbSalesOrder;
 @Repository
 @Mapper
@@ -28,5 +27,9 @@ public interface TbSalesOrderMapper {
 	
 	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where ibillid = #{ibillid}"})
 	TbSalesOrder getOne(int ibillid);
+	
+	//销售订单->销售开票之后对销售订单的处理
+	@Update({"update tb_salesorder t set t.FLAGPERFORM = 'Y',t.VCAPPUSER = #{vcappuser},FLAGAPP = 'Y' where ibillid =#{ibillid}"})
+	int update(int ibillid,String vcappuser);
 	
 }

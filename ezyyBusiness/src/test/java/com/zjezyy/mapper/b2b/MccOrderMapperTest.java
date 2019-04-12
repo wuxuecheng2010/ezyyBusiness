@@ -33,7 +33,7 @@ public class MccOrderMapperTest {
 	public void testUpdateMccOrderStatus() {
 		MccOrder mccOrder= mccOrderMapper.getOne(99);
 		System.out.println(mccOrder.getOrder_status_id());
-		mccOrderMapper.updateMccOrderStatus(99, 18);
+		mccOrderMapper.updateMccOrderStatus(99, "18");
 	}
 	
 	

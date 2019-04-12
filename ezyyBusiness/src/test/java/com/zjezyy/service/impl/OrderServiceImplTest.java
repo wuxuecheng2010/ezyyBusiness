@@ -96,6 +96,14 @@ public class OrderServiceImplTest {
 		orderServiceImpl.payExpired(95);
 	}
 	
+	@Test
+	public void testApproval() {
+		Map<String, Object>  map=orderServiceImpl.approval(731642, "2011");
+		log.info("iResult_out:"+(Integer)map.get("iResult_out"));
+		log.info("ErrMsg_Out:"+(String)map.get("ErrMsg_Out"));
+	}
+	
+	
 	
 	
 	

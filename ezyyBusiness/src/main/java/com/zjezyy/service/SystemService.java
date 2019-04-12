@@ -1,5 +1,7 @@
 package com.zjezyy.service;
 
+import java.util.List;
+
 public interface SystemService {
 	
 	
@@ -40,5 +42,9 @@ public interface SystemService {
  	
  	//获取接口类型ID  
  	int getTypeId(String bif)throws RuntimeException;
+ 	
+ 	//发送手机短信
+ 	void sendTelMsg(String msg,List<String> tels);
+ 	
  	
 }
