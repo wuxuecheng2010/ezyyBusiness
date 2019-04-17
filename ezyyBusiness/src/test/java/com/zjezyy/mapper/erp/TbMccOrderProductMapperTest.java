@@ -1,5 +1,6 @@
 package com.zjezyy.mapper.erp;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.Test;
@@ -65,7 +66,8 @@ public class TbMccOrderProductMapperTest {
 			MccProduct_Eo mccProduct_Eo =mccProductMapper.getOne(product_id, 1);
 			Integer erpiproductid=mccProduct_Eo.getErpiproductid();
 			TbProductinfo tbProductinfo=tbProductinfoMapper.getOne(erpiproductid);
-			TbMccOrderProduct tbMccOrderProduct=new TbMccOrderProduct(mccOrderProduct,impid, erpiproductid, tbProductinfo.getNumsaletaxrate());
+			TbMccOrderProduct tbMccOrderProduct=new TbMccOrderProduct(mccOrderProduct,impid, erpiproductid, tbProductinfo.getNumsaletaxrate(),tbProductinfo.getNumpurchasetaxrate(),'N','N','N','N');
+			
 			tbMccOrderProductMapper.insert(tbMccOrderProduct);
 		}
 		//System.out.println("Impid:"+tbMccOrder.getImpid());

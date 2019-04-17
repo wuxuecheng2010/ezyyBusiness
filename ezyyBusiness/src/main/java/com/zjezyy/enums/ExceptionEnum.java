@@ -12,6 +12,7 @@ public enum ExceptionEnum {
     B2B_ORDER_ID_LACK(-1101,"B2B订单ID缺失或者不存在"),
     B2B_ORDER_NOT_IN_ERP_TMP(-1102,"B2B订单未在接口表中找到"),
     B2B_ORDER_NOT_PAYED(-1103,"B2B订单不是支付状态"),
+    B2B_ORDER_IS_NOT_UNPAYED_STATUS(-1104,"B2B订单状态不为未支付状态"),
     
     B2B_PRODUCT_UNRELATED(-1201,"B2B商品信息不完整"),//B2B商品与ERP商品未做关联
     B2B_PRODUCT_RELATED_ERROR(-1202,"B2B商品信息有误"),//B2B商品与ERP商品关联不正确
@@ -19,6 +20,7 @@ public enum ExceptionEnum {
     
     B2B_CUSTOMER_UNRELATED(-1301,"B2B客户信息不完整"),//B2B客户与ERP客户未做关联
     B2B_CUSTOMER_RELATED_ERROR(-1302,"B2B客户信息有误"), //B2B客户与ERP客户关联不正确
+    
     
     
     ERP_ORDER_CODE_CREATE_FAIL(-2101,"创建销售单据号失败"),//创建ERP销售订单号失败
@@ -30,6 +32,11 @@ public enum ExceptionEnum {
     
     ERP_PRODUCT_PRICE_LQ_ZERO(-2201,"系统商品价格有误"),//ERP商品价格<=0
     ERP_PRODUCT_STOCK_SHORT(-2202,"商品库存不足"),
+    ERP_PRODUCT_NO_CASH_SALE(-2203,"商品不允许现金销售"),
+    ERP_PRODUCT_ZZRSOVER(-2204,"商品属于终止妊娠药品，但是您的该类经营许可证过期"),
+    ERP_B2B_ORDER_PRICE_NOT_EQ(-2205,"价格异常"),//订单与商品设定的价格不一致
+    
+    ERP_CUSTOMER_LOCKED(-2301,"客户被锁定"),
     
     ERP_SALESNOTICE_NOT_EXISIT(-3101,"销售开票单据不存在"),
     ERP_SALESNOTICE_IS_APPED(-3102,"销售开票单据已审核"),

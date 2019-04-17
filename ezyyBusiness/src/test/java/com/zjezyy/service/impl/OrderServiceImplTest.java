@@ -1,6 +1,7 @@
 package com.zjezyy.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,9 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbSalesOrderS;
 import com.zjezyy.entity.erp.TbStocks;
+import com.zjezyy.enums.BusinessInterfaceType;
 import com.zjezyy.enums.DeployPolicyEnum;
+import com.zjezyy.mapper.erp.TbCustomerMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderSMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
 import com.zjezyy.service.OrderService;
@@ -34,7 +38,8 @@ public class OrderServiceImplTest {
 	OrderService orderServiceImpl;
 	@Autowired
 	SystemService systemServiceImpl;
-	
+	@Autowired
+	TbCustomerMapper tbCustomerMapper;
 	
 	@Resource(name="wxPayServiceImpl")
 	PayService wxPayServiceImpl;
@@ -102,6 +107,27 @@ public class OrderServiceImplTest {
 		log.info("iResult_out:"+(Integer)map.get("iResult_out"));
 		log.info("ErrMsg_Out:"+(String)map.get("ErrMsg_Out"));
 	}
+	
+	
+	@Test
+	public void testcheckCustomerRight() {
+		TbCustomer  tbCustomer=tbCustomerMapper.getOne(4443);
+		Map<String,Boolean > map=new HashMap<>();
+		boolean f=orderServiceImpl.checkCustomerRight(tbCustomer, BusinessInterfaceType.B2BToERPOnLine.getCode(), map);
+		System.out.println(f);
+	}
+	
+	
+	@Test
+	public void testcheckCustomerCredit() {
+		TbCustomer  tbCustomer=tbCustomerMapper.getOne(4443);
+		Map<String,Boolean > map=new HashMap<>();
+		boolean f=orderServiceImpl.checkCustomerCredit(tbCustomer, true);
+		System.out.println(f);
+		
+	}
+	
+	
 	
 	
 	

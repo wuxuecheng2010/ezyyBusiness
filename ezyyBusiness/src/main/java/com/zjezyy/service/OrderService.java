@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.zjezyy.entity.b2b.MccOrder;
+import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbMccOrderProduct;
+import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbSalesOrder;
 import com.zjezyy.entity.erp.TbSalesOrderS;
 import com.zjezyy.entity.erp.TbStocks;
@@ -21,14 +23,24 @@ public interface OrderService {
 	void orderPlace(int order_id,int itypeid, String token) throws RuntimeException;
 	
 	//创建中间表
-	Integer makeMccOrderToTbMccOrder(int order_id)throws RuntimeException;
+	Integer makeMccOrderToTbMccOrder(int order_id,int itypeid)throws RuntimeException;
+	
+	//校验客户信息 证照等  包含_bZZRSOver,  _bSpecialManOver字段
+	boolean checkCustomerRight(TbCustomer tbCustomer,int itypeid,Map<String,Boolean> map)throws RuntimeException;
+	//校验客户信用
+	boolean checkCustomerCredit(TbCustomer tbCustomer,boolean bWriteApprovalLog) throws RuntimeException;
+	//校验商品经营分类及其属性等
+	void checkProduct(TbProductinfo_Eo tbProductinfo_Eo,Map map_management)throws RuntimeException;
 	
 	//创建销售订单
 	Map<TbSalesOrder,List<TbSalesOrderS>> makeTbMccOrderToTbSalesOrder(int impid,int itypeid) throws RuntimeException;
 	
-	//按税率对订单明细数据进行分组
+	//按税率对订单明细数据进行分组(弃用)
 	Map<BigDecimal,List<TbMccOrderProduct>> makeTbMccOrderProductGroupByTaxRate(List<BigDecimal> taxRateList,List<TbMccOrderProduct> tbMccOrderProductList) throws RuntimeException;
 
+	//按税率、冷藏、冷冻、特殊药品、麻黄碱 对订单明细数据进行分组
+	Map<String,List<TbMccOrderProduct>> makeTbMccOrderProductGroupByType(List<String> typeList,List<TbMccOrderProduct> tbMccOrderProductList) throws RuntimeException;
+	
 	//销售订单导入到销售开票
 	void makeTbSalesOrderToTbSalesNotice(Map<TbSalesOrder,List<TbSalesOrderS>> map)throws RuntimeException;
      

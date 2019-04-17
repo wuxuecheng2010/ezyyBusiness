@@ -19,5 +19,13 @@ public class MccOrderProduct {
 	private BigDecimal tax;
 	
 	
+	public String toString() {
+		String productname=new StringBuilder().append(this.getName())
+				.append(" ")
+				.append(this.getModel())
+				.toString();
+		return productname;
+	}
+	
 	
 }

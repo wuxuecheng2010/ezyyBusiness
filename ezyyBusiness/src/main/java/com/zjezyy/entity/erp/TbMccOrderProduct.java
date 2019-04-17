@@ -12,6 +12,7 @@ public class TbMccOrderProduct {
     private Integer impid;
     private Integer erp_iproductid;
     private BigDecimal erp_numsaletaxrate;
+    private BigDecimal erp_numpurchasetaxrate;
     
     private Integer mcc_order_id;
     private Integer mcc_order_product_id;
@@ -23,16 +24,24 @@ public class TbMccOrderProduct {
     private BigDecimal mcc_total;
     private BigDecimal mcc_tax;
     
+    private char erp_flagcold;
+    private char erp_flagfreezing;
+    private char erp_flagephedrine;
+    private char erp_flagspecial;
+    
     public TbMccOrderProduct() {
     	super();
     }
     public TbMccOrderProduct(MccOrderProduct mccOrderProduct,int impid,
-			int iproductid, BigDecimal numsaletaxrate) {
+			int iproductid, BigDecimal numsaletaxrate,BigDecimal numpurchasetaxrate,
+			char erp_flagcold,char erp_flagfreezing,char erp_flagephedrine,char erp_flagspecial) {
     	
     	//private Integer impdtlid;
     	this.impid=impid;
         this.erp_iproductid=iproductid;
         this.erp_numsaletaxrate= numsaletaxrate;
+        this.erp_numpurchasetaxrate=numpurchasetaxrate;
+        
         this.mcc_order_id=mccOrderProduct.getOrder_id();
         this.mcc_order_product_id=mccOrderProduct.getOrder_product_id();
         this.mcc_product_id=mccOrderProduct.getProduct_id();
@@ -42,6 +51,11 @@ public class TbMccOrderProduct {
         this.mcc_price=mccOrderProduct.getPrice();
         this.mcc_total=mccOrderProduct.getTotal();
         this.mcc_tax=mccOrderProduct.getTax();
+        
+        this.erp_flagcold=erp_flagcold;
+        this.erp_flagfreezing=erp_flagfreezing;
+        this.erp_flagephedrine=erp_flagephedrine;
+        this.erp_flagspecial=erp_flagspecial;
         
     }
     

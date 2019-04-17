@@ -25,6 +25,24 @@ public class BusinessException extends RuntimeException{
         super(message);
         this.code = code;
     }
+    
+    /**
+     * 
+    * 创建一个新的实例 BusinessException.
+    *
+    * @param exceptionEnum
+    * @param 附加信息
+     */
+    public BusinessException(String str,ExceptionEnum exceptionEnum) {
+        super(new StringBuilder()
+    			.append(str)
+    			.append(" ")
+    			.append(exceptionEnum.getMsg())
+    			.toString()
+    			);
+        this.code = exceptionEnum.getCode();
+    }
+    
 
     public Integer getCode() {
         return code;

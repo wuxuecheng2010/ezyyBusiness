@@ -1,19 +1,21 @@
 package com.zjezyy.service.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zjezyy.entity.b2b.MccOrder;
@@ -22,10 +24,13 @@ import com.zjezyy.entity.b2b.MccOrderProduct;
 import com.zjezyy.entity.b2b.MccPayResult;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
+import com.zjezyy.entity.erp.TbLisenceCustomer_Eo;
+import com.zjezyy.entity.erp.TbManagement;
 import com.zjezyy.entity.erp.TbMccOrder;
 import com.zjezyy.entity.erp.TbMccOrderProduct;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
+import com.zjezyy.entity.erp.TbReceivables_Eo;
 import com.zjezyy.entity.erp.TbSalesNotice;
 import com.zjezyy.entity.erp.TbSalesNoticeS;
 import com.zjezyy.entity.erp.TbSalesOrder;
@@ -37,6 +42,7 @@ import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.OrderComment;
 import com.zjezyy.enums.PayResult;
+import com.zjezyy.enums.StorageoptionType;
 import com.zjezyy.exception.BusinessException;
 import com.zjezyy.mapper.b2b.MccOrderHistoryMapper;
 import com.zjezyy.mapper.b2b.MccOrderMapper;
@@ -44,9 +50,12 @@ import com.zjezyy.mapper.b2b.MccOrderProductMapper;
 import com.zjezyy.mapper.b2b.MccPayResultMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerMapper;
+import com.zjezyy.mapper.erp.TbLisenceCustomerMapper;
+import com.zjezyy.mapper.erp.TbManagementMapper;
 import com.zjezyy.mapper.erp.TbMccOrderMapper;
 import com.zjezyy.mapper.erp.TbMccOrderProductMapper;
 import com.zjezyy.mapper.erp.TbProductinfoMapper;
+import com.zjezyy.mapper.erp.TbReceivablesMapper;
 import com.zjezyy.mapper.erp.TbSalesNoticeMapper;
 import com.zjezyy.mapper.erp.TbSalesNoticeSMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderMapper;
@@ -58,6 +67,7 @@ import com.zjezyy.service.PayService;
 import com.zjezyy.service.ProductService;
 import com.zjezyy.service.SettingService;
 import com.zjezyy.service.SystemService;
+import com.zjezyy.utils.DateUtils;
 import com.zjezyy.utils.HttpClientUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +117,9 @@ public class OrderServiceImpl implements OrderService {
 	TbStocksMapper tbStocksMapper;
 	
 	@Autowired
+	TbLisenceCustomerMapper tbLisenceCustomerMapper;
+	
+	@Autowired
 	MccOrderHistoryMapper mccOrderHistoryMapper;
 	
 	@Autowired
@@ -114,6 +127,12 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	SettingService settingServiceImpl;
+	
+	@Autowired
+	TbReceivablesMapper tbReceivablesMapper;
+	
+	@Autowired
+	TbManagementMapper tbManagementMapper;
 	
 
 	@Value("${erp.system.default.user}")
@@ -131,6 +150,8 @@ public class OrderServiceImpl implements OrderService {
 	@Value("${erp.salesnotice.approval.url}")
 	private String salesnoticeApprovalUrl;
 	
+	@Value("${erp.customer.locked.canbuy}")
+	private String customer_locked_canbuy;
 	
 /*	@Value("${setting.ezyy.code}")
 	private String setting_code;
@@ -162,9 +183,9 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public synchronized void orderPlace(int order_id, int itypeid, String token) throws RuntimeException {
 		// 1、复制b2b订单到erp的接口表
-		Integer impid = makeMccOrderToTbMccOrder(order_id);
+		Integer impid = makeMccOrderToTbMccOrder(order_id,itypeid);
 
-		// 2、根据税率不同生成 销售订单
+		// 2、根据税率 、是否冷藏、是否冷冻、是否麻黄碱、是否特殊、不同生成 销售订单
 		Map<TbSalesOrder,List<TbSalesOrderS>> map=
 		makeTbMccOrderToTbSalesOrder(impid, itypeid);
 		
@@ -177,14 +198,27 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	@Override
-	public Integer makeMccOrderToTbMccOrder(int order_id) throws RuntimeException {
+	public Integer makeMccOrderToTbMccOrder(int order_id,int itypeid) throws RuntimeException {
 		MccOrder mccOrder = mccOrderMapper.getOne(order_id);
 
 		Integer customer_id = mccOrder.getCustomer_id();
 		TbCustomer tbCustomer = customerServiceimpl.getTbCustomerByMccCustomerId(customer_id);
 
+		//0、检查b2b订单状态    现金模式
+		if(itypeid==BusinessInterfaceType.B2BToERPOnLine.getCode()) 
+			if(!String.valueOf(mccOrder.getOrder_status_id()).equals(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_UNPAY_STATUS)))
+				throw new BusinessException(ExceptionEnum.B2B_ORDER_IS_NOT_UNPAYED_STATUS);
+		
+		
+		//1、校验客户信息是否合法
+		Map<String ,Boolean> map=new HashMap<>();
+		checkCustomerRight(tbCustomer,itypeid,map);
+		
+		//2、现款不采用信用审核,否则会很怪异
+		if(itypeid!=BusinessInterfaceType.B2BToERPOnLine.getCode())
+		checkCustomerCredit( tbCustomer, true);
+		
 		// 主表保存到接口表
-		//TbMccOrder tbMccOrder = mccOrder.toTbMccOrder(tbCustomer.getIcustomerid(), tbCustomer.getVccustomername());
 		TbMccOrder tbMccOrder=new TbMccOrder(mccOrder,tbCustomer.getIcustomerid(), tbCustomer.getVccustomername());
 		tbMccOrderMapper.insert(tbMccOrder);
 		Integer impid = tbMccOrder.getImpid();
@@ -192,11 +226,50 @@ public class OrderServiceImpl implements OrderService {
 		List<MccOrderProduct> list = mccOrderProductMapper.getListByOrderId(tbMccOrder.getMcc_order_id());
 		for (MccOrderProduct mccOrderProduct : list) {
 			Integer product_id = mccOrderProduct.getProduct_id();
+			/*String productname=new StringBuilder().append(mccOrderProduct.getName())
+					.append(" ")
+					.append(mccOrderProduct.getModel())
+					.toString();*/
+					
+					//mccOrderProduct.getName()+" "+mccOrderProduct.getModel();
+			
 			TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(product_id);
-			//TbMccOrderProduct tbMccOrderProduct = mccOrderProduct.toTbMccOrderProduct(impid,
-			//		tbProductinfo_Eo.getIproductid(), tbProductinfo_Eo.getNumsaletaxrate());
+			//判断商品价格是否和订单价格一致
+			BigDecimal order_product_price=mccOrderProduct.getPrice();
+			BigDecimal erp_product_price=productServiceImpl.getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
+			if(order_product_price.compareTo(erp_product_price)!=0) {
+				throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_B2B_ORDER_PRICE_NOT_EQ);
+			}
+			//3、商品信息相关校验
+			Map<String ,Boolean> map_p=new HashMap<>();
+			map_p.put("erp_flagcold", false);
+			map_p.put("erp_flagfreezing", false);
+			map_p.put("flagzzrs", false);
+			map_p.put("erp_flagephedrine", false);
+			map_p.put("flagnotcash", false);
+			map_p.put("erp_flagspecial", false);
+			checkProduct(tbProductinfo_Eo,map_p);
+			//现金模式  不允许非现金的药品交易 或者含有麻黄碱  也不能现金交易
+			if(itypeid==BusinessInterfaceType.B2BToERPOnLine.getCode())
+				if(map_p.get("flagnotcash")||map_p.get("erp_flagephedrine"))
+			        throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_PRODUCT_NO_CASH_SALE);
+			//终止妊娠药品集合许可证效期
+			if(map_p.get("flagzzrs") && map.get("_bZZRSOver"))
+				throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_PRODUCT_ZZRSOVER);
+			
+			//麻黄碱或者特殊药品 冷藏 冷冻  不能和其他药品开在一起 
+			//if(map_p.get("erp_flagephedrine"))
+				char erp_flagcold=map_p.get("erp_flagcold")?'Y':'N';
+				char erp_flagfreezing=map_p.get("erp_flagfreezing")?'Y':'N';
+				char erp_flagephedrine=map_p.get("erp_flagephedrine")?'Y':'N';
+				char erp_flagspecial=map_p.get("erp_flagspecial")?'Y':'N';
+			
+
 			TbMccOrderProduct tbMccOrderProduct=new TbMccOrderProduct(mccOrderProduct,impid,
-					tbProductinfo_Eo.getIproductid(), tbProductinfo_Eo.getNumsaletaxrate());
+					tbProductinfo_Eo.getIproductid(), tbProductinfo_Eo.getNumsaletaxrate(),tbProductinfo_Eo.getNumpurchasetaxrate(),
+					erp_flagcold, erp_flagfreezing, erp_flagephedrine, erp_flagspecial);
+			
+			
 			// 细表保存到接口细表
 			tbMccOrderProductMapper.insert(tbMccOrderProduct);
 		}
@@ -214,15 +287,19 @@ public class OrderServiceImpl implements OrderService {
 		List<TbMccOrderProduct> tbMccOrderProductList = tbMccOrderProductMapper.getListByImpid(impid);
 		// 按照税率分组订单明细
 		// 1获取税率列表;
-		List<BigDecimal> taxRateList = tbMccOrderProductMapper.getSaleTaxRateList(impid);
+		//List<BigDecimal> taxRateList = tbMccOrderProductMapper.getSaleTaxRateList(impid);
+		List<String> typeList = tbMccOrderProductMapper.getSaleTypeList(impid);
+		
 		// 初始化存放分组信息的map
-		Map<BigDecimal, List<TbMccOrderProduct>> map = makeTbMccOrderProductGroupByTaxRate(taxRateList,
+		//Map<BigDecimal, List<TbMccOrderProduct>> map = makeTbMccOrderProductGroupByTaxRate(taxRateList,
+		//		tbMccOrderProductList);
+		Map<String, List<TbMccOrderProduct>> map = makeTbMccOrderProductGroupByType(typeList,
 				tbMccOrderProductList);
 
 		// 保存主表 保存细表
 		// 创建销售订单主表数据
-		Set<Entry<BigDecimal, List<TbMccOrderProduct>>> set = map.entrySet();
-		for (Entry<BigDecimal, List<TbMccOrderProduct>> entry : set) {
+		Set<Entry<String, List<TbMccOrderProduct>>> set = map.entrySet();
+		for (Entry<String, List<TbMccOrderProduct>> entry : set) {
 			//销售订单主单
 			String vcbillcode =systemServiceImpl.genBillCodeForTransactional(salesOrderBillPrefix);
 			TbSalesOrder tbSalesOrder=new TbSalesOrder(tbMccOrder,vcbillcode, itypeid, defaultuser);
@@ -601,6 +678,407 @@ public class OrderServiceImpl implements OrderService {
 			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL);
 		}
 		
+	}
+
+	@Override
+	public boolean checkCustomerRight(TbCustomer tbCustomer,int itypeid,Map<String,Boolean> map) throws RuntimeException {
+		//客户是否锁定  
+	    char flaglock=tbCustomer.getFlaglock();
+	   
+	    if(flaglock=='Y') {
+	    	 //业务类型是4 并且 客户锁定可以买
+		    if("N".equals(customer_locked_canbuy) ) {
+		    	throw new BusinessException(ExceptionEnum.ERP_CUSTOMER_LOCKED);
+		    }else {
+		    	if(itypeid!=BusinessInterfaceType.B2BToERPOnLine.getCode()) {
+		    		throw new BusinessException(ExceptionEnum.ERP_CUSTOMER_LOCKED);
+		    	}
+		    }
+	    }
+	    
+	    
+	    //客户证照信息是否过期
+	    boolean _bSpecialManOver=false;
+	    boolean  _bZZRSOver = false;
+	    String sErrMsg="";
+	    String sWaingMsg="";
+	    List<TbLisenceCustomer_Eo> list=tbLisenceCustomerMapper.getListByIcustomerid(tbCustomer.getIcustomerid());
+	   
+	    try {
+	    for(TbLisenceCustomer_Eo lisenceeo:list) {
+	    	
+	    	//获取特殊药品委托人效期是否过期
+	    	if ( 'Y'==lisenceeo.getFlagspecial())
+            {
+                if (lisenceeo.getDtend()==null||"".equals(lisenceeo.getDtend()))
+                {
+                    _bSpecialManOver = true;
+                    continue;
+                }
+                String dtend=lisenceeo.getDtend();
+    	    	String dtnow = DateUtils.dateFormat(DateUtils.dateAdd(new Date(), -1, false), DateUtils.DATE_PATTERN);
+				int i=DateUtils.dateCompare(DateUtils.dateParse(dtend,DateUtils.DATE_PATTERN),DateUtils.dateParse(dtnow,DateUtils.DATE_PATTERN));
+    	    	
+                if (lisenceeo.getDtend()!=null && !"".equals(lisenceeo.getDtend()) && i<1)
+                {
+                    _bSpecialManOver = true;
+                    continue;
+                }
+            }
+            //终止妊娠是否过期
+            if ( 'Y'==lisenceeo.getFlagzzrs())
+            {
+                if (lisenceeo.getDtend()==null||"".equals(lisenceeo.getDtend()))
+                {
+                    _bZZRSOver = true;
+                    continue;
+                }
+                String dtend=lisenceeo.getDtend();
+    	    	String dtnow = DateUtils.dateFormat(DateUtils.dateAdd(new Date(), -1, false), DateUtils.DATE_PATTERN);
+				int i=DateUtils.dateCompare(DateUtils.dateParse(dtend,DateUtils.DATE_PATTERN),DateUtils.dateParse(dtnow,DateUtils.DATE_PATTERN));
+                if (lisenceeo.getDtend()!=null && !"".equals(lisenceeo.getDtend()) && i<1)
+                {
+                    _bZZRSOver = true;
+                    continue;
+                }
+            }
+            //其他证照类型判断
+            if ('Y'==lisenceeo.getFlagusefullife())//效期判断标记
+            {                    
+                if (lisenceeo.getDtend()==null || "".equals(lisenceeo.getDtend()))
+                {                       
+                    continue;
+                }
+                Date dtEnd =DateUtils.dateParse(lisenceeo.getDtend(), DateUtils.DATE_PATTERN) ;//ConvertEx.ToDateTimeEx(row[Models.tb_Lisence_Customer.DTEND]);
+            
+/*                if ( dtEnd == DateTime.MinValue)
+                {
+                    continue;
+                }*/
+                
+                String dtend=lisenceeo.getDtend();
+    	    	String dtnow = DateUtils.dateFormat(DateUtils.dateAdd(new Date(), -1, false), DateUtils.DATE_PATTERN);
+				int i=DateUtils.dateCompare(DateUtils.dateParse(dtend,DateUtils.DATE_PATTERN),DateUtils.dateParse(dtnow,DateUtils.DATE_PATTERN));
+				
+                if (i<1)
+                {
+                    sErrMsg += "当前客户的" + lisenceeo.getVclisencetypename() + "过期，其期限是" + lisenceeo.getDtend() + "\r\n";
+                    continue;
+                }
+                String dtnow7 = DateUtils.dateFormat(DateUtils.dateAdd(new Date(), -7, false), DateUtils.DATE_PATTERN);
+                int j=DateUtils.dateCompare(DateUtils.dateParse(dtend,DateUtils.DATE_PATTERN),DateUtils.dateParse(dtnow7,DateUtils.DATE_PATTERN));
+                if (j<1)
+                {
+                    sWaingMsg += "当前客户的" +lisenceeo.getVclisencetypename() + "将在7天内过期，其期限是" + lisenceeo.getDtend() + "\r\n";
+                    continue;
+                }
+            }
+			
+	    }
+	    }catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+	    
+	    
+	    if(!"".equals(sWaingMsg)) {
+	    	throw new BusinessException(sWaingMsg,-9997);
+	    }
+	    	
+	    
+	    if(!"".equals(sErrMsg)) {
+	    	throw new BusinessException(sWaingMsg,-9996);
+	    }
+	    	
+	    map.put("_bSpecialManOver", _bSpecialManOver);
+	    map.put("_bZZRSOver", _bZZRSOver);
+		return true;
+	}
+
+	@Override
+	public boolean checkCustomerCredit(TbCustomer tbCustomer,boolean bWriteApprovalLog) throws RuntimeException {
+		 String sErrMsg="";
+		//信用判断和客户锁定判断
+		 
+		//1判断信用天数 最后欠款时间到现在
+		Integer numcreditdays=tbCustomer.getNumcreditdays();
+		//最早欠款时间
+		Integer days=tbReceivablesMapper.getEarliest(tbCustomer.getIcustomerid());
+		if(days>numcreditdays) {
+            sErrMsg = tbCustomer.getVccustomername() + " 信用天数受限！限定天数是" + numcreditdays + ",未收款天数是" + days;
+		}
+		
+		//2判断信用额度 期初应收加上当前应收
+		TbReceivables_Eo tbReceivables_Eo =tbReceivablesMapper.getSummer(tbCustomer.getIcustomerid());
+		if(tbReceivables_Eo.getNummoney().compareTo(tbReceivables_Eo.getNumcreditmoney())==1) {
+			//欠款额度大于授信额度
+			 if ("".equals(sErrMsg))
+                 sErrMsg += tbCustomer.getVccustomername();
+             else
+                 sErrMsg += "\r\n ";
+             sErrMsg += " 信用额度受限！限定额度是" + tbReceivables_Eo.getNumcreditmoney().toString() + ",目前未收款金额" + tbReceivables_Eo.getNummoney().toString();
+		}
+		
+		if(!"".equals(sErrMsg))
+			throw new BusinessException(sErrMsg,-9995);
+		
+            /*
+             * 控制方法
+             * 一类（县级医院）
+                1、应收账款90天内（含90天）收回的，不控制
+                2、应收账款91天至120天（含120天）收回的，信用额度内不控制，超信用额度的由销售总监和财务经理审批
+                3、应收账款121天至150天（含150天）收回的，由销售总监和财务经理审批
+                4、应收账款151天以上收回的，不能开票。
+             * 一类 (中医院)
+                1、应收账款120天内（含120天）收回的不控制
+                2、应收账款121天至150天（含150天）收回的，由销售总监和财务经理审批
+                3、应收账款151天以上收回的，不能开票。
+             * 二类（乡镇医疗机构）
+                1、应收账款60天内（含60天）收回的不控制
+                2、应收账款61天至120天（含120天）收回的，信用额度内不控制，超信用额度的由销售总监和财务经理审批
+                3、应收账款121天至150天（含150天）收回的，由销售总监和财务经理审批
+                4、应收账款151天以上收回的，不能开票。
+             * 三类（医药公司）
+                1、应收账款75天内（含75天）收回的，信用额度内不控制，超信用额度的由销售总监和财务经理审批
+                2、应收账款76天至90天（含90天）收回的，信用额度内不控制，超信用额度的由销售总监、财务经理、常务副总经理审批
+                3、应收账款91天以上的，所有销售清单都需销售总监和财务经理审批。
+             * 第四类（第三终端客户市场）
+                1、以上单位全部为现款单位，所有销售清单都需销售总监和财务经理审批。
+             * */
+
+		/*
+                //获取客户所属分类 明天待续
+                Integer ICREDITTYPE =tbCustomer.getIcredittype();//客户信用类型
+                int NUMCREDITDAYS =tbCustomer.getNumcreditdays();//客户信用考核天数
+                BigDecimal NUMCREDITMONEY =tbCustomer.getNumcreditmoney();//客户信用额度
+                Integer NUMCREDITDAYS1 =tbCustomer.getNumcreditdays1();//信用审核天数1
+                Integer NUMCREDITDAYS2 =tbCustomer.getNumcreditdays2();//信用审核天数2
+                Integer NUMCREDITDAYS3 =tbCustomer.getNumcreditdays3();//信用审核天数3
+                Integer NOWCREDITDAYS = days;//实际欠款天数
+                BigDecimal NUMMONEY = tbReceivables_Eo.getNummoney();//实际欠款金额
+
+                string _MoneyMsg = "单据金额:"
+                + _BLL.CurrentBusiness.Tables[tb_SalesNotice.__TableName].Rows[0][tb_SalesNotice.NUMMONEY].ToString(); 
+                if (ICREDITTYPE == "1")//一类（县级医院）
+                {
+                    if (NOWCREDITDAYS > NUMCREDITDAYS1 && NOWCREDITDAYS <= NUMCREDITDAYS2 && NUMMONEY > NUMCREDITMONEY)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核" ;
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg+")"+ oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "4";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS2 && NOWCREDITDAYS <= NUMCREDITDAYS3)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "6";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS3)
+                    {
+                        Msg.Warning("当前客户是一类（县级医院），欠款天数:" + NOWCREDITDAYS.ToString() + "， 限定天数是" + NUMCREDITDAYS3.ToString() + ",不能开票！");
+                        return false;
+                    }
+                }
+                //一类 (中医院)
+                if (ICREDITTYPE == "2")//
+                {
+                    if (NOWCREDITDAYS > NUMCREDITDAYS1 && NOWCREDITDAYS <= NUMCREDITDAYS3)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "7";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS3)
+                    {
+                        Msg.Warning("当前客户是一类 (中医院),欠款天数:" + NOWCREDITDAYS.ToString() + "， 限定天数是" + NUMCREDITDAYS2.ToString() + ",不能开票！");
+                        return false;
+                    }
+                }
+
+                if (ICREDITTYPE == "3")//二类（乡镇医疗机构）
+                {
+                    if (NOWCREDITDAYS > NUMCREDITDAYS1 && NOWCREDITDAYS <= NUMCREDITDAYS2 && NUMMONEY > NUMCREDITMONEY)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "8";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS2 && NOWCREDITDAYS <= NUMCREDITDAYS3)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "9";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS3)
+                    {
+                        Msg.Warning("当前客户是二类（乡镇医疗机构），欠款天数:" + NOWCREDITDAYS.ToString() + "， 限定天数是" + NUMCREDITDAYS3.ToString() + ",不能开票！");
+                        return false;
+                    }
+                }
+
+                if (ICREDITTYPE == "4")//三类（医药公司）
+                {
+                    if (NOWCREDITDAYS > NUMCREDITDAYS && NOWCREDITDAYS <= NUMCREDITDAYS1 && NUMMONEY > NUMCREDITMONEY)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "10";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS1 && NOWCREDITDAYS <= NUMCREDITDAYS2 && NUMMONEY > NUMCREDITMONEY)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监 常务副总经理";
+                            drmsg1["parmvalue"] = "11";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                    if (NOWCREDITDAYS > NUMCREDITDAYS2)
+                    {
+                        if (bWriteApprovalLog)
+                        {
+                            DataRow drmsg1 = _dtMsg.NewRow();
+                            drmsg1["vcproductcode"] = "信用审核";
+                            drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ")" + oj.ErrMsg;
+                            drmsg1["vcappuser"] = "财务经理 销售总监";
+                            drmsg1["parmvalue"] = "12";
+                            _dtMsg.Rows.Add(drmsg1);
+                        }
+                    }
+                }
+
+                if (ICREDITTYPE == "5")//第四类（第三终端客户市场）
+                {
+                    if (bWriteApprovalLog)
+                    {
+                        DataRow drmsg1 = _dtMsg.NewRow();
+                        drmsg1["vcproductcode"] = "信用审核";
+                        drmsg1["vccontent"] = "信用审核(" + _MoneyMsg + ")当前客户是现金客户 需要财务经理或销售总监审批！";
+                        drmsg1["vcappcontent"] = "信用审核(" + _MoneyMsg + ") 当前客户是现金客户 需要财务经理或销售总监审批！";
+                        drmsg1["vcappuser"] = "财务经理 销售总监";
+                        drmsg1["parmvalue"] = "13";
+                        _dtMsg.Rows.Add(drmsg1);
+                    }
+                }
+            
+            //
+            if (bWriteApprovalLog)//需要写入日志，其实就是审核时调用本函数
+            {
+                if (Msg.AskQuestion("当前客户存在信用问题\r\n " + oj.ErrMsg + " \r\n还要继续审核吗？") == false)
+                {
+                    return false;
+                }
+            }
+            else//不需要写入日志，其实就是新单时调用本函数
+            {
+                if (Msg.AskQuestion("当前客户存在信用问题\r\n " + oj.ErrMsg + " \r\n还要继续操作吗？") == false)
+                {
+                    return false;
+                }
+            }*/
+        
+        return true;
+	}
+
+	@Override
+	public void checkProduct(TbProductinfo_Eo tbProductinfo_Eo, Map map_p)
+			throws RuntimeException {
+		//获取商品经营分类
+		char flagcode=tbProductinfo_Eo.getFlagcold();
+		char flagfreezing=tbProductinfo_Eo.getFlagfreezing();
+		Integer istorageoptionid= tbProductinfo_Eo.getIstorageoptionid();
+		
+		if(flagfreezing!='Y') {
+			System.out.println(flagcode=='Y');
+			System.out.println(istorageoptionid==StorageoptionType.COLD.getCode());
+			if( flagcode=='Y'||istorageoptionid==StorageoptionType.COLD.getCode())
+			    map_p.put("erp_flagcold", true);
+			if(istorageoptionid==StorageoptionType.FREEZING.getCode())
+				map_p.put("erp_flagfreezing", true);
+		}else {
+			map_p.put("erp_flagfreezing", true);
+		}
+		
+		
+		Integer imanagementid=tbProductinfo_Eo.getImanagementid();
+		TbManagement tbManagement=tbManagementMapper.getOne(imanagementid);
+		if(tbManagement!=null) {
+			if(tbManagement.getFlagzzrs()=='Y')
+				map_p.put("flagzzrs", true);
+			if(tbManagement.getFlagephedrine()=='Y')
+				map_p.put("erp_flagephedrine", true);
+			if(tbManagement.getFlagnotcash()=='Y')
+				map_p.put("flagnotcash", true);
+			if(tbManagement.getFlagspecial()=='Y')
+				map_p.put("erp_flagspecial", true);
+		}
+		
+	}
+
+	@Override
+	public Map<String, List<TbMccOrderProduct>> makeTbMccOrderProductGroupByType(List<String> typeList,
+			List<TbMccOrderProduct> tbMccOrderProductList) throws RuntimeException {
+		
+		Map<String, List<TbMccOrderProduct>> map = new HashMap<String, List<TbMccOrderProduct>>();
+		for (String type : typeList) {
+			List<TbMccOrderProduct> _tbMccOrderProductList = new ArrayList<TbMccOrderProduct>();
+			map.put(type, _tbMccOrderProductList);
+			for (TbMccOrderProduct tbMccOrderProduct : tbMccOrderProductList) {
+				BigDecimal erp_numsaletaxrate = tbMccOrderProduct.getErp_numsaletaxrate();
+				String[] arrType=type.split("-");
+				BigDecimal type_=new BigDecimal(arrType[0]);
+				if (type_.compareTo(erp_numsaletaxrate) == 0) {
+					_tbMccOrderProductList.add(tbMccOrderProduct);
+				}
+			}
+		}
+		return map;
 	}
 
 
