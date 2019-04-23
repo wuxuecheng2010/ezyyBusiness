@@ -12,7 +12,7 @@ public enum ExceptionEnum {
     B2B_ORDER_ID_LACK(-1101,"B2B订单ID缺失或者不存在"),
     B2B_ORDER_NOT_IN_ERP_TMP(-1102,"B2B订单未在接口表中找到"),
     B2B_ORDER_NOT_PAYED(-1103,"B2B订单不是支付状态"),
-    B2B_ORDER_IS_NOT_UNPAYED_STATUS(-1104,"B2B订单状态不为未支付状态"),
+    B2B_ORDER_IS_NOT_INIT_STATUS(-1104,"B2B订单状态不为初始状态"),
     
     B2B_PRODUCT_UNRELATED(-1201,"B2B商品信息不完整"),//B2B商品与ERP商品未做关联
     B2B_PRODUCT_RELATED_ERROR(-1202,"B2B商品信息有误"),//B2B商品与ERP商品关联不正确

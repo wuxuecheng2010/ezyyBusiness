@@ -14,6 +14,7 @@ public enum EzyySettingKey {
 	ORDER_UNPAY_STATUS("order_unpay_status","订单未付款的状态码"),
 	ORDER_PAYED_STATUS("order_payed_status","订单付款后的状态码"),
 	ORDER_EXPIRE_STATUS("order_expire_status","订单取消状态码（超时即为取消）"),
+	ORDER_INIT_STATUS("order_init_status","订单初始状态"),
 	B2B_MANAGER_TELS("b2b_manager_tels","b2b网站管理者，接收系统重要错误信息"),
 ;
 

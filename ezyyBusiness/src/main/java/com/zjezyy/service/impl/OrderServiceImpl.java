@@ -204,10 +204,10 @@ public class OrderServiceImpl implements OrderService {
 		Integer customer_id = mccOrder.getCustomer_id();
 		TbCustomer tbCustomer = customerServiceimpl.getTbCustomerByMccCustomerId(customer_id);
 
-		//0、检查b2b订单状态    现金模式
+		//0、检查b2b订单状态    现金模式 只有状态为0的单据可以传递进来   b2b新增订单时，默认初始的状态为0
 		if(itypeid==BusinessInterfaceType.B2BToERPOnLine.getCode()) 
-			if(!String.valueOf(mccOrder.getOrder_status_id()).equals(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_UNPAY_STATUS)))
-				throw new BusinessException(ExceptionEnum.B2B_ORDER_IS_NOT_UNPAYED_STATUS);
+			if(!String.valueOf(mccOrder.getOrder_status_id()).equals(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_INIT_STATUS)))
+				throw new BusinessException(ExceptionEnum.B2B_ORDER_IS_NOT_INIT_STATUS);
 		
 		
 		//1、校验客户信息是否合法
