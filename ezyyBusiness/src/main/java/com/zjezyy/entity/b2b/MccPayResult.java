@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class MccPayResult {
 	private int result_id;
+	private String ordercode;
 	private int order_id ;//订单编号
 	private String  payment;//支付类型
 	private String  busstype;//业务类型

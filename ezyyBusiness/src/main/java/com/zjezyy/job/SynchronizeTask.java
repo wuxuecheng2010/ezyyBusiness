@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.zjezyy.entity.b2b.MccOrder;
 import com.zjezyy.entity.b2b.MccProduct;
-import com.zjezyy.entity.b2b.MccSetting;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.Payment;
@@ -47,11 +46,16 @@ public class SynchronizeTask {
 
 	@Value("${erp.to.b2b.product.import.url}")
 	private String productRemoteServiceUrl;
+	
+	@Value("${spring.profiles.active}")
+	private String mode;
 
 
 	// 1、低储信息、b2b价格是否维护 同步B2B上下架
 	@Scheduled(initialDelay = 1000, fixedRate = 150000)
 	public void lowStorage() throws Exception {
+		
+		
 		// 获得当前类名
 		String clazz = Thread.currentThread().getStackTrace()[1].getClassName();
 		// 获得当前方法名
@@ -72,23 +76,26 @@ public class SynchronizeTask {
 	}
 
 	// 2、同步B2B商品价格 如果发现ERP没有B2B价格集合 直接下架
-	//@Scheduled(initialDelay = 2000, fixedRate = 150000)
+	@Scheduled(initialDelay = 2000, fixedRate = 150000)
 	public void b2bPrice() throws Exception {
-		// 获得当前类名
-		String clazz = Thread.currentThread().getStackTrace()[1].getClassName();
-		// 获得当前方法名
-		String method = Thread.currentThread().getStackTrace()[1].getMethodName();
-
-		// 1、查询b2b所有商品
-		List<MccProduct> list = productServiceImpl.getAllMccProductID();
-
-		// 2、遍历商品 更新价格
-		for (MccProduct mccProduct : list) {
-			try {
-				productServiceImpl.doSynchronizePrice(mccProduct);
-			} catch (Exception e) {
-				LogUtil.logForB2BProduct(clazz, method, e, mccProduct);
-			}
+		//测试模式不执行
+		if(!"dev".equals(mode)) {
+					// 获得当前类名
+					String clazz = Thread.currentThread().getStackTrace()[1].getClassName();
+					// 获得当前方法名
+					String method = Thread.currentThread().getStackTrace()[1].getMethodName();
+			
+					// 1、查询b2b所有商品
+					List<MccProduct> list = productServiceImpl.getAllMccProductID();
+			
+					// 2、遍历商品 更新价格
+					for (MccProduct mccProduct : list) {
+						try {
+							productServiceImpl.doSynchronizePrice(mccProduct);
+						} catch (Exception e) {
+							LogUtil.logForB2BProduct(clazz, method, e, mccProduct);
+						}
+					}
 		}
 	}
 
@@ -152,12 +159,13 @@ public class SynchronizeTask {
 			String payment_code = mccOrder.getPayment_code();
 			int order_status_id = mccOrder.getOrder_status_id();
 			int order_id = mccOrder.getOrder_id();
+			String ordercode=mccOrder.getOrdercode();
 			if (order_status_id == order_unpay_status) {
 
 				if (Payment.QRCODE_WXPAY.getCode().equals(payment_code))
-					orderServiceImpl.payResultQuery(wxPayServiceImpl, order_id);
+					orderServiceImpl.payResultQuery(wxPayServiceImpl, ordercode);
 				if(Payment.QRCODE_ALIPAY.getCode().equals(payment_code))
-					orderServiceImpl.payResultQuery(aliPayServiceImpl, order_id);
+					orderServiceImpl.payResultQuery(aliPayServiceImpl, ordercode);
 
 			}
 
@@ -165,7 +173,7 @@ public class SynchronizeTask {
 
 	}
 
-	// 6、定时检查支付状态 超市未付款处理
+	// 6、定时检查支付状态 超时未付款处理
 	@Scheduled(initialDelay = 50, fixedRate = 3000)
 	public void unpayExpireOrderStatusQuery() throws Exception {
 		//log.info("6、定时检查支付状态 及相应处理");

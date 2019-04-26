@@ -12,9 +12,9 @@ import com.zjezyy.entity.b2b.MccPayResult;
 public interface MccPayResultMapper {
 	String SELECT_FIELDS="result_id,order_id,payment,busstype,plordercode,baseinfo,fee,attach,paydate,tradestatus";
 
-	String INSERT_FIELDS="order_id,payment,busstype,plordercode,baseinfo,fee,attach,paydate,tradestatus";
+	String INSERT_FIELDS="order_id,ordercode,payment,busstype,plordercode,baseinfo,fee,attach,paydate,tradestatus";
 
-	String INSERT_VALUES="#{order_id},#{payment},#{busstype},#{plordercode},#{baseinfo},#{fee},#{attach},#{paydate},#{tradestatus}";
+	String INSERT_VALUES="#{order_id},#{ordercode},#{payment},#{busstype},#{plordercode},#{baseinfo},#{fee},#{attach},#{paydate},#{tradestatus}";
 
 	String TABLE_NAME="mcc_pay_result";
 	

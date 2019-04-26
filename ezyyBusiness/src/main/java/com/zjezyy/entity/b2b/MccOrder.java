@@ -24,6 +24,7 @@ public class MccOrder {
 	private String shipping_address;
 	private Integer order_status_id;
 	private String payment_code;
+	private String ordercode;
 	
 	
 }

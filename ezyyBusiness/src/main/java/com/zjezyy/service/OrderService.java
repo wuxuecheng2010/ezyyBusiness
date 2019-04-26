@@ -57,7 +57,7 @@ public interface OrderService {
 	void setMccOrderStatus(int order_id, String order_status_id,OrderComment comment,int notify) throws RuntimeException;
 
     //根据第三方付款信息  更新付款情况
-    void payResultQuery(PayService payService,int order_id)throws RuntimeException;
+    void payResultQuery(PayService payService,String  ordercode)throws RuntimeException;
     
     //付款超时
     void payExpired(int order_id) throws RuntimeException;

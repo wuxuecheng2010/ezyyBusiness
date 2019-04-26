@@ -4,7 +4,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <!-- <property name="log.path" value="d:\home" /> -->
-    <property name="log.path" value="e:\\mapserver\\ezyyBusinesslog" />
+    <property name="log.path" value="e:\\ezyyBusiness\\log" />
     <!--0. 日志格式和颜色渲染 -->
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
@@ -21,8 +21,8 @@
         </filter>
         <encoder>
             <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
-            <!-- 设置字符集 -->
-            <charset>UTF-8</charset>
+            <!-- 设置字符集  -->
+           <!--  <charset>UTF-8</charset> -->
         </encoder>
     </appender>
 

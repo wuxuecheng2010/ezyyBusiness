@@ -27,7 +27,7 @@ public class AliPayServiceImplTest {
 	@Test
 	public void testPayResultQuery() {
 		
-		orderServiceImpl.payResultQuery(aliPayServiceImpl, 152);
+		//orderServiceImpl.payResultQuery(aliPayServiceImpl, 152);
 		
 		//aliPayServiceImpl.payResultQuery(152);
 	}

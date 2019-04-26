@@ -480,26 +480,39 @@ public class OrderServiceImpl implements OrderService {
 	} 
 
 	/**
-	 * 安全起见 这里还是不要事务回滚了 
+	 * 同步处理  避免轮询和异步处理时  同时处理 
+	 * 安全起见 这里还是不要事务回滚了  
 	 */
 
 	@Override
-	public void payResultQuery(PayService payService, int order_id) throws RuntimeException {
-		MccPayResult mccPayResult = payService.payResultQuery(order_id);
+	public synchronized void payResultQuery(PayService payService, String ordercode) throws RuntimeException {
+		
+		//检验b2b单据状态是否为待付款状态
+		//MccOrder mccOrder =mccOrderMapper.getOne(order_id);
+		MccOrder mccOrder =mccOrderMapper.getOneByCode(ordercode);
+		String order_unpay_status=settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_UNPAY_STATUS);
+		
+		if(mccOrder==null ||Integer.valueOf( order_unpay_status)!=mccOrder.getOrder_status_id())
+			return ;//如果是空订单或者单据状态不为等待付款,就返回
+			
+			MccPayResult mccPayResult = payService.payResultQuery(ordercode);
 
-		if(mccPayResult!=null && PayResult.SUCCESS.getCode().equals(mccPayResult.getTradestatus())) {//付款成功
+			if(mccPayResult!=null && PayResult.SUCCESS.getCode().equals(mccPayResult.getTradestatus())) {//付款成功
+				
+				//1更新b2b订单为已付款  这里必须及时 涉及到用户端付款之后页面检查是否付款的字段
+				 updateMccOrderPayedAndCreateResult(mccOrder.getOrder_id(), mccPayResult);
+				
+				//2、erp订单状态 扮演审核的角色  调用ERP存储过程
+				 List<TbSalesNotice> list=tbSalesNoticeMapper.getListByMccOrderID(mccOrder.getOrder_id(),BusinessInterfaceType.B2BToERPOnLine.getCode());
+				 for(TbSalesNotice tbSalesNotice:list) {
+					 httpApproval(tbSalesNotice.getIbillid(),defaultuser);
+				 }
+			}
 			
-			//1更新b2b订单为已付款  这里必须及时 涉及到用户端付款之后页面检查是否付款的字段
-			 updateMccOrderPayedAndCreateResult(order_id, mccPayResult);
-			
-			//2、erp订单状态 扮演审核的角色  调用ERP存储过程
-			 List<TbSalesNotice> list=tbSalesNoticeMapper.getListByMccOrderID(order_id,BusinessInterfaceType.B2BToERPOnLine.getCode());
-			 for(TbSalesNotice tbSalesNotice:list) {
-				 httpApproval(tbSalesNotice.getIbillid(),defaultuser);
-			 }
-			 
-			 
-		}
+		
+		
+		
+
 		
 	}
 	
