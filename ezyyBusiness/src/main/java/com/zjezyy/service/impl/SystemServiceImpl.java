@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.exception.BusinessException;
 import com.zjezyy.mapper.erp.SystemMapper;
+import com.zjezyy.service.AuthorityService;
 import com.zjezyy.service.SystemService;
 import com.zjezyy.utils.HttpClientUtil;
 
@@ -24,19 +25,12 @@ public  class SystemServiceImpl implements SystemService {
 	@Autowired
 	SystemMapper systemMapper;
 	
+	@Autowired
+	AuthorityService authorityServiceImpl;
+	
 	@Value("${erp.billcode.create.url}")
 	String vcbillcodeURL;
 
-	@Override
-	public String genToken(String userName, String password) throws RuntimeException {
-		return null;
-	}
-
-	@Override
-	public boolean checkToken(String token) throws RuntimeException {
-
-		return true;
-	}
 
 	// 此方法不能用于@Transactional下面，否则不行；
 	@Override
@@ -52,9 +46,14 @@ public  class SystemServiceImpl implements SystemService {
 
 	@Override
 	public String genBillCodeForTransactional(String prefix)throws RuntimeException{
+		
+		//获取头信息的token值
+		Map<String,String > map_head=new HashMap<>();
+		authorityServiceImpl.credateHeader(map_head);
+		
 		String url=getBillCodeURL(prefix);
 		String code="";
-		String resStr=HttpClientUtil.get(url);
+		String resStr=HttpClientUtil.get(url,map_head);
 		
 		JSONObject jsonObject=null;
 		if(resStr!=null) {

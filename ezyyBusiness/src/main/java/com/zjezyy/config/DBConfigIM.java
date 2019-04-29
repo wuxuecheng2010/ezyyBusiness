@@ -1,11 +1,13 @@
 package com.zjezyy.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import lombok.Data;
-import oracle.jdbc.xa.OracleXADataSource;
 
 @Data
+
+@Component
 /**
  * 将application.properties配置文件中配置自动封装到实体类字段中
  * @author Administrator

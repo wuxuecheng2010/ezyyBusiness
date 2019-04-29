@@ -1,9 +1,11 @@
 package com.zjezyy.filter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.zjezyy.service.AuthorityService;
 import com.zjezyy.utils.JwtUtil;
 
 import javax.servlet.FilterChain;
@@ -16,6 +18,9 @@ import java.io.IOException;
 @WebFilter(filterName="authfilter",urlPatterns="/*")
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final PathMatcher pathMatcher = new AntPathMatcher();
+    
+    @Autowired
+	AuthorityService AuthorityServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IllegalStateException,ServletException, IOException {
@@ -23,20 +28,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if(isProtectedUrl(request)) {
                 String token = request.getHeader("Authorization");
                 //检查jwt令牌, 如果令牌不合法或者过期, 里面会直接抛出异常, 下面的catch部分会直接返回
-                JwtUtil.validateToken(token);
+                //JwtUtil.validateToken(token);
+                AuthorityServiceImpl.checkToken(token);
             }
-            
         } 
-/*        catch (IllegalStateException e) {
-            //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-        	//response.sendRedirect("system/filtererr");
-        	request.getRequestDispatcher("/system/filtererr").forward(request, response);
-            return;
-        }*/
         catch (Exception e) {
             //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         	request.setAttribute("exception", e);
-        	request.getRequestDispatcher("/system/filtererr").forward(request, response);
+        	request.getRequestDispatcher("/authorize/tokenerr").forward(request, response);
             return;
         }
         //如果jwt令牌通过了检测, 那么就把request传递给后面的RESTful api 

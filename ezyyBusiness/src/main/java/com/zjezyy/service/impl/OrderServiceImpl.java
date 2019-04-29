@@ -61,6 +61,7 @@ import com.zjezyy.mapper.erp.TbSalesNoticeSMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderSMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
+import com.zjezyy.service.AuthorityService;
 import com.zjezyy.service.CustomerService;
 import com.zjezyy.service.OrderService;
 import com.zjezyy.service.PayService;
@@ -133,6 +134,9 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	TbManagementMapper tbManagementMapper;
+	
+	@Autowired
+	AuthorityService authorityServiceImpl;
 	
 
 	@Value("${erp.system.default.user}")
@@ -672,7 +676,12 @@ public class OrderServiceImpl implements OrderService {
 		Map<String ,String > map=new HashMap<String ,String >();
 		map.put("ibillid",String.valueOf(salesnotice_ibillid));
 		map.put("user", user);
-		String resStr=HttpClientUtil.postMap(salesnoticeApprovalUrl,map );
+		
+		//获取头信息的token值
+		Map<String,String > map_head=new HashMap<>();
+		authorityServiceImpl.credateHeader(map_head);
+		
+		String resStr=HttpClientUtil.postMap(salesnoticeApprovalUrl,map,map_head );
 		JSONObject jsonObject=null;
 		if(resStr!=null) {
 			jsonObject = JSON.parseObject(resStr);

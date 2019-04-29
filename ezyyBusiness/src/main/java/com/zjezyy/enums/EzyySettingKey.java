@@ -10,6 +10,10 @@ package com.zjezyy.enums;
  */
 public enum EzyySettingKey {
 	
+	API_HEADER_NAME("api_header_name","http请求头名称"),
+	API_USER_NAME("api_user_name","http请求授权用户名称"),
+	API_USER_PASSWORD("api_user_password","http请求授权用户密码"),
+	
 	ORDER_EXPIRE_TIME("order_pay_expire_time","b2b订单付款时限  单位    分钟"),
 	ORDER_UNPAY_STATUS("order_unpay_status","订单未付款的状态码"),
 	ORDER_PAYED_STATUS("order_payed_status","订单付款后的状态码"),

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.zjezyy.filter.JwtAuthenticationFilter;
 
-@Configuration
+//@Configuration
 public class JwtConfig {
 	//@Bean
     public FilterRegistrationBean jwtFilter() {

@@ -17,7 +17,7 @@ import com.zjezyy.service.SystemService;
 import com.zjezyy.utils.ResultUtil;
 
 @RestController
-@RequestMapping(value = "/order", method = RequestMethod.GET)
+@RequestMapping(value = "/api/order", method = RequestMethod.GET)
 public class OrderController extends BaseController {
 
 	@Autowired

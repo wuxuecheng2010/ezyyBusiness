@@ -12,17 +12,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.alibaba.druid.pool.xa.DruidXADataSource;
 
 /**
  * Created by summer on 2016/11/25.
  */
-@Configuration
+@Configuration              
 @MapperScan(basePackages = "com.zjezyy.mapper.im", sqlSessionTemplateRef  = "imSqlSessionTemplate")
 public class DataSourceIMConfig {
-
 
 	 // 配置数据源
   @Bean(name = "imDataSource")
@@ -58,7 +56,7 @@ public class DataSourceIMConfig {
       SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
       bean.setDataSource(dataSource);
       //以xml文件方式 需要指定路径
-      //bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/im/*.xml"));
+      //bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/b2b/*.xml"));
       return bean.getObject();
   }
 
@@ -68,8 +66,4 @@ public class DataSourceIMConfig {
       return new SqlSessionTemplate(sqlSessionFactory);
   }
 	
-  
-  
-	
-
 }

@@ -3,9 +3,15 @@ package com.zjezyy.enums;
 public enum ExceptionEnum {
 	
 	UNKNOW_ERROR(-1,"未知原因"),
+	USER_ERR(-0001,"API授权用户不存在"),
+	USER_PSW_ERR(-0002,"API授权用户密码错误"),
+	
+	
 	TOKEN_LACK(-1000,"Token缺失"),
 	TOKEN_TIMEOUT(-1001,"Token过时"),
 	TOKEN_INVALID(-1002,"Token无效"),
+	
+	
 	
 	PREVENT_PARAMS_NOT_ALOW_EMPTY(-2,"[防刷]入参不允许为空"),
 	PREVENT_STRATEGY_ONT_IN_USE(-2,"无效的策略"),
