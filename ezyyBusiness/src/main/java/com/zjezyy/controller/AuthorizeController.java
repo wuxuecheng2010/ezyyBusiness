@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.zjezyy.aop.Prevent;
 import com.zjezyy.entity.Result;
+import com.zjezyy.utils.JwtUtil;
 import com.zjezyy.utils.ResultUtil;
 
 @Controller
@@ -27,6 +27,21 @@ public class AuthorizeController extends BaseController{
 		return this.result;
 	}
 	
+	@RequestMapping(value="/create")
+	public String cretoken() {
+		return JwtUtil.generateToken("wuxuecheng");
+	}
+
+	@RequestMapping(value="/check")
+	public String checktoken(String token ) {
+		JwtUtil.validateToken(token);
+		return "true";
+	}
+	
+	@RequestMapping(value="/api/read")
+	public String read() {
+		return "wuxuecheng";
+	}
 	
 	
 	

@@ -2,8 +2,6 @@ package com.zjezyy.entity.b2b;
 
 import java.math.BigDecimal;
 
-import com.zjezyy.entity.erp.TbMccOrder;
-
 import lombok.Data;
 
 @Data

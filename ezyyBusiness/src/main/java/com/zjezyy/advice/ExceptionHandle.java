@@ -31,7 +31,12 @@ public class ExceptionHandle {
 	      }else if(e instanceof BusinessException) {
 	    	  BusinessException MyException = (BusinessException) e;
 	          return ResultUtil.error(MyException.getCode(),MyException.getMessage());
+	      }else if(e instanceof IllegalStateException) {
+	    	  //jwt 验证token 无效
+	    	  BusinessException MyException = new BusinessException(ExceptionEnum.TOKEN_INVALID);
+	    	  return ResultUtil.error(MyException.getCode(),MyException.getMessage());
 	      }
+	    	  
 
 	      log.error("【系统异常】{}",e);
 	      return ResultUtil.error(ExceptionEnum.UNKNOW_ERROR);
