@@ -38,6 +38,14 @@ public class NotifyController extends BaseController{
 		aliPayServiceImpl.notify(request,response, Payment.ALIPAY_WAP);
 	}
 	
+	//微信 手机网页支付 异步通知地址
+	@RequestMapping(value = "/wxpay_wap",method=RequestMethod.POST)
+	public void wxpayWapNotify(HttpServletRequest request, HttpServletResponse response) {
+		wxPayServiceImpl.notify(request,response, Payment.WXPAY_WAP);
+		
+	}
+	
+	
 	//支付宝 扫码支付 异步通知地址
 	@RequestMapping(value = "/qrcode_alipay",method=RequestMethod.POST)
 	public void qrcodeAlipayNotify(HttpServletRequest request, HttpServletResponse response) {

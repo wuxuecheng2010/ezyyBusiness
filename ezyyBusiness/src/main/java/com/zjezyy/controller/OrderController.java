@@ -28,7 +28,7 @@ public class OrderController extends BaseController {
 	
 
 	//下单接口
-	//http://localhost:8099/bi/order/place?oc_order_id=95&bif=b2b-online&token=123456
+	//http://localhost:8099/bi/order/place?oc_order_id=95&bif=b2b-online
 	@RequestMapping(value = "/place", method = RequestMethod.POST)
 	public Result place(HttpServletRequest request, HttpServletResponse response) {
 
