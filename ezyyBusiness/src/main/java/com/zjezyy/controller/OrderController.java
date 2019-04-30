@@ -33,15 +33,15 @@ public class OrderController extends BaseController {
 	public Result place(HttpServletRequest request, HttpServletResponse response) {
 
 		String oc_order_id = request.getParameter("oc_order_id");
-		String bif=request.getParameter("bif");//来自b2b  换车文字表示  然后文字指向ID 防止代码ID选错 
+		String bif=request.getParameter("bif");//业务就标志 来自b2b  换车文字表示  然后文字指向ID 防止代码ID选错 
 		
-		String token = request.getParameter("token");
+		//String token = request.getParameter("token");
 		//b2b向erp下单  参数校验  通过继续  不通过则异常返回
-		orderServiceImpl.checkOrderPlaceParam(oc_order_id, token);
+		orderServiceImpl.checkOrderPlaceParam(oc_order_id);
 		int order_id=Integer.valueOf(oc_order_id);
 		int typeid=systemServiceImpl.getTypeId(bif);
 		//开始下单
-		orderServiceImpl.orderPlace(order_id, typeid,token);
+		orderServiceImpl.orderPlace(order_id, typeid);
 
 		return ResultUtil.success();
 	}

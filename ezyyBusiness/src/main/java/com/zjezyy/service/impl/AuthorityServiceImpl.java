@@ -66,7 +66,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 	                    .setSigningKey(SECRET)
 	                    .parseClaimsJws(token.replace("Bearer ",""))
 	                    .getBody();
-	            System.out.println("xxxx");
+	            //System.out.println("xxxx");
 	        }catch (Exception e){
 	            throw new IllegalStateException("Invalid Token. "+e.getMessage());
 	        }

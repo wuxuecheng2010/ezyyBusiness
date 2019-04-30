@@ -52,7 +52,7 @@ public class OrderServiceImplTest {
 
 	@Test
 	public void testOrderPlace() {
-		orderServiceImpl.orderPlace(58, 3,"123455token");
+		orderServiceImpl.orderPlace(58, 3);
 	}
 
 	@Test

@@ -5,7 +5,9 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.service.AuthorityService;
+import com.zjezyy.service.SettingService;
 import com.zjezyy.utils.JwtUtil;
 
 import javax.servlet.FilterChain;
@@ -21,12 +23,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     @Autowired
 	AuthorityService AuthorityServiceImpl;
+    
+    @Autowired
+    SettingService settingServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IllegalStateException,ServletException, IOException {
         try {
             if(isProtectedUrl(request)) {
-                String token = request.getHeader("Authorization");
+            	
+            	String headerName=settingServiceImpl.getEzyySettingValue(EzyySettingKey.API_HEADER_NAME);
+                String token = request.getHeader(headerName);
                 //检查jwt令牌, 如果令牌不合法或者过期, 里面会直接抛出异常, 下面的catch部分会直接返回
                 //JwtUtil.validateToken(token);
                 AuthorityServiceImpl.checkToken(token);

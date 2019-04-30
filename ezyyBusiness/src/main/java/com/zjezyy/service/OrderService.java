@@ -17,10 +17,10 @@ import com.zjezyy.enums.OrderComment;
 public interface OrderService {
 
 	// 校验参数传入是否合法
-	void checkOrderPlaceParam(String order_id, String token) throws RuntimeException;
+	void checkOrderPlaceParam(String order_id) throws RuntimeException;
 
 	// 下单到ERP
-	void orderPlace(int order_id,int itypeid, String token) throws RuntimeException;
+	void orderPlace(int order_id,int itypeid) throws RuntimeException;
 	
 	//创建中间表
 	Integer makeMccOrderToTbMccOrder(int order_id,int itypeid)throws RuntimeException;

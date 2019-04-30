@@ -173,19 +173,17 @@ public class OrderServiceImpl implements OrderService {
 	private Integer order_expire_status;*/
 
 	@Override
-	public void checkOrderPlaceParam(String oc_order_id, String token) throws RuntimeException {
+	public void checkOrderPlaceParam(String oc_order_id) throws RuntimeException {
 		if (oc_order_id == null || "".equals(oc_order_id)) {
 			throw new BusinessException(ExceptionEnum.B2B_ORDER_ID_LACK);
 		}
-		if (token == null || "".equals(token)) {
-			throw new BusinessException(ExceptionEnum.TOKEN_LACK);
-		}
+
 	}
 
 	//同步处理 一次只能通过一个
 	@Transactional
 	@Override
-	public synchronized void orderPlace(int order_id, int itypeid, String token) throws RuntimeException {
+	public synchronized void orderPlace(int order_id, int itypeid) throws RuntimeException {
 		// 1、复制b2b订单到erp的接口表
 		Integer impid = makeMccOrderToTbMccOrder(order_id,itypeid);
 

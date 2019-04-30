@@ -120,7 +120,7 @@ public class SynchronizeTask {
 		}
 
 		// 3、调用http请求处理数据 php服务
-		String respStr = HttpClientUtil.get(productRemoteServiceUrl);
+		String respStr = HttpClientUtil.get(productRemoteServiceUrl,null);
 		if (respStr != null && "".equals(respStr))
 			log.info(respStr);
 	}

@@ -7,9 +7,9 @@ public enum ExceptionEnum {
 	USER_PSW_ERR(-0002,"API授权用户密码错误"),
 	
 	
-	TOKEN_LACK(-1000,"Token缺失"),
-	TOKEN_TIMEOUT(-1001,"Token过时"),
-	TOKEN_INVALID(-1002,"Token无效"),
+	TOKEN_LACK(-1000,"API Token缺失"),
+	TOKEN_TIMEOUT(-1001,"API Token过时"),
+	TOKEN_INVALID(-1002,"API Token无效"),
 	
 	
 	

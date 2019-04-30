@@ -9,10 +9,10 @@ import com.zjezyy.filter.JwtAuthenticationFilter;
 //@Configuration
 public class JwtConfig {
 	//@Bean
-    public FilterRegistrationBean jwtFilter() {
+    /*public FilterRegistrationBean jwtFilter() {
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
         registrationBean.setFilter(filter);
         return registrationBean;
-    }
+    }*/
 }
