@@ -10,7 +10,7 @@ import com.zjezyy.entity.erp.TbCustomer;
 public interface TbCustomerMapper {
 	
 	//String SELECT_FIELDS="icustomerid,vccustomername,isalerid,vcregisteredaddress,vcaddress,vcstoreaddress";
-	String SELECT_FIELDS="icustomerid,vccustomername,isalerid,vcregisteredaddress,vcaddress,vcstoreaddress,flaglock,numcreditdays,numcreditdays1,numcreditdays2,numcreditdays3,numcreditmoney,vccustomercode,icredittype";
+	String SELECT_FIELDS="icustomerid,vccustomername,vclinkman,vclinkphone,vczipcode,isalerid,vcregisteredaddress,vcaddress,vcstoreaddress,flaglock,numcreditdays,numcreditdays1,numcreditdays2,numcreditdays3,numcreditmoney,vccustomercode,icredittype";
 
 	
 	String TABLE_NAME="tb_customer";

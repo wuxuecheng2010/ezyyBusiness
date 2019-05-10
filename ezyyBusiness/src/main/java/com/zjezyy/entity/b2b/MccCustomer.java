@@ -1,5 +1,7 @@
 package com.zjezyy.entity.b2b;
 
+import com.zjezyy.entity.erp.TbCustomer;
+
 import lombok.Data;
 
 @Data
@@ -10,4 +12,6 @@ public class MccCustomer {
 	   private String email;
 	   private String telephone;
 	   private Integer erp_icustomerid;
+	   
+
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.druid.sql.visitor.functions.Char;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zjezyy.entity.Result;
 import com.zjezyy.entity.b2b.MccOrder;
 import com.zjezyy.entity.b2b.MccOrderHistory;
 import com.zjezyy.entity.b2b.MccOrderProduct;
@@ -679,10 +680,10 @@ public class OrderServiceImpl implements OrderService {
 		Map<String,String > map_head=new HashMap<>();
 		authorityServiceImpl.credateHeader(map_head);
 		
-		String resStr=HttpClientUtil.postMap(salesnoticeApprovalUrl,map,map_head );
+		Result res=HttpClientUtil.postMap(salesnoticeApprovalUrl,map,map_head );
 		JSONObject jsonObject=null;
-		if(resStr!=null) {
-			jsonObject = JSON.parseObject(resStr);
+		if(res!=null && res.getStatus()==0) {
+			jsonObject = JSON.parseObject(res.getMsg());
 			int status=jsonObject.getInteger("status");
 			String msg=jsonObject.getString("msg");
 			if(status!=0) {
@@ -695,7 +696,7 @@ public class OrderServiceImpl implements OrderService {
 			String error=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核失败，原因：%s", salesnotice_ibillid,ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL.getMsg());
 			log.error(error);
 			systemServiceImpl.sendTelMsg(error, tellist);
-			throw new BusinessException(ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL);
+			throw new BusinessException(res.getMsg(),ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL);
 		}
 		
 	}

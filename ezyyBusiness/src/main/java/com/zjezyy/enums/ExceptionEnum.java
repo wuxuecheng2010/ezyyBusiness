@@ -3,6 +3,7 @@ package com.zjezyy.enums;
 public enum ExceptionEnum {
 	
 	UNKNOW_ERROR(-1,"未知原因"),
+	HTTP_ERROR(-2,"HTTP失败"),
 	USER_ERR(-0001,"API授权用户不存在"),
 	USER_PSW_ERR(-0002,"API授权用户密码错误"),
 	
@@ -27,7 +28,7 @@ public enum ExceptionEnum {
     
     B2B_CUSTOMER_UNRELATED(-1301,"B2B客户信息不完整"),//B2B客户与ERP客户未做关联
     B2B_CUSTOMER_RELATED_ERROR(-1302,"B2B客户信息有误"), //B2B客户与ERP客户关联不正确
-    
+    B2B_CUSTOMER_IS_EXISIT(-1303,"B2B客户信息已存在，不能重复创建"), //B2B客户信息已存在，不能重复创建
     
     
     ERP_ORDER_CODE_CREATE_FAIL(-2101,"创建销售单据号失败"),//创建ERP销售订单号失败
@@ -44,6 +45,12 @@ public enum ExceptionEnum {
     ERP_B2B_ORDER_PRICE_NOT_EQ(-2205,"价格异常"),//订单与商品设定的价格不一致
     
     ERP_CUSTOMER_LOCKED(-2301,"客户被锁定"),
+    ERP_CUSTOMER_ID_NOT_SUPPLY(-2302,"客户ID未提供"),
+    ERP_CUSTOMER_VCSTOREADDRESS_NOT_EXISIT(-2303,"客户信息不存在运输地址."),
+    ERP_CUSTOMER_VCSTOREADDRESS_TO_LATLNG_FAIL(-2304,"客户信息转经纬度失败."),
+    ERP_CUSTOMER_LATLNG_TO_DISTRICT_FAIL(-2305,"经纬度信息转县级信息失败."),
+    ERP_CUSTOMER_ID_NOT_EXISIT(-2306,"当前提供的客户ID不在客户信息中"),
+    ERP_CUSTOMER_LACK_VCLINKMAN(-2307,"客户信息缺少维护联系人"),
     
     ERP_SALESNOTICE_NOT_EXISIT(-3101,"销售开票单据不存在"),
     ERP_SALESNOTICE_IS_APPED(-3102,"销售开票单据已审核"),

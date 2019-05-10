@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.zjezyy.entity.Result;
 import com.zjezyy.entity.b2b.MccOrder;
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.erp.TbProductinfo;
@@ -120,9 +121,11 @@ public class SynchronizeTask {
 		}
 
 		// 3、调用http请求处理数据 php服务
-		String respStr = HttpClientUtil.get(productRemoteServiceUrl,null);
-		if (respStr != null && "".equals(respStr))
-			log.info(respStr);
+		Result ress=HttpClientUtil.get(productRemoteServiceUrl,null);
+		
+		//String respStr = HttpClientUtil.get(productRemoteServiceUrl,null);
+		if (ress != null)
+			log.info(ress.getMsg());
 	}
 
 	// 4、同步B2B库存

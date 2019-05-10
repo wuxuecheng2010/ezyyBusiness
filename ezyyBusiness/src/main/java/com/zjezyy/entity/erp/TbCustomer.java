@@ -13,6 +13,10 @@ public class TbCustomer {
 	private String vcaddress;// 客户地址
 	private String vcstoreaddress;// 送货地址
 	
+	private String vclinkman;//联系人
+	private String vclinkphone;//联系电话
+	private String vczipcode;//邮编
+	
 	private char flaglock;//是否锁定
 	
 	private Integer numcreditdays;

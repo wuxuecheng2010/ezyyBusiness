@@ -12,15 +12,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import com.alibaba.druid.pool.xa.DruidXADataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerXADataSource;
 
 /**
  * Created by summer on 2016/11/25.
  */
-//@Configuration
+@Configuration
 @MapperScan(basePackages = "com.zjezyy.mapper.pms", sqlSessionTemplateRef  = "pmsSqlSessionTemplate")
 public class DataSourcePMSConfig {
 
@@ -75,7 +73,7 @@ public class DataSourcePMSConfig {
          throws Exception {
      SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
      bean.setDataSource(dataSource);
-     bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/pms/*.xml"));
+     //bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/pms/*.xml"));
      return bean.getObject();
  }
 
@@ -86,8 +84,8 @@ public class DataSourcePMSConfig {
  }
  
  
-	/*
-    @Bean(name = "pmsDataSource")
+	
+   /* @Bean(name = "pmsDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.pms")
     public DataSource testDataSource() {
         return DataSourceBuilder.create().build();
@@ -97,7 +95,7 @@ public class DataSourcePMSConfig {
     public SqlSessionFactory testSqlSessionFactory(@Qualifier("pmsDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/pms/*.xml"));
+        //bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/pms/*.xml"));
         return bean.getObject();
     }
 

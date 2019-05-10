@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -26,6 +25,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
+import com.zjezyy.entity.Result;
+
 public class HttpClientUtil {
 
 	/**
@@ -35,22 +36,27 @@ public class HttpClientUtil {
 	 *            请求地址加参数
 	 * @return 响应
 	 */
-	public static String get(String url, Map<String, String> head_map) {
+	public static Result get(String url, Map<String, String> head_map) {
+		Result ress=null;
 		String result = null;
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet get = new HttpGet(url);
-		//增加header输入
-		addHeaders(get,head_map);
+		// 增加header输入
+		addHeaders(get, head_map);
 		CloseableHttpResponse response = null;
 		try {
 			response = httpClient.execute(get);
 			if (response != null && response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				result = entityToString(entity);
+				ress=ResultUtil.success(result);
+			}else if(response != null && response.getStatusLine().getStatusCode() != 200){
+				ress=ResultUtil.error(response.getStatusLine().getStatusCode(), "statusCode:"+response.getStatusLine().getStatusCode());
 			}
-			return result;
+
 		} catch (IOException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} finally {
 			try {
 				httpClient.close();
@@ -61,37 +67,20 @@ public class HttpClientUtil {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return ress;
 	}
 
-
-	/*public static String get_h(String url, Map<String, String> map_h) {
-		String result = null;
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		HttpGet get = new HttpGet(url);
-		addHeaders(get,map_h);
-		CloseableHttpResponse response = null;
-		try {
-			response = httpClient.execute(get);
-			if (response != null && response.getStatusLine().getStatusCode() == 200) {
-				HttpEntity entity = response.getEntity();
-				result = entityToString(entity);
-			}
-			return result;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				httpClient.close();
-				if (response != null) {
-					response.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}*/
+	/*
+	 * public static String get_h(String url, Map<String, String> map_h) { String
+	 * result = null; CloseableHttpClient httpClient = HttpClients.createDefault();
+	 * HttpGet get = new HttpGet(url); addHeaders(get,map_h); CloseableHttpResponse
+	 * response = null; try { response = httpClient.execute(get); if (response !=
+	 * null && response.getStatusLine().getStatusCode() == 200) { HttpEntity entity
+	 * = response.getEntity(); result = entityToString(entity); } return result; }
+	 * catch (IOException e) { e.printStackTrace(); } finally { try {
+	 * httpClient.close(); if (response != null) { response.close(); } } catch
+	 * (IOException e) { e.printStackTrace(); } } return null; }
+	 */
 
 	/**
 	 * get请求，参数放在map里
@@ -102,7 +91,8 @@ public class HttpClientUtil {
 	 *            参数map
 	 * @return 响应
 	 */
-	public static String getMap(String url, Map<String, String> map,Map<String, String> head_map) {
+	public static Result getMap(String url, Map<String, String> map, Map<String, String> head_map) {
+		Result ress=null;
 		String result = null;
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
@@ -114,21 +104,26 @@ public class HttpClientUtil {
 			URIBuilder builder = new URIBuilder(url);
 			builder.setParameters(pairs);
 			HttpGet get = new HttpGet(builder.build());
-			//增加header输入
-			addHeaders(get,head_map);
-			
+			// 增加header输入
+			addHeaders(get, head_map);
+
 			response = httpClient.execute(get);
 			if (response != null && response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				result = entityToString(entity);
+				ress=ResultUtil.success(result);
+			}else if(response != null && response.getStatusLine().getStatusCode() != 200){
+				ress=ResultUtil.error(response.getStatusLine().getStatusCode(), "statusCode:"+response.getStatusLine().getStatusCode());
 			}
-			return result;
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} finally {
 			try {
 				httpClient.close();
@@ -140,50 +135,30 @@ public class HttpClientUtil {
 			}
 		}
 
-		return null;
+		return ress;
 	}
 
-	
-	/*public static String getMap_h(String url, Map<String, String> map,Map<String, String> map_h) {
-		String result = null;
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-		for (Map.Entry<String, String> entry : map.entrySet()) {
-			pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-		}
-		CloseableHttpResponse response = null;
-		try {
-			URIBuilder builder = new URIBuilder(url);
-			builder.setParameters(pairs);
-			HttpGet get = new HttpGet(builder.build());
-			addHeaders(get, map_h);
-			response = httpClient.execute(get);
-			if (response != null && response.getStatusLine().getStatusCode() == 200) {
-				HttpEntity entity = response.getEntity();
-				result = entityToString(entity);
-			}
-			return result;
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				httpClient.close();
-				if (response != null) {
-					response.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	/*
+	 * public static String getMap_h(String url, Map<String, String> map,Map<String,
+	 * String> map_h) { String result = null; CloseableHttpClient httpClient =
+	 * HttpClients.createDefault(); List<NameValuePair> pairs = new
+	 * ArrayList<NameValuePair>(); for (Map.Entry<String, String> entry :
+	 * map.entrySet()) { pairs.add(new BasicNameValuePair(entry.getKey(),
+	 * entry.getValue())); } CloseableHttpResponse response = null; try { URIBuilder
+	 * builder = new URIBuilder(url); builder.setParameters(pairs); HttpGet get =
+	 * new HttpGet(builder.build()); addHeaders(get, map_h); response =
+	 * httpClient.execute(get); if (response != null &&
+	 * response.getStatusLine().getStatusCode() == 200) { HttpEntity entity =
+	 * response.getEntity(); result = entityToString(entity); } return result; }
+	 * catch (URISyntaxException e) { e.printStackTrace(); } catch
+	 * (ClientProtocolException e) { e.printStackTrace(); } catch (IOException e) {
+	 * e.printStackTrace(); } finally { try { httpClient.close(); if (response !=
+	 * null) { response.close(); } } catch (IOException e) { e.printStackTrace(); }
+	 * }
+	 * 
+	 * return null; }
+	 */
 
-		return null;
-	}*/
-	
-	
 	/**
 	 * 发送post请求，参数用map接收
 	 * 
@@ -193,7 +168,9 @@ public class HttpClientUtil {
 	 *            参数
 	 * @return 返回值
 	 */
-	public static String postMap(String url, Map<String, String> map,Map<String, String> head_map) {
+	public static Result postMap(String url, Map<String, String> map, Map<String, String> head_map) {
+		
+		Result ress=null;
 		String result = null;
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost post = new HttpPost(url);
@@ -211,14 +188,20 @@ public class HttpClientUtil {
 			if (response != null && response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				result = entityToString(entity);
+				ress=ResultUtil.success(result);
+			}else if(response != null && response.getStatusLine().getStatusCode() != 200){
+				ress=ResultUtil.error(response.getStatusLine().getStatusCode(), "statusCode:"+response.getStatusLine().getStatusCode());
 			}
-			return result;
+			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} finally {
 			try {
 				httpClient.close();
@@ -230,7 +213,7 @@ public class HttpClientUtil {
 			}
 
 		}
-		return null;
+		return ress;
 	}
 
 	/**
@@ -242,7 +225,8 @@ public class HttpClientUtil {
 	 *            json字符串
 	 * @return 响应
 	 */
-	public static String postJson(String url, String jsonString,Map<String, String> head_map) {
+	public static Result postJson(String url, String jsonString, Map<String, String> head_map) {
+		Result ress=null;
 		String result = null;
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost post = new HttpPost(url);
@@ -254,14 +238,19 @@ public class HttpClientUtil {
 			if (response != null && response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				result = entityToString(entity);
+				ress=ResultUtil.success(result);
+			}else if(response != null && response.getStatusLine().getStatusCode() != 200){
+				ress=ResultUtil.error(response.getStatusLine().getStatusCode(), "statusCode:"+response.getStatusLine().getStatusCode());
 			}
-			return result;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
+			ress= ResultUtil.error(-9999, e.getMessage());
 		} finally {
 			try {
 				httpClient.close();
@@ -272,7 +261,7 @@ public class HttpClientUtil {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return ress;
 	}
 
 	private static String entityToString(HttpEntity entity) throws IOException {
@@ -303,5 +292,9 @@ public class HttpClientUtil {
 			}
 
 	}
+
+
+
+
 
 }

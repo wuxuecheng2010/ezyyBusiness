@@ -19,7 +19,7 @@ import com.zjezyy.config.DBConfigWMS;
 @ServletComponentScan
 @SpringBootApplication
 @MapperScan(basePackages="com.zjezyy.mapper")
-@EnableScheduling
+//@EnableScheduling
 @EnableConfigurationProperties(value= {DBConfigERP.class,DBConfigWMS.class,DBConfigB2B.class})
 
 public class EzyyBusinessApplication {

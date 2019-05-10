@@ -62,6 +62,13 @@ public class AuthorizeController extends BaseController{
 		return "wuxuecheng";
 	}
 	*/
+	@RequestMapping(value="/test")
+	public String test(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "success";
+	}
+	
+
 	
 	
 	
