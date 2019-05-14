@@ -69,21 +69,18 @@ footer {
 			<div class="col-md-12 column">
 				<div class="row clearfix">
 					<div class="col-md-3 column">
-						<div id="main" class="item"></div>
-					</div>
-					<div class="col-md-3 column">
-						<div id="main2" class="item"></div>
-					</div>
-					<div class="col-md-3 column">
-						<div id="main3" class="item"></div>
-					</div>
-					<div class="col-md-3 column">
-						<div id="main4" class="item"></div>
+						<div id="main" class="item">
+							
+						</div>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-3 column">
-						<div id="main5" class="item"></div>
+						<div id="main5" class="item">
+						
+					     <span th:include="template::copyright"></span> 
+						
+						</div>
 					</div>
 
 				</div>
@@ -129,9 +126,38 @@ footer {
 </script>
 
 <script type="text/javascript">
+$(function(){
+	ajaxtable();
+})
+    
+//方式一 得到 html  再赋值给节点
+function ajaxtable(){
+	$.ajax({
+         //url:'[[@{/test/table}]]',  //采用模板返回
+         //dataType: 'html',
+        url:'[[@{/test/tablex}]]',//通过解析器 返回html
+        dataType: 'text',
+        complete: function() {
+            //$('#button-payment-method').button('reset');
+        },
+        success: function(html) {
+        	alert(html);
+        	$("#main").html(html);
+            //$('#collapse-checkout-confirm .panel-body').html(html);
 
+			//$('#collapse-checkout-confirm').parent().find('.panel-heading .panel-title').html('<a href="#collapse-checkout-confirm" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $text_checkout_confirm; ?> <i class="fa fa-caret-down"></i></a>');
+
+			//$('a[href=\'#collapse-checkout-confirm\']').trigger('click');
+		},
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+}
 
 </script>
+
+
 
 </body>
 </html>

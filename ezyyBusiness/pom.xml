@@ -41,8 +41,13 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-		<!-- <dependency> <groupId>tk.mybatis</groupId> <artifactId>mapper-spring-boot-starter</artifactId> 
-			<version>1.1.1</version> </dependency> -->
+		<!--mapper -->
+		<!-- <dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
+		</dependency> -->
+
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -260,19 +265,24 @@
 		</dependency>
 		<!-- /http所需包 -->
 
-		<!-- mybatis的分页插件 -->
+		<!-- springboot分页插件 -->
 		<dependency>
-			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper</artifactId>
-			<version>4.1.6</version>
+		    <groupId>com.github.pagehelper</groupId>
+		    <artifactId>pagehelper-spring-boot-starter</artifactId>
+		    <!-- 特别注意版本问题, 看到评论以后得以纠正 -->
+		    <version>1.2.3</version>
 		</dependency>
-		
-		<!--jwt-->
+
+
+
+
+
+		<!--jwt -->
 		<dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.7.0</version>
-        </dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.7.0</version>
+		</dependency>
 
 
 	</dependencies>
@@ -286,11 +296,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
-			
-			
-			
-			
+
+
+
+
+
 		</plugins>
 	</build>
 

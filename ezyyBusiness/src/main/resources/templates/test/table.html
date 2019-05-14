@@ -1,0 +1,19 @@
+<!-- 直接html模式 内部元素缺乏重用性  设计ajax时   又需要画模板 缺乏统一性 难以维护-->
+<!-- <div>
+     <ul>
+         <li  th:each="address:${addresslist}">
+              <span th:text="${address}"></span>-
+         </li>
+     </ul>
+</div> -->
+
+
+
+<div>
+     <ul>
+         <li  th:each="address:${addresslist}">
+              <!-- 替换模板内容 -->
+              <span th:replace="template::addressitem"></span> 
+         </li>
+     </ul>
+</div>

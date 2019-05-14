@@ -1,0 +1,15 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+  <body>
+  
+   <!--   定义模板  地址行单元 -->
+   <span th:fragment="addressitem" th:text="${address}"></span>
+  
+    <!--    底部模板 -->
+    <div th:fragment="copyright" id="copyright">
+      © 2016 xxx <span th:text="${name}"></span>
+      
+    </div>
+  </body>
+</html> 

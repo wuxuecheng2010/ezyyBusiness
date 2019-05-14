@@ -39,4 +39,11 @@ public interface TbProductinfoMapper {
 	@Update({"update tb_productinfo set iydstate=1 where iproductid=#{iproductid} "})
 	void updateTbProductinfoIydstate(int iproductid);
 	
+	
+	@Select({"select ",SELECT_FIELDS," from " ,TABLE_NAME," order by iproductid"})
+	List<TbProductinfo> getProductListAll();
+	
+	@Select({"select ","count(*)"," from " ,TABLE_NAME})
+	int  getProductListCount();
+	
 }

@@ -24,6 +24,13 @@ public class TbProductinfoMapperTest {
 		TbProductinfo_Eo tbProductinfo	=tbProductinfoMapper.getOneEo(12112,201);
 		System.out.println(tbProductinfo.getVcuniversalname());
 	}
+	
+	
+	@Test
+	public void testCountProduct() {
+		int n	=tbProductinfoMapper.getProductListCount();
+		System.out.println(n);
+	}
 
 
 }
