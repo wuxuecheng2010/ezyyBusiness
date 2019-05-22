@@ -11,17 +11,28 @@ import org.springframework.stereotype.Service;
 
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.b2b.MccProduct_Eo;
+import com.zjezyy.entity.b2b.MccTbCustomerKind;
+import com.zjezyy.entity.b2b.MccTbCustomerKindPrice;
+import com.zjezyy.entity.erp.TbCustomer;
+import com.zjezyy.entity.erp.TbCustomerKindList;
+import com.zjezyy.entity.erp.TbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbStockControl;
 import com.zjezyy.entity.erp.TbStocks;
 import com.zjezyy.enums.ExceptionEnum;
+import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.exception.BusinessException;
 import com.zjezyy.mapper.b2b.MccProductMapper;
+import com.zjezyy.mapper.b2b.MccTbCustomerKindMapper;
+import com.zjezyy.mapper.b2b.MccTbCustomerKindPriceMapper;
+import com.zjezyy.mapper.erp.TbCustomerKindListMapper;
+import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbProductinfoMapper;
 import com.zjezyy.mapper.erp.TbStockControlMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
 import com.zjezyy.service.ProductService;
+import com.zjezyy.service.SettingService;
 import com.zjezyy.utils.DateUtils;
 import com.zjezyy.utils.RedisUtil;
 
@@ -35,6 +46,21 @@ public class ProductServiceImpl implements ProductService {
 	MccProductMapper mccProductMapper;
 	@Autowired
 	TbProductinfoMapper tbProductinfoMapper;
+	
+	@Autowired
+	MccTbCustomerKindMapper mccTbCustomerKindMapper;
+	
+	@Autowired
+	TbCustomerKindListMapper tbCustomerKindListMapper;
+	
+	@Autowired
+	TbCustomerKindPriceMapper tbCustomerKindPriceMapper;
+	
+	@Autowired
+	MccTbCustomerKindPriceMapper mccTbCustomerKindPriceMapper;
+	
+	@Autowired
+	SettingService SettingServiceImpl;
 
 	// @Autowired
 	// private RedisTemplate redisTemplate;
@@ -51,8 +77,8 @@ public class ProductServiceImpl implements ProductService {
 	@Value("${b2b.product.price.icustomerkindid}")
 	private Integer icustomerkindid;
 
-	@Value("${b2b.product.price.pricetype}")
-	private String pricetype;
+	/*@Value("${b2b.product.price.pricetype}")
+	private String pricetype;*/
 
 	@Value("${product.redies.timetout}")
 	private int productRedisTime;
@@ -81,6 +107,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public BigDecimal getERPProductPriceByTbProductinfoEo(TbProductinfo_Eo tbProductinfoEo) throws RuntimeException {
 		BigDecimal price = BigDecimal.ZERO;
+		String pricetype=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_FIELD);
 		if (tbProductinfoEo != null) {
 			switch (pricetype) {
 			case "numprice":
@@ -332,6 +359,99 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void updateMccProductQuantity(MccProduct mccProduct, BigDecimal erpqty) throws RuntimeException {
 		mccProductMapper.setMccProductQuantity(mccProduct.getProduct_id(), erpqty);
+	}
+
+	
+	//根据b2b中存在的集合  更新集合价格明细
+	@Override
+	public void doSynchronizeCustomerKindPrice() throws RuntimeException {
+		
+		//获取价格集合列表
+		List<MccTbCustomerKind> list =mccTbCustomerKindMapper.getAllList();
+		
+		//循环获取价格
+		for(MccTbCustomerKind mccTbCustomerKind:list) {
+			
+			Integer icustomerkindid=mccTbCustomerKind.getIcustomerkindid();
+			List<TbCustomerKindPrice> erppicelist= tbCustomerKindPriceMapper.getListByKindID(icustomerkindid);
+			
+			//检查b2b 是否有该集合   
+			       for(TbCustomerKindPrice tbCustomerKindPrice:erppicelist) {
+			    	  Integer isid= tbCustomerKindPrice.getIsid();
+			    	  MccTbCustomerKindPrice mccTbCustomerKindPrice=mccTbCustomerKindPriceMapper.getOne(isid);
+			    	  if(mccTbCustomerKindPrice==null) {
+			    		  //没有就插入
+			    		  mccTbCustomerKindPrice=new MccTbCustomerKindPrice(tbCustomerKindPrice);
+			    		  mccTbCustomerKindPriceMapper.insert(mccTbCustomerKindPrice);
+			    	  }else {
+			    		  //有就更新
+			    		  mccTbCustomerKindPriceMapper.updateByTbCustomerKindPrice(tbCustomerKindPrice);
+			    	  }
+			       }
+			       
+		}
+			
+		
+	}
+
+	@Override
+	public BigDecimal getERPProductCustomerPriceByTbProductinfoEoAndTbCustomer(TbProductinfo_Eo tbProductinfoEo,
+			TbCustomer tbCustomer) throws RuntimeException {
+		BigDecimal price = BigDecimal.ZERO;
+		String pricetype=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_FIELD);
+		//获取客户所在集合
+		TbCustomerKindList tbCustomerKindList=tbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
+		//获取商品集合价格
+		if(tbCustomerKindList!=null) {
+			Integer icustomerkindid=tbCustomerKindList.getIcustomerkindid();
+			Integer iproductid=tbProductinfoEo.getIproductid();
+			TbCustomerKindPrice tbCustomerKindPrice=tbCustomerKindPriceMapper.getOne(iproductid, icustomerkindid);
+
+			if (tbCustomerKindPrice != null) {
+				switch (pricetype) {
+				case "numprice":
+					price = tbCustomerKindPrice.getNumprice();
+					break;
+				case "numlowprice":
+					price = tbCustomerKindPrice.getNumlowprice();
+					break;
+				case "numassesscost":
+					price = tbCustomerKindPrice.getNumassesscost();
+					break;
+				case "numguidprice":
+					price = tbCustomerKindPrice.getNumguidprice();
+					break;
+
+				default:
+					price = tbCustomerKindPrice.getNumguidprice();
+					break;
+				}
+			}
+			if (price.compareTo(new BigDecimal(0)) == 0 || price.compareTo(new BigDecimal(0)) == -1) {
+				throw new BusinessException(tbProductinfoEo.toString(),ExceptionEnum.ERP_PRODUCT_PRICE_LQ_ZERO);
+			}
+
+		}
+		return price;
+	}
+
+	@Override
+	public BigDecimal getERPProductPrice(TbProductinfo_Eo tbProductinfoEo,TbCustomer tbCustomer) throws RuntimeException {
+		BigDecimal price=BigDecimal.ZERO;
+		//获取价格模式
+		String pricemodel=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_MODEL);;
+		
+		if(pricemodel==null||"".equals(pricemodel)||"0".equals(pricemodel)) {
+			price=getERPProductPriceByTbProductinfoEo( tbProductinfoEo);
+		}else {
+			price=getERPProductCustomerPriceByTbProductinfoEoAndTbCustomer( tbProductinfoEo,
+					 tbCustomer);
+		}
+		if (price.compareTo(new BigDecimal(0)) == 0 || price.compareTo(new BigDecimal(0)) == -1) {
+			throw new BusinessException(tbProductinfoEo.toString(),ExceptionEnum.ERP_PRODUCT_PRICE_LQ_ZERO);
+		}
+		
+		return price;
 	}
 
 }

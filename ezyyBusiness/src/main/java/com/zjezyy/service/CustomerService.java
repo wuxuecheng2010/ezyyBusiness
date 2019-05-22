@@ -8,5 +8,5 @@ public interface CustomerService {
      
      Result makeTbCustomerToMccCustomer(int icustomerid,int flag_credit_user)throws RuntimeException ;
      
-     
+     void makeTbCustomerKindToMccTbCustomerKindByICustomerid(int icustomerid)throws RuntimeException ;
 }

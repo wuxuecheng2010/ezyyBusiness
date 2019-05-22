@@ -15,7 +15,7 @@ public class LogUtil {
 			into=String.format("业务 %s.%s： B2B商品ID：%s,出错Code：%d,错误信息：%s", clazz,method,mccProduct.getProduct_id(),code,message);
 		    log.warn(into);
     	}else {
-    		into=String.format("业务 %s.$s：B2B商品ID：%s,错误信息%s", clazz,method,mccProduct.getProduct_id(),e.getMessage());
+    		into=String.format("业务 %s.%s：B2B商品ID：%s,错误信息%s", clazz,method,mccProduct.getProduct_id(),e.getMessage());
 			log.warn(into);
 		}
     }

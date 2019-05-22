@@ -11,14 +11,21 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zjezyy.entity.Address;
 import com.zjezyy.entity.Result;
 import com.zjezyy.entity.b2b.MccAddress;
 import com.zjezyy.entity.b2b.MccCustomer;
+import com.zjezyy.entity.b2b.MccTbCustomerKind;
+import com.zjezyy.entity.b2b.MccTbCustomerKindList;
 import com.zjezyy.entity.erp.TbCustomer;
+import com.zjezyy.entity.erp.TbCustomerKind;
+import com.zjezyy.entity.erp.TbCustomerKindList;
 import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.exception.BusinessException;
 import com.zjezyy.mapper.b2b.MccCustomerMapper;
+import com.zjezyy.mapper.b2b.MccTbCustomerKindListMapper;
+import com.zjezyy.mapper.b2b.MccTbCustomerKindMapper;
+import com.zjezyy.mapper.erp.TbCustomerKindListMapper;
+import com.zjezyy.mapper.erp.TbCustomerKindMapper;
 import com.zjezyy.mapper.erp.TbCustomerMapper;
 import com.zjezyy.service.AddressService;
 import com.zjezyy.service.CustomerService;
@@ -33,6 +40,14 @@ public class CustomerServiceimpl implements CustomerService {
 	TbCustomerMapper tbCustomerMapper;
 	@Autowired
 	AddressService AddressServiceImpl;
+	@Autowired
+	TbCustomerKindListMapper tbCustomerKindListMapper;
+	@Autowired
+	TbCustomerKindMapper tbCustomerKindMapper;
+	@Autowired
+	MccTbCustomerKindMapper mccTbCustomerKindMapper;
+	@Autowired
+	MccTbCustomerKindListMapper mccTbCustomerKindListMapper;
 
 	@Value("${b2b.api.url}")
 	private String customer_receive_url;
@@ -100,6 +115,11 @@ public class CustomerServiceimpl implements CustomerService {
 
 						// 更新客户默认的客户地址
 						mccCustomerMapper.updateAddressID(customer_id, mccAddress.getAddress_id());
+						
+						//根据ERP客户ID 获取客户的客户集合信息  集合列表
+						makeTbCustomerKindToMccTbCustomerKindByICustomerid(icustomerid);
+						
+						
 
 					} catch (Exception e) {
 						// 因为客户地址数据保存出错，删除本次创建的客户信息 保持数据的一致性
@@ -144,6 +164,45 @@ public class CustomerServiceimpl implements CustomerService {
 		map.put("password", String.valueOf(password));
 		map.put("flag_credit_user", String.valueOf(flag_credit_user));
 		map.put("erp_icustomerid", String.valueOf(tbCustomer.getIcustomerid()));
+	}
+
+	//根据ERP客户ID 创建客户集合  和  客户集合列表
+	@Transactional
+	@Override
+	public void makeTbCustomerKindToMccTbCustomerKindByICustomerid(int icustomerid) throws RuntimeException {
+		//获取客户所在的价格集合
+		TbCustomerKindList tbCustomerKindList =tbCustomerKindListMapper.getOne(icustomerid);
+		
+		if(tbCustomerKindList!=null) {
+			
+			//客户集合ID  
+			Integer icustomerkindid=tbCustomerKindList.getIcustomerkindid();
+			
+			//获取集合信息  
+			TbCustomerKind tbCustomerKind=tbCustomerKindMapper.getOne(icustomerkindid);
+			
+			//保存mcc_tb_customerkind
+			MccTbCustomerKind mccTbCustomerKind=mccTbCustomerKindMapper.getOne(icustomerkindid);
+			if(mccTbCustomerKind==null) {
+				MccTbCustomerKind _mccTbCustomerKind=new MccTbCustomerKind(tbCustomerKind);
+				mccTbCustomerKindMapper.insert(_mccTbCustomerKind);
+			}
+			
+			//保存mcc_tb_customerkindlist
+			MccTbCustomerKindList mccTbCustomerKindList=mccTbCustomerKindListMapper.getOne(icustomerid);
+			if(mccTbCustomerKindList==null) {
+				MccTbCustomerKindList _mccTbCustomerKindList=new MccTbCustomerKindList(tbCustomerKindList);
+				mccTbCustomerKindListMapper.insert(_mccTbCustomerKindList);
+			}
+			
+			
+		}else {
+			
+			throw new BusinessException(String.format("客户ID:%d", icustomerid),ExceptionEnum.ERP_CUSTOMER_KIND_NOT_SET);
+		}
+		
+			
+		
 	}
 
 }

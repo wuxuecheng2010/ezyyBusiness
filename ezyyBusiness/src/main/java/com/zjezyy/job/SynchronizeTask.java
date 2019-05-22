@@ -80,7 +80,7 @@ public class SynchronizeTask {
 	@Scheduled(initialDelay = 2000, fixedRate = 150000)
 	public void b2bPrice() throws Exception {
 		//测试模式不执行
-		if(!"dev".equals(mode)) {
+		//if(!"dev".equals(mode)) {
 					// 获得当前类名
 					String clazz = Thread.currentThread().getStackTrace()[1].getClassName();
 					// 获得当前方法名
@@ -97,7 +97,7 @@ public class SynchronizeTask {
 							LogUtil.logForB2BProduct(clazz, method, e, mccProduct);
 						}
 					}
-		}
+		//}
 	}
 
 	// 3、同步B2B商品信息 根据价格集合 有维护B2B商品价格体系的，同步到B2b来 上下架关系 由高低储和价格需信息来决定 此处只关心商品数据
@@ -129,7 +129,7 @@ public class SynchronizeTask {
 	}
 
 	// 4、同步B2B库存
-	@Scheduled(initialDelay = 4000, fixedRate = 150000)
+	//@Scheduled(initialDelay = 4000, fixedRate = 150000)
 	public void b2bStock() throws Exception {
 
 		// 获得当前类名
@@ -194,5 +194,15 @@ public class SynchronizeTask {
 		}
 
 	}
+	
+	//7、根据客户集合  同步商品价格体系
+	@Scheduled(initialDelay = 150, fixedRate = 3000)
+	public void customerkindprice() throws Exception {
+		
+		productServiceImpl.doSynchronizeCustomerKindPrice();
+
+	}
+	
+	
 
 }

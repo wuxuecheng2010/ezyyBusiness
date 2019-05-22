@@ -20,6 +20,10 @@ public enum EzyySettingKey {
 	ORDER_EXPIRE_STATUS("order_expire_status","订单取消状态码（超时即为取消）"),
 	ORDER_INIT_STATUS("order_init_status","订单初始状态"),
 	B2B_MANAGER_TELS("b2b_manager_tels","b2b网站管理者，接收系统重要错误信息"),
+	
+	PRODUCT_PRICE_CUSTOMER_MODEL("product_price_customer_model","价格模式 0 一刀切按照B2B价格体系；1按照客户所在价格集合的商品价格"),
+	PRODUCT_PRICE_CUSTOMER_FIELD("product_price_customer_field","b2b价格取ERP系统价格体系所对应的字段"),
+	
 ;
 
 	private String key;

@@ -38,7 +38,7 @@ public enum ExceptionEnum {
     ERP_ORDER_ITYPEID_WRONG(-2105,"销售订单单据类型不为4"),// 单据itypeid不=4 参考BusinessInterfaceType
     ERP_ORDER_TBMCC_NOT_EXISIT(-2106,"销售订单中间表数据不存在"),
     
-    ERP_PRODUCT_PRICE_LQ_ZERO(-2201,"系统商品价格有误"),//ERP商品价格<=0
+    ERP_PRODUCT_PRICE_LQ_ZERO(-2201,"商品价格未设定"),//ERP商品价格<=0
     ERP_PRODUCT_STOCK_SHORT(-2202,"商品库存不足"),
     ERP_PRODUCT_NO_CASH_SALE(-2203,"商品不允许现金销售"),
     ERP_PRODUCT_ZZRSOVER(-2204,"商品属于终止妊娠药品，但是您的该类经营许可证过期"),
@@ -51,6 +51,7 @@ public enum ExceptionEnum {
     ERP_CUSTOMER_LATLNG_TO_DISTRICT_FAIL(-2305,"经纬度信息转县级信息失败."),
     ERP_CUSTOMER_ID_NOT_EXISIT(-2306,"当前提供的客户ID不在客户信息中"),
     ERP_CUSTOMER_LACK_VCLINKMAN(-2307,"客户信息缺少维护联系人"),
+    ERP_CUSTOMER_KIND_NOT_SET(-2308,"客户集合信息未维护,请先维护"),
     
     ERP_SALESNOTICE_NOT_EXISIT(-3101,"销售开票单据不存在"),
     ERP_SALESNOTICE_IS_APPED(-3102,"销售开票单据已审核"),

@@ -239,7 +239,9 @@ public class OrderServiceImpl implements OrderService {
 			TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(product_id);
 			//判断商品价格是否和订单价格一致
 			BigDecimal order_product_price=mccOrderProduct.getPrice();
-			BigDecimal erp_product_price=productServiceImpl.getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
+			//根据系统设定的价格模式，获取价格
+			//BigDecimal erp_product_price=productServiceImpl.getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
+			BigDecimal erp_product_price=productServiceImpl.getERPProductPrice( tbProductinfo_Eo, tbCustomer);
 			if(order_product_price.compareTo(erp_product_price)!=0) {
 				throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_B2B_ORDER_PRICE_NOT_EQ);
 			}

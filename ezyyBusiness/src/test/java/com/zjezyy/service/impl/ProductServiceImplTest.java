@@ -71,6 +71,12 @@ public class ProductServiceImplTest {
 		System.out.println(list.size());
 	}
 	
+	@Test
+	public void testDoSynchronizeCustomerKindPrice() {
+		
+		productServiceImpl.doSynchronizeCustomerKindPrice();
+	}
+	
 	
 
 	

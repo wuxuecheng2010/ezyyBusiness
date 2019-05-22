@@ -125,7 +125,7 @@ public class TestController {
 			return list;
 		}
 		
-		//分页代码展示测试
+		//分页代码展示测试 http://10.0.2.11:8099/bi/test/pageful?pageno=24&pagesize=150
 		@RequestMapping(value="/pageful")
 		public ModelAndView t6(HttpServletRequest request, HttpServletResponse response) {
 			//获取总行数
