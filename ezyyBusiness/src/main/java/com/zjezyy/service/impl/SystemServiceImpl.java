@@ -55,8 +55,14 @@ public class SystemServiceImpl implements SystemService {
 
 		JSONObject jsonObject = null;
 		if (res != null && res.getStatus() == 0) {
-			jsonObject = JSON.parseObject(res.getMsg());
-			code = jsonObject.getString("data");
+			String data=(String)res.getData();
+			
+			if(data!=null && !"".equals(data)) {
+				int status=JSON.parseObject(data).getIntValue("status");
+				if(status==0)
+					code=JSON.parseObject(data).getString("data");
+			}
+			
 		} else {
 			throw new BusinessException(res.getMsg(), ExceptionEnum.ERP_ORDER_CODE_CREATE_HTTP_FAIL);
 		}

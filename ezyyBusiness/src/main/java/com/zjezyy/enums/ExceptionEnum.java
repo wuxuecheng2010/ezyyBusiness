@@ -32,7 +32,7 @@ public enum ExceptionEnum {
     
     
     ERP_ORDER_CODE_CREATE_FAIL(-2101,"创建销售单据号失败"),//创建ERP销售订单号失败
-    ERP_ORDER_CODE_CREATE_HTTP_FAIL(-2102,"创建销售单据号http失败"),//创建ERP销售订单号失败
+    ERP_ORDER_CODE_CREATE_HTTP_FAIL(-2102,"销售单据号创建失败"),//创建ERP销售订单号失败
     ERP_ORDER_IS_USED_TO_NOTICE(-2103,"销售订单已经转为销售开票，不能重复转"),//ERP销售订单flagapp=Y表示 已经转到销售开票了
     ERP_ORDER_NOT_EXISIT(-2104,"销售订单不存在"),//
     ERP_ORDER_ITYPEID_WRONG(-2105,"销售订单单据类型不为4"),// 单据itypeid不=4 参考BusinessInterfaceType

@@ -307,6 +307,8 @@ public class OrderServiceImpl implements OrderService {
 		for (Entry<String, List<TbMccOrderProduct>> entry : set) {
 			//销售订单主单
 			String vcbillcode =systemServiceImpl.genBillCodeForTransactional(salesOrderBillPrefix);
+			if("".equals(vcbillcode))
+				throw new BusinessException(ExceptionEnum.ERP_ORDER_CODE_CREATE_HTTP_FAIL);//单据创建失败
 			TbSalesOrder tbSalesOrder=new TbSalesOrder(tbMccOrder,vcbillcode, itypeid, defaultuser);
 			tbSalesOrderMapper.insert(tbSalesOrder);
 			
