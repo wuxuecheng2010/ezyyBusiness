@@ -44,6 +44,9 @@ public enum ExceptionEnum {
     ERP_PRODUCT_ZZRSOVER(-2204,"商品属于终止妊娠药品，但是您的该类经营许可证过期"),
     ERP_B2B_ORDER_PRICE_NOT_EQ(-2205,"价格异常"),//订单与商品设定的价格不一致
     
+    ERP_PRODUCT_ID_ERR(-2207,"商品ID未提供或者不是有效的数字"),
+    
+    
     ERP_CUSTOMER_LOCKED(-2301,"客户被锁定"),
     ERP_CUSTOMER_ID_NOT_SUPPLY(-2302,"客户ID未提供"),
     ERP_CUSTOMER_VCSTOREADDRESS_NOT_EXISIT(-2303,"客户信息不存在运输地址."),
@@ -52,6 +55,7 @@ public enum ExceptionEnum {
     ERP_CUSTOMER_ID_NOT_EXISIT(-2306,"当前提供的客户ID不在客户信息中"),
     ERP_CUSTOMER_LACK_VCLINKMAN(-2307,"客户信息缺少维护联系人"),
     ERP_CUSTOMER_KIND_NOT_SET(-2308,"客户集合信息未维护,请先维护"),
+    ERP_CUSTOMER_BASE_KIND_NOT_SET(-2309,"客户集合信息未维护,请先维护"),
     
     ERP_SALESNOTICE_NOT_EXISIT(-3101,"销售开票单据不存在"),
     ERP_SALESNOTICE_IS_APPED(-3102,"销售开票单据已审核"),

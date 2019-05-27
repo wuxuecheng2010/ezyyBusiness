@@ -1,5 +1,8 @@
 package com.zjezyy.mapper.b2b;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -41,5 +44,11 @@ public interface MccTbCustomerKindPriceMapper {
 	@Insert({"insert into ",TABLE_NAME,"("+INSERT_FIELDS+")","values","("+INSERT_VALUES+")"})
 	@Options(useGeneratedKeys=true,keyProperty="id",keyColumn="id")
 	int insert(MccTbCustomerKindPrice mccTbCustomerKindPrice);
+	
+	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where icustomerkindid = #{icustomerkindid}"})
+	List<MccTbCustomerKindPrice> getListByKindID(int icustomerkindid);
+	
+	@Delete({"delete from ",TABLE_NAME," where isid=#{isid}"})
+	int deleteByISID(int isid);
 	
 }

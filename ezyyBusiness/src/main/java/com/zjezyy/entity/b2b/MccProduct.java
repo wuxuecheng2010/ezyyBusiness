@@ -1,6 +1,11 @@
 package com.zjezyy.entity.b2b;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
+
+import com.zjezyy.entity.erp.TbProductinfo;
+import com.zjezyy.utils.DateUtils;
 
 import lombok.Data;
 
@@ -42,5 +47,52 @@ public class MccProduct {
 	private String  date_added;
 	private String date_modified;
 	private Integer erpiproductid;
+	public MccProduct() {
+		
+	}
 
+	
+public MccProduct(String model,String sku,String location,int erpiproductid) {
+
+	this.model = model;
+	this.sku = sku;
+	this.upc = "";
+	this.ean = "";
+	this.jan = "";
+	this.isbn = "";
+	this.mpn = "";
+	this.location = location;
+	this.quantity = new BigDecimal("999999");
+	this.minimum = 1;
+	this.subtract = true;
+	this.stock_status_id = 5;
+	
+	this.manufacturer_id = 0;
+	this.shipping = true;
+	this.price =  new BigDecimal("0");
+	this.points =0;
+	this.weight = new BigDecimal("0");
+	this.weight_class_id = 1;
+	this.length =new BigDecimal("0");
+	this.width =new BigDecimal("0");
+	this.height = new BigDecimal("0");
+	this.length_class_id = 1;
+	this.status = 0;
+	this.viewed=0;
+	this.tax_class_id = 0; 
+	this.sort_order = 1; 
+	
+	String now="2019-05-24";
+	try {
+		 now=DateUtils.dateFormat(new Date(), DateUtils.DATE_PATTERN);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+	this.date_added = now;
+	this.date_modified=now;
+	this.date_available = now;
+	this.erpiproductid=erpiproductid;
+	
+	}
+	
 }

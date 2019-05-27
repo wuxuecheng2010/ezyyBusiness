@@ -19,7 +19,7 @@ public class CustomerServiceimplTest {
 	
 	@Test
 	public void testMakeTbCustomerKindToMccTbCustomerKindByICustomerid() {
-		customerServiceimpl.makeTbCustomerKindToMccTbCustomerKindByICustomerid(450);
+		//customerServiceimpl.makeTbCustomerKindToMccTbCustomerKindByICustomerid(450);
 	}
 
 }

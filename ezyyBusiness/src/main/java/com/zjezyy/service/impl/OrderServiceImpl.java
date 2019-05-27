@@ -811,7 +811,7 @@ public class OrderServiceImpl implements OrderService {
 	    	
 	    
 	    if(!"".equals(sErrMsg)) {
-	    	throw new BusinessException(sWaingMsg,-9996);
+	    	throw new BusinessException(sErrMsg,-9996);
 	    }
 	    	
 	    map.put("_bSpecialManOver", _bSpecialManOver);

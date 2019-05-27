@@ -9,10 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.zjezyy.entity.b2b.MccProduct;
+import com.zjezyy.entity.erp.TbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbStocks;
 import com.zjezyy.mapper.b2b.MccProductMapper;
+import com.zjezyy.mapper.b2b.MccTbCustomerKindPriceMapper;
+import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
 import com.zjezyy.service.ProductService;
 
@@ -28,7 +31,10 @@ public class ProductServiceImplTest {
 	TbStocksMapper tbStocksMapper;
 	@Autowired
 	MccProductMapper mccProductMapper;
-
+	@Autowired
+	MccTbCustomerKindPriceMapper mccTbCustomerKindPriceMapper;
+	@Autowired
+	TbCustomerKindPriceMapper tbCustomerKindPriceMapper;
 	@Test
 	public void testGetTbProductinfoByMccProductId() {
 		TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(40);
@@ -78,8 +84,20 @@ public class ProductServiceImplTest {
 	}
 	
 	
-
+	@Test
+	public void testupdateMccProductByTbProductinfo() {
+		TbProductinfo tbProductinfo=	productServiceImpl.getTbProductinfoById(982);
+		productServiceImpl.updateMccProductByTbProductinfo(tbProductinfo);
+	}
 	
-	
+	@Test
+	public void testx() {
+		//MccTbCustomerKindPrice mccTbCustomerKindPrice= mccTbCustomerKindPriceMapper.getOne(74866);
+		//获取ERP价格集合信息 //如果没有则删除B2b的价格集合  
+ 	   TbCustomerKindPrice tbCustomerKindPrice= tbCustomerKindPriceMapper.getOneByISID(74866);
+ 	   if(tbCustomerKindPrice==null)
+ 		   mccTbCustomerKindPriceMapper.deleteByISID(74866);
+		
+	}
 
 }

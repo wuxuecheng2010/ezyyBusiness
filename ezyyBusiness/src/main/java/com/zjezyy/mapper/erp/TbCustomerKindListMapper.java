@@ -13,9 +13,16 @@ public interface TbCustomerKindListMapper {
 	
     String TABLE_NAME="tb_customerkindlist";
 	
-	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where icustomerid = #{icustomerid}"})
+	/*@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where icustomerid = #{icustomerid} and icustomerkindid in (select icustomerkindid from tb_customerkind where  nvl(flagstop,'N')='N')"})
+	TbCustomerKindList getOne(int icustomerid);*/
+    
+    
+    
+	@Select({"select * from tb_customerkindlist a where a.icustomerid = #{icustomerid}" , 
+			"   and exists(" ,
+			"   select 1 from tb_customerkind b where a.icustomerkindid=icustomerkindid and   nvl(b.flagstop,'N')='N'" , 
+			"   )"})
 	TbCustomerKindList getOne(int icustomerid);
-	
 
 	
 	

@@ -14,8 +14,8 @@ import com.zjezyy.entity.erp.TbProductinfo_Eo;
 public interface TbProductinfoMapper {
 	
 
-	String SELECT_FIELDS="a.iproductid,a.vcproductname,a.vcproductcode,a.vcuniversalname,a.istorageoptionid,nvl(a.flagcold,'N') flagcold,nvl(a.flagfreezing,'N')flagfreezing,"
-			+ "a.vcstandard,a.iproductunitid,a.numsaletaxrate,a.numpurchasetaxrate,a.numcountryprice,a.numwarningdays,a.imanagementid";
+	String SELECT_FIELDS="a.iproductid,a.iproductkindid,a.vcproductname,a.vcproductcode,a.vcuniversalname,a.istorageoptionid,nvl(a.flagcold,'N') flagcold,nvl(a.flagfreezing,'N')flagfreezing,"
+			+ "a.vcstandard,a.iproductunitid,a.iproducerid,a.numsaletaxrate,a.numpurchasetaxrate,a.numcountryprice,a.numwarningdays,a.imanagementid,a.iydstate ";
 	String TABLE_NAME="tb_productinfo a";
 	
 	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where a.iproductid = #{iproductid}"})
@@ -36,14 +36,20 @@ public interface TbProductinfoMapper {
 			"and nvl(a.iydstate,0)=0" })
 	List<TbProductinfo> getProductListForB2B(int icustomerkindid);
 	
-	@Update({"update tb_productinfo set iydstate=1 where iproductid=#{iproductid} "})
-	void updateTbProductinfoIydstate(int iproductid);
+	@Update({"update tb_productinfo set iydstate=#{iydstate} where iproductid=#{iproductid} "})
+	void updateTbProductinfoIydstate(int iproductid,int iydstate);
 	
 	
 	@Select({"select ",SELECT_FIELDS," from " ,TABLE_NAME," order by iproductid"})
 	List<TbProductinfo> getProductListAll();
 	
+	@Select({"select ",SELECT_FIELDS," from " ,TABLE_NAME," where nvl(a.iydstate,0)=1"," order by iproductid"})
+	List<TbProductinfo> getProductListForYD();
+	
 	@Select({"select ","count(*)"," from " ,TABLE_NAME})
 	int  getProductListCount();
+	
+	
+	
 	
 }

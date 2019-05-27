@@ -28,5 +28,7 @@ public class TbCustomer {
 	private String vccustomercode;
 	private Integer icredittype;// ICREDITTYPE
 	
+	private Integer icustomerkindid;
+	
 	
 }

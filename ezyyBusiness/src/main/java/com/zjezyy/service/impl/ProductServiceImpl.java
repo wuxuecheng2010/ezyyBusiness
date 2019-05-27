@@ -5,15 +5,22 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.zjezyy.entity.b2b.MccProduct;
+import com.zjezyy.entity.b2b.MccProductDescription;
+import com.zjezyy.entity.b2b.MccProductToCategory;
+import com.zjezyy.entity.b2b.MccProductToLayout;
+import com.zjezyy.entity.b2b.MccProductToStore;
 import com.zjezyy.entity.b2b.MccProduct_Eo;
 import com.zjezyy.entity.b2b.MccTbCustomerKind;
 import com.zjezyy.entity.b2b.MccTbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbCustomer;
+import com.zjezyy.entity.erp.TbCustomerKind;
 import com.zjezyy.entity.erp.TbCustomerKindList;
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbProductinfo;
@@ -22,15 +29,22 @@ import com.zjezyy.entity.erp.TbStockControl;
 import com.zjezyy.entity.erp.TbStocks;
 import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.enums.EzyySettingKey;
+import com.zjezyy.enums.LanguageEnum;
 import com.zjezyy.exception.BusinessException;
+import com.zjezyy.mapper.b2b.MccProductDescriptionMapper;
 import com.zjezyy.mapper.b2b.MccProductMapper;
+import com.zjezyy.mapper.b2b.MccProductToCategoryMapper;
+import com.zjezyy.mapper.b2b.MccProductToLayoutMapper;
+import com.zjezyy.mapper.b2b.MccProductToStoreMapper;
 import com.zjezyy.mapper.b2b.MccTbCustomerKindMapper;
 import com.zjezyy.mapper.b2b.MccTbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindListMapper;
+import com.zjezyy.mapper.erp.TbCustomerKindMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbProductinfoMapper;
 import com.zjezyy.mapper.erp.TbStockControlMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
+import com.zjezyy.service.BaseInfoService;
 import com.zjezyy.service.ProductService;
 import com.zjezyy.service.SettingService;
 import com.zjezyy.utils.DateUtils;
@@ -51,6 +65,9 @@ public class ProductServiceImpl implements ProductService {
 	MccTbCustomerKindMapper mccTbCustomerKindMapper;
 	
 	@Autowired
+	TbCustomerKindMapper tbCustomerKindMapper;
+	
+	@Autowired
 	TbCustomerKindListMapper tbCustomerKindListMapper;
 	
 	@Autowired
@@ -58,6 +75,18 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	MccTbCustomerKindPriceMapper mccTbCustomerKindPriceMapper;
+	
+	@Autowired
+	MccProductDescriptionMapper mccProductDescriptionMapper;
+	@Autowired
+	MccProductToStoreMapper mccProductToStoreMapper;
+	@Autowired
+	MccProductToCategoryMapper mccProductToCategoryMapper;
+	@Autowired
+	MccProductToLayoutMapper mccProductToLayoutMapper;
+	
+	@Autowired
+	BaseInfoService baseInfoServiceImpl;
 	
 	@Autowired
 	SettingService SettingServiceImpl;
@@ -80,8 +109,15 @@ public class ProductServiceImpl implements ProductService {
 	/*@Value("${b2b.product.price.pricetype}")
 	private String pricetype;*/
 
-	@Value("${product.redies.timetout}")
+	@Value("${redies.timetout}")
 	private int productRedisTime;
+	
+	@Value("${erp.product.to.b2b.state}")
+	private int productToB2bState;
+	
+
+	
+	
 
 	@Override
 	public TbProductinfo_Eo getTbProductinfoEoByMccProductId(int product_id) throws RuntimeException {
@@ -319,8 +355,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void setTbProductinfoIydstate(TbProductinfo tbProductinfo) {
-		tbProductinfoMapper.updateTbProductinfoIydstate(tbProductinfo.getIproductid());
+	public void setTbProductinfoIydstate(TbProductinfo tbProductinfo,int iydstate) {
+		tbProductinfoMapper.updateTbProductinfoIydstate(tbProductinfo.getIproductid(),iydstate);
 	}
 
 	@Override
@@ -372,6 +408,7 @@ public class ProductServiceImpl implements ProductService {
 		//循环获取价格
 		for(MccTbCustomerKind mccTbCustomerKind:list) {
 			
+			//ERP====>B2B 更新
 			Integer icustomerkindid=mccTbCustomerKind.getIcustomerkindid();
 			List<TbCustomerKindPrice> erppicelist= tbCustomerKindPriceMapper.getListByKindID(icustomerkindid);
 			
@@ -389,48 +426,78 @@ public class ProductServiceImpl implements ProductService {
 			    	  }
 			       }
 			       
+			// B2B====>ERP 更新      
+			       //获取B2B价格集合信息
+			       List<MccTbCustomerKindPrice> b2bpicelist= mccTbCustomerKindPriceMapper.getListByKindID(icustomerkindid);
+			       
+			       for(MccTbCustomerKindPrice mccTbCustomerKindPrice:b2bpicelist) {
+			    	 //获取ERP价格集合信息 //如果没有则删除B2b的价格集合  
+			    	   TbCustomerKindPrice tbCustomerKindPrice= tbCustomerKindPriceMapper.getOneByISID(mccTbCustomerKindPrice.getIsid());
+			    	   if(tbCustomerKindPrice==null)
+			    		   mccTbCustomerKindPriceMapper.deleteByISID(mccTbCustomerKindPrice.getIsid());
+			       }
 		}
 			
 		
 	}
+	
+	
+	
 
 	@Override
 	public BigDecimal getERPProductCustomerPriceByTbProductinfoEoAndTbCustomer(TbProductinfo_Eo tbProductinfoEo,
 			TbCustomer tbCustomer) throws RuntimeException {
 		BigDecimal price = BigDecimal.ZERO;
 		String pricetype=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_FIELD);
-		//获取客户所在集合
-		TbCustomerKindList tbCustomerKindList=tbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
-		//获取商品集合价格
-		if(tbCustomerKindList!=null) {
-			Integer icustomerkindid=tbCustomerKindList.getIcustomerkindid();
-			Integer iproductid=tbProductinfoEo.getIproductid();
-			TbCustomerKindPrice tbCustomerKindPrice=tbCustomerKindPriceMapper.getOne(iproductid, icustomerkindid);
-
-			if (tbCustomerKindPrice != null) {
-				switch (pricetype) {
-				case "numprice":
-					price = tbCustomerKindPrice.getNumprice();
-					break;
-				case "numlowprice":
-					price = tbCustomerKindPrice.getNumlowprice();
-					break;
-				case "numassesscost":
-					price = tbCustomerKindPrice.getNumassesscost();
-					break;
-				case "numguidprice":
-					price = tbCustomerKindPrice.getNumguidprice();
-					break;
-
-				default:
-					price = tbCustomerKindPrice.getNumguidprice();
-					break;
-				}
+		
+		//第一种 、获取客户信息中标志的价格集合
+		TbCustomerKindPrice tbCustomerKindPrice=
+				tbCustomerKindPriceMapper.getOneByKindIDAndIcustomerID( tbProductinfoEo.getIproductid(), tbCustomer.getIcustomerid());
+		price = picktbCustomerKindPricePrice( pricetype, tbCustomerKindPrice);
+		if(price.compareTo(BigDecimal.ZERO)<=0) {
+			//如果没有价格
+			//第二种、根据特殊的价格集合取价格
+			//获取客户所在集合
+			TbCustomerKindList tbCustomerKindList=tbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
+			//获取商品集合价格
+			if(tbCustomerKindList!=null) {
+				Integer icustomerkindid=tbCustomerKindList.getIcustomerkindid();
+				Integer iproductid=tbProductinfoEo.getIproductid();
+				tbCustomerKindPrice=tbCustomerKindPriceMapper.getOne(iproductid, icustomerkindid);
+				price = picktbCustomerKindPricePrice( pricetype, tbCustomerKindPrice);
+				
 			}
-			if (price.compareTo(new BigDecimal(0)) == 0 || price.compareTo(new BigDecimal(0)) == -1) {
-				throw new BusinessException(tbProductinfoEo.toString(),ExceptionEnum.ERP_PRODUCT_PRICE_LQ_ZERO);
-			}
+		}	
+				
+		if (price.compareTo(new BigDecimal(0)) == 0 || price.compareTo(new BigDecimal(0)) == -1) {
+			throw new BusinessException(tbProductinfoEo.toString(),ExceptionEnum.ERP_PRODUCT_PRICE_LQ_ZERO);
+		}
+		
+		return price;
+	}
 
+	private BigDecimal picktbCustomerKindPricePrice( String pricetype,
+			TbCustomerKindPrice tbCustomerKindPrice) {
+		BigDecimal price=BigDecimal.ZERO; 
+		if (tbCustomerKindPrice != null) {
+			switch (pricetype) {
+			case "numprice":
+				price = tbCustomerKindPrice.getNumprice();
+				break;
+			case "numlowprice":
+				price = tbCustomerKindPrice.getNumlowprice();
+				break;
+			case "numassesscost":
+				price = tbCustomerKindPrice.getNumassesscost();
+				break;
+			case "numguidprice":
+				price = tbCustomerKindPrice.getNumguidprice();
+				break;
+
+			default:
+				price = tbCustomerKindPrice.getNumguidprice();
+				break;
+			}
 		}
 		return price;
 	}
@@ -452,6 +519,105 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 		return price;
+	}
+
+	//跟新ERP商品信息到B2B
+	@Override
+	public void doSynchronizeProductInfo(int iproductid,int store_id,int layout_id) throws RuntimeException {
+		//获取商品信息
+		TbProductinfo tbProductinfo=tbProductinfoMapper.getOne(iproductid);
+		//检查信息是否存在  存在则更新  不存在则新增
+		MccProduct mccProduct=mccProductMapper.getOneByErpIproductid(iproductid);
+		if(mccProduct==null ) {
+			makeTbProductinfoToMccProduct(tbProductinfo,store_id,layout_id);
+		}else {
+			//log.info("####iproductid:%d"+iproductid);
+			updateMccProductByTbProductinfo(tbProductinfo);
+		}
+		
+	}
+
+/*	$this->insert_mcc_product($IPRODUCTID,$VCSTANDARD,$VCPRODUCERNAME,$ERPIPRODUCTID,$VCUNITNAME);
+    $this->insert_mcc_product_description_1($IPRODUCTID,$VCUNIVERSALNAME);
+    $this->insert_mcc_product_description_2($IPRODUCTID,$VCUNIVERSALNAME);
+    $this->insert_mcc_product_description_3($IPRODUCTID,$VCUNIVERSALNAME);
+    $this->insert_mcc_product_to_store($IPRODUCTID);
+    $this->insert_mcc_product_to_category($IPRODUCTID,$IPRODUCTKINDID);
+    $this->insert_mcc_product_to_layout($IPRODUCTID);
+    $this->insert_mcc_url_alias($IPRODUCTID);*/
+	@Transactional
+	@Override
+	public void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id) throws RuntimeException {
+		//1、保存 mcc_product
+		MccProduct mccProduct=new MccProduct(tbProductinfo.getVcstandard(), 
+				baseInfoServiceImpl.getTbUnitByID(tbProductinfo.getIproductunitid()).getVcunitname(), 
+				baseInfoServiceImpl.getTbProducerByID(tbProductinfo.getIproducerid()).getVcproducername(), 
+				tbProductinfo.getIproductid());
+		mccProductMapper.insert(mccProduct);
+		
+		//2、保存mcc_product_description 多语言都保存一次
+		MccProductDescription mccProductDescription=new MccProductDescription(mccProduct.getProduct_id(),LanguageEnum.zh_cn, tbProductinfo);
+		mccProductDescriptionMapper.insert(mccProductDescription);
+							  mccProductDescription=new MccProductDescription(mccProduct.getProduct_id(),LanguageEnum.en_gb, tbProductinfo);
+		mccProductDescriptionMapper.insert(mccProductDescription);
+							  mccProductDescription=new MccProductDescription(mccProduct.getProduct_id(),LanguageEnum.zh_hk, tbProductinfo);
+		mccProductDescriptionMapper.insert(mccProductDescription);
+		
+		//3、store
+		MccProductToStore mccProductToStore=new MccProductToStore(mccProduct.getProduct_id(),store_id);
+		mccProductToStoreMapper.insert(mccProductToStore);
+		
+		//4、category
+		MccProductToCategory mccProductToCategory=new MccProductToCategory(mccProduct.getProduct_id(),tbProductinfo.getIproductkindid());
+		mccProductToCategoryMapper.insert(mccProductToCategory);
+		
+		//5、layout
+		MccProductToLayout mccProductToLayout=new MccProductToLayout(mccProduct.getProduct_id(),store_id,layout_id);
+		mccProductToLayoutMapper.insert(mccProductToLayout);
+		
+		//6 mcc_url_alias
+		
+		//7、 修改ERP商品状态
+		this.setTbProductinfoIydstate(tbProductinfo, productToB2bState);
+		String msg=String.format("商品ID：%d 商品通用名：%s 规格：%s,成功加入到B2B", tbProductinfo.getIproductid(),tbProductinfo.getVcuniversalname(),tbProductinfo.getVcstandard());
+		log.info(msg);
+		
+	}
+
+	@Override
+	public void updateMccProductByTbProductinfo(TbProductinfo tbProductinfo) throws RuntimeException {
+		
+		Integer iydstate=tbProductinfo.getIydstate();
+		if(iydstate==null || iydstate!=2)
+			//7、 修改ERP商品状态
+			this.setTbProductinfoIydstate(tbProductinfo, productToB2bState);
+		//其他的更新  比如名称规格等  此次不管
+	}
+
+	@Override
+	public List<TbProductinfo> getProductsForPM() throws RuntimeException {
+		return tbProductinfoMapper.getProductListForYD();
+	}
+
+	@Override
+	public void doSynchronizeCustomerKind() throws RuntimeException {
+		
+		//获取集合列表
+		List<TbCustomerKind> list =tbCustomerKindMapper.getBaseList();
+		
+		//循环获取价格
+		for(TbCustomerKind tbCustomerKind:list) {
+			int icustomerkindid=tbCustomerKind.getIcustomerkindid();
+			//获取B2b上面的集合
+			MccTbCustomerKind mccTbCustomerKind=mccTbCustomerKindMapper.getOne(icustomerkindid);
+			if(mccTbCustomerKind==null) {
+				//保存价格集合到B2B
+				mccTbCustomerKind=new MccTbCustomerKind(tbCustomerKind);
+				mccTbCustomerKindMapper.insert(mccTbCustomerKind);
+			}
+		}
+			
+		
 	}
 
 }

@@ -19,6 +19,7 @@ import com.github.pagehelper.PageHelper;
 import com.zjezyy.entity.Result;
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.erp.TbProductinfo;
+import com.zjezyy.exception.BusinessException;
 import com.zjezyy.mapper.b2b.MccProductMapper;
 import com.zjezyy.mapper.erp.TbProductinfoMapper;
 import com.zjezyy.utils.ResultUtil;
@@ -138,5 +139,15 @@ public class TestController {
 	public Result testresult() {
 		return ResultUtil.success("WX123");
 	}
+	
+	
+	@RequestMapping(value = "/exception")
+	@ResponseBody
+	public Result testException() {
+		if(1==1)
+			throw new BusinessException("xxxxxTets Exception",-9996);
+		return ResultUtil.success("WX123");
+	}
+
 
 }

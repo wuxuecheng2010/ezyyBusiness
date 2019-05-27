@@ -117,7 +117,7 @@ public class CustomerServiceimpl implements CustomerService {
 						mccCustomerMapper.updateAddressID(customer_id, mccAddress.getAddress_id());
 						
 						//根据ERP客户ID 获取客户的客户集合信息  集合列表
-						makeTbCustomerKindToMccTbCustomerKindByICustomerid(icustomerid);
+						makeTbCustomerKindToMccTbCustomerKindByICustomerid(tbCustomer);
 						
 						
 
@@ -153,6 +153,8 @@ public class CustomerServiceimpl implements CustomerService {
 			throw new BusinessException(ExceptionEnum.ERP_CUSTOMER_ID_NOT_EXISIT);
 		if(tbCustomer.getVclinkman()==null||"".equals(tbCustomer.getVclinkman().trim()))
 			throw new BusinessException(ExceptionEnum.ERP_CUSTOMER_LACK_VCLINKMAN);
+		if(tbCustomer.getIcustomerkindid()==null)
+			throw new BusinessException(ExceptionEnum.ERP_CUSTOMER_BASE_KIND_NOT_SET);
 	}
 
 	// 创建B2B账户参数
@@ -164,14 +166,15 @@ public class CustomerServiceimpl implements CustomerService {
 		map.put("password", String.valueOf(password));
 		map.put("flag_credit_user", String.valueOf(flag_credit_user));
 		map.put("erp_icustomerid", String.valueOf(tbCustomer.getIcustomerid()));
+		map.put("icustomerkindid", String.valueOf(tbCustomer.getIcustomerkindid()));
 	}
 
 	//根据ERP客户ID 创建客户集合  和  客户集合列表
 	@Transactional
 	@Override
-	public void makeTbCustomerKindToMccTbCustomerKindByICustomerid(int icustomerid) throws RuntimeException {
+	public void makeTbCustomerKindToMccTbCustomerKindByICustomerid(TbCustomer tbCustomer) throws RuntimeException {
 		//获取客户所在的价格集合
-		TbCustomerKindList tbCustomerKindList =tbCustomerKindListMapper.getOne(icustomerid);
+		TbCustomerKindList tbCustomerKindList =tbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
 		
 		if(tbCustomerKindList!=null) {
 			
@@ -189,7 +192,7 @@ public class CustomerServiceimpl implements CustomerService {
 			}
 			
 			//保存mcc_tb_customerkindlist
-			MccTbCustomerKindList mccTbCustomerKindList=mccTbCustomerKindListMapper.getOne(icustomerid);
+			MccTbCustomerKindList mccTbCustomerKindList=mccTbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
 			if(mccTbCustomerKindList==null) {
 				MccTbCustomerKindList _mccTbCustomerKindList=new MccTbCustomerKindList(tbCustomerKindList);
 				mccTbCustomerKindListMapper.insert(_mccTbCustomerKindList);
@@ -198,7 +201,7 @@ public class CustomerServiceimpl implements CustomerService {
 			
 		}else {
 			
-			throw new BusinessException(String.format("客户ID:%d", icustomerid),ExceptionEnum.ERP_CUSTOMER_KIND_NOT_SET);
+			//throw new BusinessException(String.format("客户ID:%d", tbCustomer.getIcustomerid()),ExceptionEnum.ERP_CUSTOMER_KIND_NOT_SET);
 		}
 		
 			

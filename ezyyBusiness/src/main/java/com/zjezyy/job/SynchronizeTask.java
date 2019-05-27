@@ -1,5 +1,6 @@
 package com.zjezyy.job;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -110,26 +111,38 @@ public class SynchronizeTask {
 		String method = Thread.currentThread().getStackTrace()[1].getMethodName();
 
 		// 1、查询维护了B2B价格集合的商品 并且ERP商品信息表iydstate 为0或者null的商品信息
-		List<TbProductinfo> list = productServiceImpl.getProductsForB2B();
-
+		
+		List<TbProductinfo> list=new ArrayList<TbProductinfo>();
+		List<TbProductinfo> list1 = productServiceImpl.getProductsForB2B();//加入到B2B集合的数据
+		List<TbProductinfo> list2= productServiceImpl.getProductsForPM();//药店使用了ERP商品ID的数据
+		list.addAll(list1);
+		list.addAll(list2);
 		// 2、修改商品信息表字段iydstate=1
 		String into = "";
 		for (TbProductinfo tbProductinfo : list) {
-			productServiceImpl.setTbProductinfoIydstate(tbProductinfo);
-			into = String.format("ERP商品ID：%d修改iydstate状态为1，准备自动对接到B2B", tbProductinfo.getIproductid());
-			log.info(into);
+			try {
+				productServiceImpl.doSynchronizeProductInfo(tbProductinfo.getIproductid(), 0, 0);
+				//productServiceImpl.setTbProductinfoIydstate(tbProductinfo);
+				into = String.format("ERP商品ID：%d修改iydstate状态为1，准备导入到B2B", tbProductinfo.getIproductid());
+				log.info(into);
+			} catch (Exception e) {
+				LogUtil.logForERPProduct(clazz, method, e, tbProductinfo);
+			}
+			
+			
 		}
 
-		// 3、调用http请求处理数据 php服务
+		/*// 3、调用http请求处理数据 php服务
 		Result ress=HttpClientUtil.get(productRemoteServiceUrl,null);
+		
 		
 		//String respStr = HttpClientUtil.get(productRemoteServiceUrl,null);
 		if (ress != null)
-			log.info(ress.getMsg());
+			log.info(ress.getMsg());*/
 	}
 
 	// 4、同步B2B库存
-	//@Scheduled(initialDelay = 4000, fixedRate = 150000)
+	@Scheduled(initialDelay = 4000, fixedRate = 150000)
 	public void b2bStock() throws Exception {
 
 		// 获得当前类名
@@ -195,13 +208,23 @@ public class SynchronizeTask {
 
 	}
 	
-	//7、根据客户集合  同步商品价格体系
+	
+	//7、根据客户集合信息
 	@Scheduled(initialDelay = 150, fixedRate = 3000)
+	public void customerkind() throws Exception {
+		
+		productServiceImpl.doSynchronizeCustomerKind();
+
+	}
+	
+	//8、根据客户集合  同步商品价格体系
+	@Scheduled(initialDelay = 200, fixedRate = 3000)
 	public void customerkindprice() throws Exception {
 		
 		productServiceImpl.doSynchronizeCustomerKindPrice();
 
 	}
+		
 	
 	
 

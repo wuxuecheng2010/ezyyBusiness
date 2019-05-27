@@ -21,4 +21,12 @@ public interface TbCustomerKindPriceMapper {
 	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where icustomerkindid = #{icustomerkindid} "})
 	List<TbCustomerKindPrice> getListByKindID(int icustomerkindid);
 	
+	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where isid = #{isid} "})
+	TbCustomerKindPrice getOneByISID(int isid);
+	
+	
+	@Select({"select b.* from tb_customer a left join tb_customerkindprice b " , 
+			" on a.icustomerkindid = b.icustomerkindid where a.icustomerid=#{icustomerid} and b.iproductid=#{iproductid}  "})
+	TbCustomerKindPrice getOneByKindIDAndIcustomerID(int iproductid,int icustomerid);
+	
 }

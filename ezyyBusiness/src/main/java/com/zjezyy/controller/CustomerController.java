@@ -15,7 +15,7 @@ import com.zjezyy.service.CustomerService;
 import com.zjezyy.utils.ResultUtil;
 
 @RestController
-@RequestMapping(value = "/api/customer", method = RequestMethod.GET)
+@RequestMapping(value = "/customer", method = RequestMethod.GET)
 public class CustomerController extends BaseController {
 
 

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
 
+import lombok.Data;
+@Data
 public class MccTbCustomerKindPrice {
 	private Integer id;
 	private Integer isid;

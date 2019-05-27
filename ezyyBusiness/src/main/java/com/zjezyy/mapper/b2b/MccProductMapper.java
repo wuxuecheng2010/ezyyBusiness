@@ -3,11 +3,14 @@ package com.zjezyy.mapper.b2b;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import com.zjezyy.entity.b2b.MccAddress;
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.b2b.MccProduct_Eo;
 @Repository
@@ -16,6 +19,14 @@ public interface MccProductMapper {
 	
 	String SELECT_FIELDS="a.product_id,a.model,a.sku,a.upc,a.ean,a.jan,a.isbn,a.mpn,a.location,a.quantity,a.stock_status_id,a.image,a.manufacturer_id,a.shipping,a.price,a.points,a.tax_class_id,a.date_available,a.weight,a.weight_class_id,a.length,a.width,a.height,a.length_class_id,a.subtract,a.minimum,a.sort_order,a.status,a.viewed,a.date_added,a.date_modified,a.erpiproductid";
 	String TABLE_NAME="mcc_product a";
+	
+	String INSERT_FIELDS="model,sku,upc,ean,jan,isbn,mpn,location,quantity,stock_status_id,image,manufacturer_id,shipping,price,points,tax_class_id,date_available,weight,weight_class_id,length,width,height,length_class_id,subtract,minimum,sort_order,status,viewed,date_added,date_modified,erpiproductid";
+
+	String INSERT_VALUES="#{model,jdbcType=VARCHAR},#{sku,jdbcType=VARCHAR},#{upc,jdbcType=VARCHAR},#{ean,jdbcType=VARCHAR},#{jan,jdbcType=VARCHAR},#{isbn,jdbcType=VARCHAR},#{mpn,jdbcType=VARCHAR},#{location,jdbcType=VARCHAR},#{quantity,jdbcType=DECIMAL},#{stock_status_id,jdbcType=INTEGER},#{image,jdbcType=VARCHAR},#{manufacturer_id,jdbcType=INTEGER},#{shipping,jdbcType=INTEGER},#{price,jdbcType=DECIMAL},#{points,jdbcType=INTEGER},#{tax_class_id,jdbcType=INTEGER},#{date_available,jdbcType=DATE},#{weight,jdbcType=DECIMAL},#{weight_class_id,jdbcType=INTEGER},#{length,jdbcType=DECIMAL},#{width,jdbcType=DECIMAL},#{height,jdbcType=DECIMAL},#{length_class_id,jdbcType=INTEGER},#{subtract,jdbcType=INTEGER},#{minimum,jdbcType=INTEGER},#{sort_order,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{viewed,jdbcType=INTEGER},#{date_added,jdbcType=TIMESTAMP},#{date_modified,jdbcType=TIMESTAMP},#{erpiproductid,jdbcType=INTEGER}";
+
+
+	
+	
 	@Select({"select ", SELECT_FIELDS,",b.name,b.description", " from ", TABLE_NAME,
 		" left join  mcc_product_description b on a.product_id=b.product_id and b.language_id=#{language_id}",
 		" where a.product_id = #{product_id}"})
@@ -52,4 +63,10 @@ public interface MccProductMapper {
 	
 	@Update({"update mcc_product set quantity=#{quantity} where product_id=#{product_id}"})
 	int  setMccProductQuantity(int product_id,BigDecimal quantity);
+	
+	
+	@Insert({"insert into ","mcc_product","("+INSERT_FIELDS+")","values","("+INSERT_VALUES+")"})
+	@Options(useGeneratedKeys=true,keyProperty="product_id",keyColumn="product_id")
+	int insert(MccProduct mccproduct);
+	
 }

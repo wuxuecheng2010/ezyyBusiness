@@ -31,7 +31,8 @@ void updateMccProductPrice(MccProduct mccProduct,TbProductinfo_Eo tbProductinfo_
 void doSynchronizePrice(MccProduct mccProduct) throws RuntimeException;
 
 List<TbProductinfo> getProductsForB2B()throws RuntimeException;
-void setTbProductinfoIydstate(TbProductinfo tbProductinfo);
+List<TbProductinfo> getProductsForPM()throws RuntimeException;//药店
+void setTbProductinfoIydstate(TbProductinfo tbProductinfo,int iydstate);
 List<MccProduct> getAllB2BOnProduct()throws RuntimeException;
 
 void doSynchronizeStock(MccProduct mccProduct)throws RuntimeException;
@@ -39,5 +40,13 @@ BigDecimal getTbProductStocks(List<TbStocks> list)throws RuntimeException;
 void updateMccProductQuantity(MccProduct mccProduct,BigDecimal erpqty)throws RuntimeException;
 
 void doSynchronizeCustomerKindPrice()throws RuntimeException;
+
+
+void doSynchronizeProductInfo(int iproductid,int store_id,int layout_id)throws RuntimeException;
+void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id)throws RuntimeException;
+void updateMccProductByTbProductinfo(TbProductinfo tbProductinfo)throws RuntimeException;
+
+
+void doSynchronizeCustomerKind() throws RuntimeException;
 
 }
