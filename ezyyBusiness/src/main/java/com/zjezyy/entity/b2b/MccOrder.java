@@ -22,7 +22,9 @@ public class MccOrder {
 	private String shipping_address;
 	private Integer order_status_id;
 	private String payment_code;
+	private String payment_method;
 	private String ordercode;
+	private Integer copy_flag;//是否复制到ERP
 	
 	
 }

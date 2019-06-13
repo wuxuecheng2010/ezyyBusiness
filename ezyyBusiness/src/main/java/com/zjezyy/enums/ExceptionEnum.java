@@ -11,7 +11,7 @@ public enum ExceptionEnum {
 	TOKEN_LACK(-1000,"API Token缺失"),
 	TOKEN_TIMEOUT(-1001,"API Token过时"),
 	TOKEN_INVALID(-1002,"API Token无效"),
-	
+	JTA_TRANSATION_UNEXPECTEDLY_ROLLED_BACK(-1003,"接口超时,请重试"),
 	
 	
 	PREVENT_PARAMS_NOT_ALOW_EMPTY(-2,"[防刷]入参不允许为空"),
@@ -25,6 +25,7 @@ public enum ExceptionEnum {
     B2B_PRODUCT_UNRELATED(-1201,"B2B商品信息不完整"),//B2B商品与ERP商品未做关联
     B2B_PRODUCT_RELATED_ERROR(-1202,"B2B商品信息有误"),//B2B商品与ERP商品关联不正确
     B2B_PRODUCT_PRICE_TIMEOUT(-1203,"B2B商品价格有误"),//B2B商品价格与ERP商品价格不一致
+    B2B_PRODUCT_NOT_INCLUDED_BY_THIS_CUSTOMERKIND(-1204,"B2B商品信息没有纳入客户集合"),//B2B商品与ERP商品关联不正确
     
     B2B_CUSTOMER_UNRELATED(-1301,"B2B客户信息不完整"),//B2B客户与ERP客户未做关联
     B2B_CUSTOMER_RELATED_ERROR(-1302,"B2B客户信息有误"), //B2B客户与ERP客户关联不正确

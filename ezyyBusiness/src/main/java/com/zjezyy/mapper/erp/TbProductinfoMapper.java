@@ -14,7 +14,7 @@ import com.zjezyy.entity.erp.TbProductinfo_Eo;
 public interface TbProductinfoMapper {
 	
 
-	String SELECT_FIELDS="a.iproductid,a.iproductkindid,a.vcproductname,a.vcproductcode,a.vcuniversalname,a.istorageoptionid,nvl(a.flagcold,'N') flagcold,nvl(a.flagfreezing,'N')flagfreezing,"
+	String SELECT_FIELDS="a.iproductid,a.iproductkindid,a.vcproductname,a.vceasycode,a.vcproductcode,a.vcuniversalname,a.istorageoptionid,nvl(a.flagcold,'N') flagcold,nvl(a.flagfreezing,'N')flagfreezing,"
 			+ "a.vcstandard,a.iproductunitid,a.iproducerid,a.numsaletaxrate,a.numpurchasetaxrate,a.numcountryprice,a.numwarningdays,a.imanagementid,a.iydstate ";
 	String TABLE_NAME="tb_productinfo a";
 	

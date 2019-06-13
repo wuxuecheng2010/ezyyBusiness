@@ -47,12 +47,13 @@ public class MccProduct {
 	private String  date_added;
 	private String date_modified;
 	private Integer erpiproductid;
+	private Integer nummiddle;
 	public MccProduct() {
 		
 	}
 
 	
-public MccProduct(String model,String sku,String location,int erpiproductid) {
+public MccProduct(String model,String sku,String location,int erpiproductid,int nummiddle) {
 
 	this.model = model;
 	this.sku = sku;

@@ -3,6 +3,7 @@ package com.zjezyy.mapper.erp;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -12,7 +13,6 @@ import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
 
-import com.zjezyy.entity.erp.TbMccOrder;
 import com.zjezyy.entity.erp.TbSalesNotice;
 @Repository
 @Mapper
@@ -37,6 +37,9 @@ public interface TbSalesNoticeMapper {
 	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where ibillid=#{ibillid}"})
 	TbSalesNotice getOne(int ibillid);
 	
+	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where isourceid=#{isourceid}"})
+	TbSalesNotice getOneBySourceID(int isourceid);
+	
 	@Select({"select ",SELECT_FIELDS," from tb_salesnotice where isourceid in (" , 
 			"select ibillid from tb_salesorder where itypeid=#{itypeid} and   isourceid in (" , 
 			" select impid from tb_mcc_order where mcc_order_id=#{mcc_order_id}))"})
@@ -55,5 +58,37 @@ public interface TbSalesNoticeMapper {
 			  ")" })
 	@Options(statementType=StatementType.CALLABLE)
 	void approval(Map<String,Object> params);
+
+
+	@Insert({"insert into tb_salesnotice_his b(ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,nummoney,numprintcount,flagapply,dtapply,", 
+			"vcaddress,isendtype,flagnext,dtnext,flagurgent,vcmemo,flagapp,vcappuser,dtappdate,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,dtsenddate,flagpickover," , 
+			"flagrecorded,dtrecorded,vcreccorded,flagtowms,icustomeraidid,flagpause,vcrepauser,dtrepause,flagcontrol,vcddbh,vcddname,vcaddresscode,hismemo)" , 
+			"select " ,
+			" ibillid,vcbillcode,isourceid,itypeid,icustomerid,isalerid,igathermode,nummoney,numprintcount,flagapply,dtapply,", 
+			"vcaddress,isendtype,flagnext,dtnext,flagurgent,vcmemo,flagapp,vcappuser,dtappdate,dtcreationdate,vccreatedby,dtlastupdatedate,vclastupdatedby,dtsenddate,flagpickover," , 
+			"flagrecorded,dtrecorded,vcreccorded,flagtowms,icustomeraidid,flagpause,vcrepauser,dtrepause,flagcontrol,vcddbh,vcddname,vcaddresscode,#{hismemo}" , 
+			"from tb_salesnotice a where ibillid=#{ibillid}"})
+	int insertTbSalesNoticeHis(int ibillid,String hismemo);
+
+	@Insert({"insert into tb_salesnotices_his(" , 
+			"isid,ibillid,numqueue,isourceid,iproductid,ilinkmanid,iunitid,ibatchid,numprice,numquantity,numwriteoff," , 
+			"numreturn,numsaletaxrate,numinprice,numpurchasetaxrate,numassesscost,numlarge,numpiece,flagcantreturn,ipackingid," , 
+			"vcmemo,dtcreationdate,vccreatedby,dtappdate,vcappuser,dtlastupdatedate,vclastupdatedby,istorepositionid," , 
+			"vcbatchnumber,vcconfirmfile,vcdisinfection,dtdisinfection,istockid,iproviderid,dtmanufacture,dtusefullife," , 
+			"numrealout,numguideprice,numlastprice,numlowprice,numcountryprice,flagpickover,flagfollow,numapplications," , 
+			"numdelivery,ddmxbh,flagbargaining,nummle)" , 
+			"select isid,ibillid,numqueue,isourceid,iproductid,ilinkmanid,iunitid,ibatchid,numprice,numquantity,numwriteoff," , 
+			"numreturn,numsaletaxrate,numinprice,numpurchasetaxrate,numassesscost,numlarge,numpiece,flagcantreturn,ipackingid," , 
+			"vcmemo,dtcreationdate,vccreatedby,dtappdate,vcappuser,dtlastupdatedate,vclastupdatedby,istorepositionid," , 
+			"vcbatchnumber,vcconfirmfile,vcdisinfection,dtdisinfection,istockid,iproviderid,dtmanufacture,dtusefullife," , 
+			"numrealout,numguideprice,numlastprice,numlowprice,numcountryprice,flagpickover,flagfollow,numapplications," , 
+			"numdelivery,ddmxbh,flagbargaining,nummle from tb_salesnotices where ibillid=#{ibillid}"})
+	int insertTbSalesNoticesHis(int ibillid);
+
+    @Delete({"delete from tb_salesnotices where ibillid=#{ibillid}"})
+	int deleteTbSalesNotices(int ibillid);
+
+    @Delete({"delete from tb_salesnotice where ibillid=#{ibillid}"})
+	int deleteTbSalesNotice(int ibillid);
 	
 }

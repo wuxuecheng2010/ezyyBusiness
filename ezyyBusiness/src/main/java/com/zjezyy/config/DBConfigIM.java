@@ -26,4 +26,10 @@ public class DBConfigIM {
 	private int maintenanceInterval;
 	private int maxIdleTime;
 	private String testQuery;
+	
+	private String validationQuery;
+	private Boolean testWhileIdle;
+	private Boolean testOnBorrow;
+	private Boolean testOnReturn;
+	private int timeBetweenEvictionRunsMillis;
 }

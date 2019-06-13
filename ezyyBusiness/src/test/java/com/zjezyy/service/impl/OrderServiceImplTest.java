@@ -98,7 +98,7 @@ public class OrderServiceImplTest {
 
 	@Test
 	public void testpayExpired() {
-		orderServiceImpl.payExpired(95);
+		orderServiceImpl.payExpired(221);
 	}
 	
 	@Test
@@ -111,7 +111,7 @@ public class OrderServiceImplTest {
 	
 	@Test
 	public void testcheckCustomerRight() {
-		TbCustomer  tbCustomer=tbCustomerMapper.getOne(4443);
+		TbCustomer  tbCustomer=tbCustomerMapper.getOne(409);
 		Map<String,Boolean > map=new HashMap<>();
 		boolean f=orderServiceImpl.checkCustomerRight(tbCustomer, BusinessInterfaceType.B2BToERPOnLine.getCode(), map);
 		System.out.println(f);
@@ -126,10 +126,18 @@ public class OrderServiceImplTest {
 		System.out.println(f);
 		
 	}
-	
-	
-	
-	
+	@Test
+	public void testdoSynchronizeCreditOrderToERP() {
+		
+		//orderServiceImpl.doSynchronizeCreditOrderToERP();
+		
+	}
+	@Test
+	public void testemptyCart() {
+		
+		orderServiceImpl.emptyCart(53);
+		
+	}
 	
 	
 	

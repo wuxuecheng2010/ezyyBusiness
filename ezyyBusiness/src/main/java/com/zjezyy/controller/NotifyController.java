@@ -13,8 +13,8 @@ import com.zjezyy.enums.Payment;
 import com.zjezyy.service.PayService;
 import com.zjezyy.service.SettingService;
 
-@RestController
-@RequestMapping(value = "/notify")
+//@RestController
+//@RequestMapping(value = "/notify")
 public class NotifyController extends BaseController{
 	
 	@Autowired

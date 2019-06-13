@@ -22,8 +22,13 @@ public interface OrderService {
 	// 下单到ERP
 	void orderPlace(int order_id,int itypeid) throws RuntimeException;
 	
+	//系统内药店订到导入到ERP   与orderPlace业务逻辑出入有点大  所以独立
+	void orderPlaceCredit(MccOrder mccOrder,int itypeid);   
+	
 	//创建中间表
-	Integer makeMccOrderToTbMccOrder(int order_id,int itypeid)throws RuntimeException;
+	Integer makeMccOrderToTbMccOrder(MccOrder mccOrder,int itypeid)throws RuntimeException;
+	//简化版本 适合给线下导单用
+	Integer makeMccOrderToTbMccOrderSimple(int order_id,int itypeid)throws RuntimeException;
 	
 	//校验客户信息 证照等  包含_bZZRSOver,  _bSpecialManOver字段
 	boolean checkCustomerRight(TbCustomer tbCustomer,int itypeid,Map<String,Boolean> map)throws RuntimeException;
@@ -42,7 +47,7 @@ public interface OrderService {
 	Map<String,List<TbMccOrderProduct>> makeTbMccOrderProductGroupByType(List<String> typeList,List<TbMccOrderProduct> tbMccOrderProductList) throws RuntimeException;
 	
 	//销售订单导入到销售开票
-	void makeTbSalesOrderToTbSalesNotice(Map<TbSalesOrder,List<TbSalesOrderS>> map)throws RuntimeException;
+	void makeTbSalesOrderToTbSalesNotice(Map<TbSalesOrder,List<TbSalesOrderS>> map,MccOrder mccOrder)throws RuntimeException;
      
 	//订单库存分配
 	Map<BigDecimal ,TbStocks> stockDeploy(TbSalesOrderS tbSalesOrderS,List<TbStocks> stocklist,DeployPolicyEnum policy) throws RuntimeException;
@@ -79,5 +84,12 @@ public interface OrderService {
     
     //http方式审核销售开票
     void httpApproval(int salesnotice_ibillid,String user)throws RuntimeException;
+
+    //清空购物车
+    void emptyCart(int customer_id);
+    
+    //删除并备份过期的销售开票单据
+    void  backupExpiredOrder(int ibillid)throws Exception;
+    
     
 }

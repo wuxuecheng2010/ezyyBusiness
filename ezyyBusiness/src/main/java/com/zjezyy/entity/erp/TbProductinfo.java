@@ -14,6 +14,7 @@ public class TbProductinfo {
    private Integer iproductid;
    private Integer iproductkindid;
    private String vcproductname;
+   private String vceasycode;
    private String vcproductcode;
    private String vcuniversalname;
    private String vcstandard;
@@ -28,6 +29,6 @@ public class TbProductinfo {
    private Integer iydstate;//导入标志  1入药店  2入b2b
    private char flagcold;//是否冷藏
    private char flagfreezing;//是否冷冻
-   
+   //private Integer nummiddle;//销售的中包装   取值ERP tb_product_packing   numsmall--nummiddle--numlarge
    
 }

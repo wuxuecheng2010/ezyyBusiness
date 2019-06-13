@@ -34,6 +34,12 @@ public class DataSourceIMConfig {
       druidXADataSource.setUsername(testConfig.getUsername());
       druidXADataSource.setPassword(testConfig.getPassword());
       
+      druidXADataSource.setValidationQuery(testConfig.getValidationQuery());
+      druidXADataSource.setTestWhileIdle(testConfig.getTestWhileIdle());
+      druidXADataSource.setTestOnBorrow(testConfig.getTestOnBorrow());
+      druidXADataSource.setTestOnReturn(testConfig.getTestOnReturn());
+      druidXADataSource.setTimeBetweenEvictionRunsMillis(testConfig.getTimeBetweenEvictionRunsMillis());
+      
       xaDataSource.setUniqueResourceName("mysql-im");
       xaDataSource.setXaDataSource(druidXADataSource);
       xaDataSource.setXaDataSourceClassName("com.alibaba.druid.pool.xa.DruidXADataSource");
@@ -45,6 +51,8 @@ public class DataSourceIMConfig {
       xaDataSource.setMaintenanceInterval(testConfig.getMaintenanceInterval());
       xaDataSource.setMaxIdleTime(testConfig.getMaxIdleTime());
       xaDataSource.setTestQuery(testConfig.getTestQuery());
+
+ 
       
       //LOG.info("分布式事物dataSource1实例化成功");
       return xaDataSource;

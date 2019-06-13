@@ -5,12 +5,14 @@ import java.util.List;
 
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.erp.TbCustomer;
+import com.zjezyy.entity.erp.TbProductPacking;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbStocks;
 
 public interface ProductService {
-TbProductinfo_Eo getTbProductinfoEoByMccProductId(int product_id) throws RuntimeException;
+//TbProductinfo_Eo getTbProductinfoEoByMccProductId(int product_id) throws RuntimeException;
+TbProductinfo_Eo getTbProductinfoEoByMccProductIDAndTBCustomer(int product_id,TbCustomer tbCustomer) throws RuntimeException;
 
 
 BigDecimal getERPProductPriceByTbProductinfoEo(TbProductinfo_Eo tbProductinfoEo) throws RuntimeException;
@@ -43,10 +45,12 @@ void doSynchronizeCustomerKindPrice()throws RuntimeException;
 
 
 void doSynchronizeProductInfo(int iproductid,int store_id,int layout_id)throws RuntimeException;
-void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id)throws RuntimeException;
+void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id,TbProductPacking tbProductPacking)throws RuntimeException;
 void updateMccProductByTbProductinfo(TbProductinfo tbProductinfo)throws RuntimeException;
 
 
 void doSynchronizeCustomerKind() throws RuntimeException;
+
+Integer getProductNumMiddle(TbProductPacking tbProductPacking);
 
 }

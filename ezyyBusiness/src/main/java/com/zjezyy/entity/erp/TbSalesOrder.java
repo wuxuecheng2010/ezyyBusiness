@@ -27,13 +27,13 @@ public class TbSalesOrder {
    public TbSalesOrder() {
 	   super();
    }
-   public TbSalesOrder(TbMccOrder tbMccOrder,String vcbillcode, int itypeid, String vccreatedby) {
+   public TbSalesOrder(TbMccOrder tbMccOrder,String vcbillcode, int itypeid, String vccreatedby,BigDecimal total_money) {
 	   //private Integer ibillid;
 	   this.vcbillcode=vcbillcode;
 	   this.isourceid=tbMccOrder.getImpid();
 	   this.itypeid=itypeid;
 	   this.icustomerid=tbMccOrder.getErp_icustomerid();
-	   this.nummoney=tbMccOrder.getMcc_total();
+	   this.nummoney=total_money;
 	   this.flagstop='N';
 	   this.numprintcount=0;
 	   this.flagperform='N';//执行标志

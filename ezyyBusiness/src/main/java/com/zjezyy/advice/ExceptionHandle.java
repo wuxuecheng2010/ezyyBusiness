@@ -1,5 +1,6 @@
 package com.zjezyy.advice;
 
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +36,12 @@ public class ExceptionHandle {
 	    	  //jwt 验证token 无效
 	    	  BusinessException MyException = new BusinessException(ExceptionEnum.TOKEN_INVALID);
 	    	  return ResultUtil.error(MyException.getCode(),MyException.getMessage());
+	      }else if(e instanceof UnexpectedRollbackException) {
+	    	  //jwt 验证token 无效
+	    	  BusinessException MyException = new BusinessException(ExceptionEnum.JTA_TRANSATION_UNEXPECTEDLY_ROLLED_BACK);
+	    	  return ResultUtil.error(MyException.getCode(),MyException.getMessage());
 	      }
+	      
 	    	  
 
 	      log.error("【系统异常】{}",e);

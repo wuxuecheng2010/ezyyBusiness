@@ -1,5 +1,7 @@
 package com.zjezyy.mapper.erp;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -31,5 +33,8 @@ public interface TbSalesOrderMapper {
 	//销售订单->销售开票之后对销售订单的处理
 	@Update({"update tb_salesorder t set t.FLAGPERFORM = 'Y',t.VCAPPUSER = #{vcappuser},FLAGAPP = 'Y' where ibillid =#{ibillid}"})
 	int update(int ibillid,String vcappuser);
+	
+	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where isourceid = #{impid} and itypeid=#{itypeid}"})
+	List<TbSalesOrder> getListByImpidAndTypeID(int impid,int itypeid);
 	
 }

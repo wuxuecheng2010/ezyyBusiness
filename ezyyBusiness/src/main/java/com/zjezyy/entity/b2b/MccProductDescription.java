@@ -15,6 +15,8 @@ public class MccProductDescription {
 	private Integer language_id;
 	private String description;
 	private String tag;
+	private String vcproductname;
+	private String vceasycode;
 	public MccProductDescription(Integer product_id,String name, String meta_title, String meta_keyword, String meta_description,
 			Integer language_id, String description, String tag) {
 		this.product_id=product_id;
@@ -43,6 +45,8 @@ public class MccProductDescription {
  		this.language_id = language.getCode();
  		this.description = title;
  		this.tag = title;
+ 		this.vceasycode=tbProductinfo.getVceasycode();
+ 		this.vcproductname=tbProductinfo.getVcproductname();
  		
 	}
 	

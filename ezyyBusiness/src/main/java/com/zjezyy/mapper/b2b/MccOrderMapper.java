@@ -12,7 +12,7 @@ import com.zjezyy.entity.b2b.MccOrder;
 @Repository
 @Mapper
 public interface MccOrderMapper {
-	String SELECT_FIELDS="order_id,store_id,customer_id,store_name,customer_group_id,fullname,email,telephone,total,comment,shipping_zone,shipping_city,shipping_district,shipping_address,order_status_id,payment_code,ordercode";
+	String SELECT_FIELDS="order_id,store_id,customer_id,store_name,customer_group_id,fullname,email,telephone,total,comment,shipping_zone,shipping_city,shipping_district,shipping_address,order_status_id,payment_method,payment_code,ordercode,copy_flag";
 	String TABLE_NAME="mcc_order";
 	
 	//根据订单号查订单
@@ -25,7 +25,7 @@ public interface MccOrderMapper {
 	
 
 	//根据业务类型查询未付款订单集合  
-	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where  order_status_id=17 and date_added>=CURRENT_TIMESTAMP - INTERVAL (#{expire}+100000) MINUTE order by order_id"})
+	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where  order_status_id=17 and date_added>=CURRENT_TIMESTAMP - INTERVAL (#{expire}+1) MINUTE order by order_id"})
 	List<MccOrder> getUnPayMccOrderList( int expire);
 
 	//根据业务类型查询超时订单集合  
@@ -35,5 +35,12 @@ public interface MccOrderMapper {
 	//将订单保存为已付款待发货状态
 	@Update({"update mcc_order set order_status_id=#{order_status_id} where order_id=#{order_id}"})
 	int updateMccOrderStatus(int order_id,String order_status_id);
+	
+	@Update({"update mcc_order set copy_flag=1 where order_id=#{order_id}"})
+	int updateMccOrderCopyFlag(int order_id);
+
+
+	@Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"  where order_status_id=1 and ifnull(copy_flag,0)=0  and payment_code='cod' and customer_id in (select customer_id from mcc_customer where  flag_credit_user=1  )"})
+	List<MccOrder> getCreditOrder();
 	
 }

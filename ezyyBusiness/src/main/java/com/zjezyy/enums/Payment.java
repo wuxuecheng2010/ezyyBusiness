@@ -10,6 +10,7 @@ package com.zjezyy.enums;
  */
 public enum Payment {
 	//对应B2B的支付setting
+	COD("cod","货到付款"),
 	QRCODE_WXPAY("qrcode_wxpay", "微信扫码支付"),
 	ALIPAY_WAP("alipay_wap","支付宝扫码支付"),
 	WXPAY_WAP("wxpay_wap","支付宝扫码支付"),

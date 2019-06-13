@@ -23,6 +23,7 @@ import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbCustomerKind;
 import com.zjezyy.entity.erp.TbCustomerKindList;
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
+import com.zjezyy.entity.erp.TbProductPacking;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbStockControl;
@@ -41,6 +42,7 @@ import com.zjezyy.mapper.b2b.MccTbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindListMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
+import com.zjezyy.mapper.erp.TbProductPackingMapper;
 import com.zjezyy.mapper.erp.TbProductinfoMapper;
 import com.zjezyy.mapper.erp.TbStockControlMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
@@ -82,6 +84,9 @@ public class ProductServiceImpl implements ProductService {
 	MccProductToStoreMapper mccProductToStoreMapper;
 	@Autowired
 	MccProductToCategoryMapper mccProductToCategoryMapper;
+	
+	@Autowired
+	TbProductPackingMapper tbProductPackingMapper;
 	@Autowired
 	MccProductToLayoutMapper mccProductToLayoutMapper;
 	
@@ -120,23 +125,71 @@ public class ProductServiceImpl implements ProductService {
 	
 
 	@Override
-	public TbProductinfo_Eo getTbProductinfoEoByMccProductId(int product_id) throws RuntimeException {
+	public TbProductinfo_Eo getTbProductinfoEoByMccProductIDAndTBCustomer(int product_id,TbCustomer tbCustomer) throws RuntimeException {
+		//获取B2B商品信息  语言为简体中文
 		MccProduct_Eo mccProduct_Eo = mccProductMapper.getOne(product_id, 1);
 		Integer erpiproductid = mccProduct_Eo.getErpiproductid();
 		if (erpiproductid == null) {
-			throw new BusinessException(ExceptionEnum.B2B_PRODUCT_UNRELATED);
+			throw new BusinessException(String.format("商品ID:product_id:%d", product_id),ExceptionEnum.B2B_PRODUCT_UNRELATED);
 		}
-		TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, icustomerkindid);
+		
+		TbProductinfo_Eo tbProductinfo_Eo = getTbProductinfoEoByIproductIDAndTBCustomer(tbCustomer, erpiproductid);
+		
 		if (tbProductinfo_Eo == null) {
-			throw new BusinessException(ExceptionEnum.B2B_PRODUCT_RELATED_ERROR);
+			throw new BusinessException(String.format("B2B商品ID:product_id:%d", product_id),ExceptionEnum.B2B_PRODUCT_NOT_INCLUDED_BY_THIS_CUSTOMERKIND);
 		}
-		// 判断价格是否一致性 不一致 报自定义异常
+		/*// 判断价格是否一致性 不一致 报自定义异常
 		BigDecimal erp_price = getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);// tbProductinfo_Eo.getNumguidprice();
+		
 		BigDecimal b2b_price = mccProduct_Eo.getPrice();
 		if (erp_price.compareTo(b2b_price) != 0) {
-			throw new BusinessException(ExceptionEnum.B2B_PRODUCT_PRICE_TIMEOUT);
-		}
+			throw new BusinessException(String.format("商品ID:product_id:%d", product_id),ExceptionEnum.B2B_PRODUCT_PRICE_TIMEOUT);
+		}*/
 
+		return tbProductinfo_Eo;
+	}
+
+	/**
+	* @Title: getTbProductinfoEoByIproductIDAndTBCustomer
+	* @Description: TODO(这里用一句话描述这个方法的作用)
+	* @param @param tbCustomer
+	* @param @param erpiproductid
+	* @param @return
+	* @param @throws RuntimeException    参数
+	* @author wuxuecheng
+	* @return TbProductinfo_Eo    返回类型
+	* @throws
+	*/
+	public TbProductinfo_Eo getTbProductinfoEoByIproductIDAndTBCustomer(TbCustomer tbCustomer, Integer erpiproductid)
+			throws RuntimeException {
+		//根据价格模式   B2B统一价  和  客户集合价
+		//获取价格模式
+		String pricemodel=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_MODEL);
+		TbProductinfo_Eo tbProductinfo_Eo=null;
+		if(pricemodel==null||"".equals(pricemodel)||"0".equals(pricemodel)) {
+			 tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, icustomerkindid);
+		}else {
+			 //客户价格体系的价格
+			int myicustomerkindid=tbCustomer.getIcustomerkindid();
+			
+			//先去特殊集合找是否有这个客户  没有就直接用默认的客户集合
+			TbCustomerKindList tbCustomerKindList=tbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
+			if(tbCustomerKindList==null) {
+				tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, myicustomerkindid);
+			}else {
+				//特殊集合
+				int _myicustomerkindid=tbCustomerKindList.getIcustomerkindid();
+				TbProductinfo_Eo _tbProductinfo_Eo=tbProductinfoMapper.getOneEo(erpiproductid, _myicustomerkindid);
+				if(_tbProductinfo_Eo==null) {//没找到 就去默认的找
+					tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, myicustomerkindid);
+				}else {
+					//找到了就赋值
+					tbProductinfo_Eo=_tbProductinfo_Eo;
+				}
+			}
+			
+			
+		}
 		return tbProductinfo_Eo;
 	}
 
@@ -414,16 +467,21 @@ public class ProductServiceImpl implements ProductService {
 			
 			//检查b2b 是否有该集合   
 			       for(TbCustomerKindPrice tbCustomerKindPrice:erppicelist) {
-			    	  Integer isid= tbCustomerKindPrice.getIsid();
-			    	  MccTbCustomerKindPrice mccTbCustomerKindPrice=mccTbCustomerKindPriceMapper.getOne(isid);
-			    	  if(mccTbCustomerKindPrice==null) {
-			    		  //没有就插入
-			    		  mccTbCustomerKindPrice=new MccTbCustomerKindPrice(tbCustomerKindPrice);
-			    		  mccTbCustomerKindPriceMapper.insert(mccTbCustomerKindPrice);
-			    	  }else {
-			    		  //有就更新
-			    		  mccTbCustomerKindPriceMapper.updateByTbCustomerKindPrice(tbCustomerKindPrice);
-			    	  }
+			    	  try {
+						Integer isid= tbCustomerKindPrice.getIsid();
+						  MccTbCustomerKindPrice mccTbCustomerKindPrice=mccTbCustomerKindPriceMapper.getOne(isid);
+						  if(mccTbCustomerKindPrice==null) {
+							  //没有就插入
+							  mccTbCustomerKindPrice=new MccTbCustomerKindPrice(tbCustomerKindPrice);
+							  mccTbCustomerKindPriceMapper.insert(mccTbCustomerKindPrice);
+						  }else {
+							  //有就更新
+							  mccTbCustomerKindPriceMapper.updateByTbCustomerKindPrice(tbCustomerKindPrice);
+						  }
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			       }
 			       
 			// B2B====>ERP 更新      
@@ -431,10 +489,15 @@ public class ProductServiceImpl implements ProductService {
 			       List<MccTbCustomerKindPrice> b2bpicelist= mccTbCustomerKindPriceMapper.getListByKindID(icustomerkindid);
 			       
 			       for(MccTbCustomerKindPrice mccTbCustomerKindPrice:b2bpicelist) {
-			    	 //获取ERP价格集合信息 //如果没有则删除B2b的价格集合  
-			    	   TbCustomerKindPrice tbCustomerKindPrice= tbCustomerKindPriceMapper.getOneByISID(mccTbCustomerKindPrice.getIsid());
-			    	   if(tbCustomerKindPrice==null)
-			    		   mccTbCustomerKindPriceMapper.deleteByISID(mccTbCustomerKindPrice.getIsid());
+			    	 try {
+						//获取ERP价格集合信息 //如果没有则删除B2b的价格集合  
+						   TbCustomerKindPrice tbCustomerKindPrice= tbCustomerKindPriceMapper.getOneByISID(mccTbCustomerKindPrice.getIsid());
+						   if(tbCustomerKindPrice==null)
+							   mccTbCustomerKindPriceMapper.deleteByISID(mccTbCustomerKindPrice.getIsid());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			       }
 		}
 			
@@ -506,7 +569,7 @@ public class ProductServiceImpl implements ProductService {
 	public BigDecimal getERPProductPrice(TbProductinfo_Eo tbProductinfoEo,TbCustomer tbCustomer) throws RuntimeException {
 		BigDecimal price=BigDecimal.ZERO;
 		//获取价格模式
-		String pricemodel=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_MODEL);;
+		String pricemodel=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_MODEL);
 		
 		if(pricemodel==null||"".equals(pricemodel)||"0".equals(pricemodel)) {
 			price=getERPProductPriceByTbProductinfoEo( tbProductinfoEo);
@@ -526,10 +589,12 @@ public class ProductServiceImpl implements ProductService {
 	public void doSynchronizeProductInfo(int iproductid,int store_id,int layout_id) throws RuntimeException {
 		//获取商品信息
 		TbProductinfo tbProductinfo=tbProductinfoMapper.getOne(iproductid);
+		//获取商品的包装信息
+		TbProductPacking  tbProductPacking=tbProductPackingMapper.getOne(iproductid);
 		//检查信息是否存在  存在则更新  不存在则新增
 		MccProduct mccProduct=mccProductMapper.getOneByErpIproductid(iproductid);
 		if(mccProduct==null ) {
-			makeTbProductinfoToMccProduct(tbProductinfo,store_id,layout_id);
+			makeTbProductinfoToMccProduct(tbProductinfo,store_id,layout_id,tbProductPacking);
 		}else {
 			//log.info("####iproductid:%d"+iproductid);
 			updateMccProductByTbProductinfo(tbProductinfo);
@@ -547,12 +612,13 @@ public class ProductServiceImpl implements ProductService {
     $this->insert_mcc_url_alias($IPRODUCTID);*/
 	@Transactional
 	@Override
-	public void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id) throws RuntimeException {
+	public void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id,TbProductPacking tbProductPacking) throws RuntimeException {
 		//1、保存 mcc_product
+		int nummiddle=getProductNumMiddle(tbProductPacking);
 		MccProduct mccProduct=new MccProduct(tbProductinfo.getVcstandard(), 
 				baseInfoServiceImpl.getTbUnitByID(tbProductinfo.getIproductunitid()).getVcunitname(), 
 				baseInfoServiceImpl.getTbProducerByID(tbProductinfo.getIproducerid()).getVcproducername(), 
-				tbProductinfo.getIproductid());
+				tbProductinfo.getIproductid(),nummiddle);
 		mccProductMapper.insert(mccProduct);
 		
 		//2、保存mcc_product_description 多语言都保存一次
@@ -585,6 +651,29 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public  Integer getProductNumMiddle(TbProductPacking tbProductPacking) {
+		//获取小包装  如果小包装不为空   就返回小包装   
+		//如果没小包装  就获取中包装   
+		//如果中包装也没有  就直接返回1
+		Integer nummiddle=1;
+		if(tbProductPacking==null) {
+			nummiddle=1;
+		}else {
+			Integer numsmall=tbProductPacking.getNumsmall();
+			if(numsmall!=null && numsmall>=1) {
+				nummiddle=numsmall;
+			}else {
+				nummiddle=tbProductPacking.getNummiddle();
+				if(nummiddle==null || nummiddle==0)
+					nummiddle=1;
+			}
+				
+			
+		}
+		return nummiddle;
+	}
+
+	@Override
 	public void updateMccProductByTbProductinfo(TbProductinfo tbProductinfo) throws RuntimeException {
 		
 		Integer iydstate=tbProductinfo.getIydstate();
@@ -602,18 +691,22 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void doSynchronizeCustomerKind() throws RuntimeException {
 		
-		//获取集合列表
+		//获取集合列表(这里只处理基础的，特殊的由新增客户的功能中添加)
 		List<TbCustomerKind> list =tbCustomerKindMapper.getBaseList();
 		
 		//循环获取价格
 		for(TbCustomerKind tbCustomerKind:list) {
 			int icustomerkindid=tbCustomerKind.getIcustomerkindid();
 			//获取B2b上面的集合
-			MccTbCustomerKind mccTbCustomerKind=mccTbCustomerKindMapper.getOne(icustomerkindid);
-			if(mccTbCustomerKind==null) {
-				//保存价格集合到B2B
-				mccTbCustomerKind=new MccTbCustomerKind(tbCustomerKind);
-				mccTbCustomerKindMapper.insert(mccTbCustomerKind);
+			try {
+				MccTbCustomerKind mccTbCustomerKind=mccTbCustomerKindMapper.getOne(icustomerkindid);
+				if(mccTbCustomerKind==null) {
+					//保存价格集合到B2B
+					mccTbCustomerKind=new MccTbCustomerKind(tbCustomerKind);
+					mccTbCustomerKindMapper.insert(mccTbCustomerKind);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 			

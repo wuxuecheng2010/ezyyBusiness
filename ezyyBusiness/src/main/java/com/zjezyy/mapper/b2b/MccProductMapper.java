@@ -17,12 +17,12 @@ import com.zjezyy.entity.b2b.MccProduct_Eo;
 @Mapper
 public interface MccProductMapper {
 	
-	String SELECT_FIELDS="a.product_id,a.model,a.sku,a.upc,a.ean,a.jan,a.isbn,a.mpn,a.location,a.quantity,a.stock_status_id,a.image,a.manufacturer_id,a.shipping,a.price,a.points,a.tax_class_id,a.date_available,a.weight,a.weight_class_id,a.length,a.width,a.height,a.length_class_id,a.subtract,a.minimum,a.sort_order,a.status,a.viewed,a.date_added,a.date_modified,a.erpiproductid";
+	String SELECT_FIELDS="a.product_id,a.model,a.sku,a.upc,a.ean,a.jan,a.isbn,a.mpn,a.location,a.quantity,a.stock_status_id,a.image,a.manufacturer_id,a.shipping,a.price,a.points,a.tax_class_id,a.date_available,a.weight,a.weight_class_id,a.length,a.width,a.height,a.length_class_id,a.subtract,a.minimum,a.sort_order,a.status,a.viewed,a.date_added,a.date_modified,a.erpiproductid,a.nummiddle";
 	String TABLE_NAME="mcc_product a";
 	
-	String INSERT_FIELDS="model,sku,upc,ean,jan,isbn,mpn,location,quantity,stock_status_id,image,manufacturer_id,shipping,price,points,tax_class_id,date_available,weight,weight_class_id,length,width,height,length_class_id,subtract,minimum,sort_order,status,viewed,date_added,date_modified,erpiproductid";
+	String INSERT_FIELDS="model,sku,upc,ean,jan,isbn,mpn,location,quantity,stock_status_id,image,manufacturer_id,shipping,price,points,tax_class_id,date_available,weight,weight_class_id,length,width,height,length_class_id,subtract,minimum,sort_order,status,viewed,date_added,date_modified,erpiproductid,nummiddle";
 
-	String INSERT_VALUES="#{model,jdbcType=VARCHAR},#{sku,jdbcType=VARCHAR},#{upc,jdbcType=VARCHAR},#{ean,jdbcType=VARCHAR},#{jan,jdbcType=VARCHAR},#{isbn,jdbcType=VARCHAR},#{mpn,jdbcType=VARCHAR},#{location,jdbcType=VARCHAR},#{quantity,jdbcType=DECIMAL},#{stock_status_id,jdbcType=INTEGER},#{image,jdbcType=VARCHAR},#{manufacturer_id,jdbcType=INTEGER},#{shipping,jdbcType=INTEGER},#{price,jdbcType=DECIMAL},#{points,jdbcType=INTEGER},#{tax_class_id,jdbcType=INTEGER},#{date_available,jdbcType=DATE},#{weight,jdbcType=DECIMAL},#{weight_class_id,jdbcType=INTEGER},#{length,jdbcType=DECIMAL},#{width,jdbcType=DECIMAL},#{height,jdbcType=DECIMAL},#{length_class_id,jdbcType=INTEGER},#{subtract,jdbcType=INTEGER},#{minimum,jdbcType=INTEGER},#{sort_order,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{viewed,jdbcType=INTEGER},#{date_added,jdbcType=TIMESTAMP},#{date_modified,jdbcType=TIMESTAMP},#{erpiproductid,jdbcType=INTEGER}";
+	String INSERT_VALUES="#{model,jdbcType=VARCHAR},#{sku,jdbcType=VARCHAR},#{upc,jdbcType=VARCHAR},#{ean,jdbcType=VARCHAR},#{jan,jdbcType=VARCHAR},#{isbn,jdbcType=VARCHAR},#{mpn,jdbcType=VARCHAR},#{location,jdbcType=VARCHAR},#{quantity,jdbcType=DECIMAL},#{stock_status_id,jdbcType=INTEGER},#{image,jdbcType=VARCHAR},#{manufacturer_id,jdbcType=INTEGER},#{shipping,jdbcType=INTEGER},#{price,jdbcType=DECIMAL},#{points,jdbcType=INTEGER},#{tax_class_id,jdbcType=INTEGER},#{date_available,jdbcType=DATE},#{weight,jdbcType=DECIMAL},#{weight_class_id,jdbcType=INTEGER},#{length,jdbcType=DECIMAL},#{width,jdbcType=DECIMAL},#{height,jdbcType=DECIMAL},#{length_class_id,jdbcType=INTEGER},#{subtract,jdbcType=INTEGER},#{minimum,jdbcType=INTEGER},#{sort_order,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{viewed,jdbcType=INTEGER},#{date_added,jdbcType=TIMESTAMP},#{date_modified,jdbcType=TIMESTAMP},#{erpiproductid,jdbcType=INTEGER},#{nummiddle,jdbcType=INTEGER}";
 
 
 	
@@ -63,6 +63,10 @@ public interface MccProductMapper {
 	
 	@Update({"update mcc_product set quantity=#{quantity} where product_id=#{product_id}"})
 	int  setMccProductQuantity(int product_id,BigDecimal quantity);
+	
+	
+	@Update({"update mcc_product set nummiddle=#{nummiddle} where product_id=#{product_id}"})
+	int  setMccProductNumMiddle(int product_id,Integer nummiddle);
 	
 	
 	@Insert({"insert into ","mcc_product","("+INSERT_FIELDS+")","values","("+INSERT_VALUES+")"})

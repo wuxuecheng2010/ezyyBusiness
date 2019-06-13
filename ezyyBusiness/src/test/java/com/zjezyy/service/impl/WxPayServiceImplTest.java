@@ -22,7 +22,7 @@ public class WxPayServiceImplTest {
 	@Test
 	public void testPayResultQuery() {
 		try {
-			//wxPayServiceImpl.payResultQuery(100);
+			wxPayServiceImpl.payResultQuery("201906031538078105407723");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

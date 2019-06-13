@@ -37,8 +37,8 @@ public class ProductServiceImplTest {
 	TbCustomerKindPriceMapper tbCustomerKindPriceMapper;
 	@Test
 	public void testGetTbProductinfoByMccProductId() {
-		TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(40);
-		System.out.println("tbProductinfo_Eo:" + tbProductinfo_Eo.getVcuniversalname());
+		//TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(40);
+		//System.out.println("tbProductinfo_Eo:" + tbProductinfo_Eo.getVcuniversalname());
 	}
 
 	@Test

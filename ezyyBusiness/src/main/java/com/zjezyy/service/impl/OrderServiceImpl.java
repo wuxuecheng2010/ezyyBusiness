@@ -1,7 +1,6 @@
 package com.zjezyy.service.impl;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,13 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zjezyy.entity.Result;
 import com.zjezyy.entity.b2b.MccOrder;
 import com.zjezyy.entity.b2b.MccOrderHistory;
 import com.zjezyy.entity.b2b.MccOrderProduct;
+import com.zjezyy.entity.b2b.MccOrderTbSalesNoticeRelate;
 import com.zjezyy.entity.b2b.MccPayResult;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
@@ -45,9 +44,11 @@ import com.zjezyy.enums.OrderComment;
 import com.zjezyy.enums.PayResult;
 import com.zjezyy.enums.StorageoptionType;
 import com.zjezyy.exception.BusinessException;
+import com.zjezyy.mapper.b2b.MccCartMapper;
 import com.zjezyy.mapper.b2b.MccOrderHistoryMapper;
 import com.zjezyy.mapper.b2b.MccOrderMapper;
 import com.zjezyy.mapper.b2b.MccOrderProductMapper;
+import com.zjezyy.mapper.b2b.MccOrderTbSalesNoticeRelateMapper;
 import com.zjezyy.mapper.b2b.MccPayResultMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerMapper;
@@ -116,6 +117,9 @@ public class OrderServiceImpl implements OrderService {
 	TbCustomerKindPriceMapper tbCustomerKindPriceMapper;
 	
 	@Autowired
+	MccOrderTbSalesNoticeRelateMapper mccOrderTbSalesNoticeRelateMapper;
+	
+	@Autowired
 	TbStocksMapper tbStocksMapper;
 	
 	@Autowired
@@ -138,6 +142,9 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	AuthorityService authorityServiceImpl;
+	
+	@Autowired
+	MccCartMapper mccCartMapper;
 	
 
 	@Value("${erp.system.default.user}")
@@ -186,14 +193,15 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public synchronized void orderPlace(int order_id, int itypeid) throws RuntimeException {
 		// 1、复制b2b订单到erp的接口表
-		Integer impid = makeMccOrderToTbMccOrder(order_id,itypeid);
+		MccOrder mccOrder = mccOrderMapper.getOne(order_id);
+		Integer impid = makeMccOrderToTbMccOrder(mccOrder,itypeid);
 
 		// 2、根据税率 、是否冷藏、是否冷冻、是否麻黄碱、是否特殊、不同生成 销售订单
 		Map<TbSalesOrder,List<TbSalesOrderS>> map=
 		makeTbMccOrderToTbSalesOrder(impid, itypeid);
 		
 		// 3、根据 销售订单生成销售开票
-		makeTbSalesOrderToTbSalesNotice(map);
+		makeTbSalesOrderToTbSalesNotice(map,mccOrder);
 
 		// 4、检查销售开票结果是否合法   如果不合法报异常
 		//TODO
@@ -201,8 +209,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	@Override
-	public Integer makeMccOrderToTbMccOrder(int order_id,int itypeid) throws RuntimeException {
-		MccOrder mccOrder = mccOrderMapper.getOne(order_id);
+	public Integer makeMccOrderToTbMccOrder(MccOrder mccOrder,int itypeid) throws RuntimeException {
+		//MccOrder mccOrder = mccOrderMapper.getOne(order_id);
 
 		Integer customer_id = mccOrder.getCustomer_id();
 		TbCustomer tbCustomer = customerServiceimpl.getTbCustomerByMccCustomerId(customer_id);
@@ -217,10 +225,11 @@ public class OrderServiceImpl implements OrderService {
 		Map<String ,Boolean> map=new HashMap<>();
 		checkCustomerRight(tbCustomer,itypeid,map);
 		
-		//2、现款不采用信用审核,否则会很怪异
+		/*
+		 * //2、现款不采用信用审核,否则会很怪异  (信用客户也就我们自己  没必要控制)
 		if(itypeid!=BusinessInterfaceType.B2BToERPOnLine.getCode())
-		checkCustomerCredit( tbCustomer, true);
-		
+			checkCustomerCredit( tbCustomer, true);//系统内药店也没有这个控制啊
+		*/		
 		// 主表保存到接口表
 		TbMccOrder tbMccOrder=new TbMccOrder(mccOrder,tbCustomer.getIcustomerid(), tbCustomer.getVccustomername());
 		tbMccOrderMapper.insert(tbMccOrder);
@@ -236,12 +245,15 @@ public class OrderServiceImpl implements OrderService {
 					
 					//mccOrderProduct.getName()+" "+mccOrderProduct.getModel();
 			
-			TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(product_id);
+			//不要觉得怪异  初始需求是我们定义一个B2B的价格集合，然后这个价格就是销售价，后来需求变成B2B价格集合只是个参考，实际售价按照客户所在的价格集合来
+			//这样前后就变成2种模式的售价了，为此 为了模式的切换，设计了标志位product_price_customer_model 0=B2b价格即为售价   1=客户价格集合为售价 B2b为参考价格
+			//TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(product_id);
+			TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductIDAndTBCustomer(product_id,tbCustomer);
 			//判断商品价格是否和订单价格一致
 			BigDecimal order_product_price=mccOrderProduct.getPrice();
 			//根据系统设定的价格模式，获取价格
-			//BigDecimal erp_product_price=productServiceImpl.getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
-			BigDecimal erp_product_price=productServiceImpl.getERPProductPrice( tbProductinfo_Eo, tbCustomer);
+			BigDecimal erp_product_price=productServiceImpl.getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
+			//BigDecimal erp_product_price=productServiceImpl.getERPProductPrice( tbProductinfo_Eo, tbCustomer);
 			if(order_product_price.compareTo(erp_product_price)!=0) {
 				throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_B2B_ORDER_PRICE_NOT_EQ);
 			}
@@ -277,6 +289,9 @@ public class OrderServiceImpl implements OrderService {
 			
 			// 细表保存到接口细表
 			tbMccOrderProductMapper.insert(tbMccOrderProduct);
+			
+			//B2B订单的copy_flag设置为1
+			mccOrderMapper.updateMccOrderCopyFlag(mccOrder.getOrder_id());
 		}
 		return impid;
 	}
@@ -306,21 +321,23 @@ public class OrderServiceImpl implements OrderService {
 		Set<Entry<String, List<TbMccOrderProduct>>> set = map.entrySet();
 		for (Entry<String, List<TbMccOrderProduct>> entry : set) {
 			//销售订单主单
-			String vcbillcode =systemServiceImpl.genBillCodeForTransactional(salesOrderBillPrefix);
-			if("".equals(vcbillcode))
-				throw new BusinessException(ExceptionEnum.ERP_ORDER_CODE_CREATE_HTTP_FAIL);//单据创建失败
-			TbSalesOrder tbSalesOrder=new TbSalesOrder(tbMccOrder,vcbillcode, itypeid, defaultuser);
-			tbSalesOrderMapper.insert(tbSalesOrder);
-			
 			//销售订单明细
 			List<TbMccOrderProduct> list=entry.getValue();
 			
+			String vcbillcode =systemServiceImpl.genBillCodeForTransactional(salesOrderBillPrefix);
+			if("".equals(vcbillcode))
+				throw new BusinessException(ExceptionEnum.ERP_ORDER_CODE_CREATE_HTTP_FAIL);//单据创建失败
+			BigDecimal total_money=getTotal(list);
+			TbSalesOrder tbSalesOrder=new TbSalesOrder(tbMccOrder,vcbillcode, itypeid, defaultuser,total_money);
+			tbSalesOrderMapper.insert(tbSalesOrder);
 			
 			float f=(float) 1.0;
 			List<TbSalesOrderS> tbSalesOrderSList=new ArrayList<>();
 			for(TbMccOrderProduct tbMccOrderProduct:list) {
 				int ibillid=tbSalesOrder.getIbillid();
-				float numqueue=f;f+=0.1;
+				float numqueue=f;
+				f+=(float)0.1;
+				f=(float)Math.round(f*10)/10;
 				int iproductid=tbMccOrderProduct.getErp_iproductid();
 				TbProductinfo_Eo tbProductinfo_Eo=tbProductinfoMapper.getOneEo(iproductid, icustomerkindid);
 				
@@ -336,6 +353,17 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return mapres;
 
+	}
+
+	private BigDecimal getTotal(List<TbMccOrderProduct> list) {
+		
+		BigDecimal total=BigDecimal.ZERO;
+		for(TbMccOrderProduct tbMccOrderProduct:list) {
+		BigDecimal price=	tbMccOrderProduct.getMcc_price();
+		BigDecimal quantity=	tbMccOrderProduct.getMcc_quantity();
+		total=total.add(price.multiply(quantity));
+		}
+		return total;
 	}
 
 	@Override
@@ -357,7 +385,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	@Override
-	public void makeTbSalesOrderToTbSalesNotice(Map<TbSalesOrder, List<TbSalesOrderS>> map) throws RuntimeException {
+	public void makeTbSalesOrderToTbSalesNotice(Map<TbSalesOrder, List<TbSalesOrderS>> map, MccOrder mccOrder ) throws RuntimeException {
 		Set<Entry<TbSalesOrder, List<TbSalesOrderS>>> set= map.entrySet();
 		for(Entry<TbSalesOrder, List<TbSalesOrderS>> entry:set) {
 			TbSalesOrder tbSalesOrder=entry.getKey();
@@ -378,6 +406,10 @@ public class OrderServiceImpl implements OrderService {
 					 itypeid, isalerid, igathermode, flagurgent);
 			tbSalesNoticeMapper.insert(tbSalesNotice);
 			int ibillid=tbSalesNotice.getIbillid();
+			
+			//保存B2B销售订单与ERP销售开票的关系数据表
+			MccOrderTbSalesNoticeRelate mccOrderTbSalesNoticeRelate=new MccOrderTbSalesNoticeRelate( tbSalesOrder, tbSalesNotice,  mccOrder);
+			mccOrderTbSalesNoticeRelateMapper.insert(mccOrderTbSalesNoticeRelate);
 					
 			//List<TbSalesOrderS> list=tbSalesOrderSMapper.getTbSalesOrderSList(ibillid);
 			List<TbSalesOrderS> list=entry.getValue();
@@ -414,8 +446,12 @@ public class OrderServiceImpl implements OrderService {
 							 numlastprice, numcountryprice
 							);
 					tbSalesNoticeSMapper.insert(_tbSalesNoticeS);
+					
+					
+					
 				}
 				numqueue+=0.1;
+				numqueue=(float)Math.round(numqueue*10)/10;
 			}
 			
 			//销售订单->销售开票之后的处理
@@ -512,8 +548,19 @@ public class OrderServiceImpl implements OrderService {
 				//2、erp订单状态 扮演审核的角色  调用ERP存储过程
 				 List<TbSalesNotice> list=tbSalesNoticeMapper.getListByMccOrderID(mccOrder.getOrder_id(),BusinessInterfaceType.B2BToERPOnLine.getCode());
 				 for(TbSalesNotice tbSalesNotice:list) {
-					 httpApproval(tbSalesNotice.getIbillid(),defaultuser);
+					 try {
+						httpApproval(tbSalesNotice.getIbillid(),defaultuser);
+						//保存单据金额明细表
+						mccOrderTbSalesNoticeRelateMapper.update(tbSalesNotice.getIbillid());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						log.error("销售开票单据号：{}审核失败，请检查原因.",tbSalesNotice.getVcbillcode());
+					}
 				 }
+				 
+			    //3、清空购物车
+				 emptyCart(mccOrder.getCustomer_id());
 			}
 			
 		
@@ -530,8 +577,13 @@ public class OrderServiceImpl implements OrderService {
 		 setMccOrderStatus( order_id,  order_payed_status, OrderComment.SUCCESS, 0);
 		
 		//2、保存付款记录
-		mccPayResultMapper.insert( mccPayResult );
+		//检查付款记录是否已经存在  存在就不管
+		int paycount=mccPayResultMapper.countMccPayResultByOrderID(order_id);
+		if(paycount==0) 
+			mccPayResultMapper.insert( mccPayResult );
 		log.info(String.format("订单：%d %s", order_id,OrderComment.SUCCESS));
+		
+			
 	}
 	
 	
@@ -547,7 +599,7 @@ public class OrderServiceImpl implements OrderService {
 	   // 1、更新b2b订单状态为取消
 	   setMccOrderStatus( order_id,  order_expire_status, OrderComment.EXPIRED, 0);
 	   
-	   // 2、更新ERP销售开票作废
+	   // 2、更新ERP销售开票作废  删除，并保存到备份表
 	   setTbSalesNoticeCancelByMccOrderID(order_id);
 	   
 	   log.info(String.format("订单：%d %s", order_id,OrderComment.EXPIRED));
@@ -582,12 +634,36 @@ public class OrderServiceImpl implements OrderService {
 			Integer impid= tbMccOrder.getImpid();
 			//获取销售订单、销售开票  并设置订单状态
 			//BusinessInterfaceType
-			tbSalesNoticeMapper.cancelTbSalesNotice(impid,BusinessInterfaceType.B2BToERPOnLine.getCode());
+			//tbSalesNoticeMapper.cancelTbSalesNotice(impid,BusinessInterfaceType.B2BToERPOnLine.getCode());
+			
+			//获取销售订单
+			List<TbSalesOrder> list=tbSalesOrderMapper.getListByImpidAndTypeID(impid, BusinessInterfaceType.B2BToERPOnLine.getCode());
+			for(TbSalesOrder tbSalesOrder:list) {
+				  try {
+					//获取销售开票单号
+					TbSalesNotice  tbSalesNotice=  tbSalesNoticeMapper.getOneBySourceID(tbSalesOrder.getIbillid());
+					if(tbSalesNotice!=null)
+						backupExpiredOrder(tbSalesNotice.getIbillid());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					log.error("impid：{} tbSalesOrder-ibillid:{},单据过期清除并备份时出错.",impid,tbSalesOrder.getIbillid());
+				}
+			}
 		}
-		
-		
-		
 	}
+	
+	@Transactional
+	@Override
+	public void  backupExpiredOrder(int ibillid)throws Exception  {
+		tbSalesNoticeMapper.insertTbSalesNoticeHis(ibillid,"支付超时，过期数据备份");
+		tbSalesNoticeMapper.insertTbSalesNoticesHis(ibillid);
+		tbSalesNoticeMapper.deleteTbSalesNotices(ibillid);
+		tbSalesNoticeMapper.deleteTbSalesNotice(ibillid);
+	}
+	
+	
+	
 
 	@SuppressWarnings("unlikely-arg-type")
 	@Override
@@ -774,7 +850,7 @@ public class OrderServiceImpl implements OrderService {
                 {                       
                     continue;
                 }
-                Date dtEnd =DateUtils.dateParse(lisenceeo.getDtend(), DateUtils.DATE_PATTERN) ;//ConvertEx.ToDateTimeEx(row[Models.tb_Lisence_Customer.DTEND]);
+               // Date dtEnd =DateUtils.dateParse(lisenceeo.getDtend(), DateUtils.DATE_PATTERN) ;//ConvertEx.ToDateTimeEx(row[Models.tb_Lisence_Customer.DTEND]);
             
 /*                if ( dtEnd == DateTime.MinValue)
                 {
@@ -1106,10 +1182,121 @@ public class OrderServiceImpl implements OrderService {
 		return map;
 	}
 
-
-
-
+	@Transactional
+	@Override
+	public void orderPlaceCredit(MccOrder mccOrder,int itypeid) {
+		int order_id=mccOrder.getOrder_id();
 	
+			MccOrder _mccOrder=mccOrderMapper.getOne(order_id);
+			if(_mccOrder.getCopy_flag()==null || _mccOrder.getCopy_flag()==0) {
+				// 1、复制b2b订单到erp的接口表
+				Integer impid = makeMccOrderToTbMccOrderSimple(order_id,itypeid);
+
+				// 2、根据税率 、是否冷藏、是否冷冻、是否麻黄碱、是否特殊、不同生成 销售订单
+				Map<TbSalesOrder,List<TbSalesOrderS>> map=
+				makeTbMccOrderToTbSalesOrder(impid, BusinessInterfaceType.B2BToERPUnderLine.getCode());
+			}
+			
+	}
+
+	@Override
+	public Integer makeMccOrderToTbMccOrderSimple(int order_id, int itypeid) throws RuntimeException {
+
+		MccOrder mccOrder = mccOrderMapper.getOne(order_id);
+
+		Integer customer_id = mccOrder.getCustomer_id();
+		TbCustomer tbCustomer = customerServiceimpl.getTbCustomerByMccCustomerId(customer_id);
+
+		//0、检查b2b订单状态    信用模式 
+		if(itypeid==BusinessInterfaceType.B2BToERPUnderLine.getCode()) {
+			if(!String.valueOf(mccOrder.getOrder_status_id()).equals(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_INIT_STATUS)))
+				throw new BusinessException(ExceptionEnum.B2B_ORDER_IS_NOT_INIT_STATUS);
+		}else {
+			throw new BusinessException(ExceptionEnum.B2B_ORDER_IS_NOT_INIT_STATUS);
+		}
+			
+		
+		
+		//1、校验客户信息是否合法
+		Map<String ,Boolean> map=new HashMap<>();
+		checkCustomerRight(tbCustomer,itypeid,map);
+		
+		/*
+		 * //2、现款不采用信用审核,否则会很怪异  (信用客户也就我们自己  没必要控制)
+		if(itypeid!=BusinessInterfaceType.B2BToERPOnLine.getCode())
+			checkCustomerCredit( tbCustomer, true);//系统内药店也没有这个控制啊
+		*/		
+		// 主表保存到接口表
+		TbMccOrder tbMccOrder=new TbMccOrder(mccOrder,tbCustomer.getIcustomerid(), tbCustomer.getVccustomername());
+		tbMccOrderMapper.insert(tbMccOrder);
+		Integer impid = tbMccOrder.getImpid();
+
+		List<MccOrderProduct> list = mccOrderProductMapper.getListByOrderId(tbMccOrder.getMcc_order_id());
+		for (MccOrderProduct mccOrderProduct : list) {
+			Integer product_id = mccOrderProduct.getProduct_id();
+			/*String productname=new StringBuilder().append(mccOrderProduct.getName())
+					.append(" ")
+					.append(mccOrderProduct.getModel())
+					.toString();*/
+					
+					//mccOrderProduct.getName()+" "+mccOrderProduct.getModel();
+			
+			//不要觉得怪异  初始需求是我们定义一个B2B的价格集合，然后这个价格就是销售价，后来需求变成B2B价格集合只是个参考，实际售价按照客户所在的价格集合来
+			//这样前后就变成2种模式的售价了，为此 为了模式的切换，设计了标志位product_price_customer_model 0=B2b价格即为售价   1=客户价格集合为售价 B2b为参考价格
+			//TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductId(product_id);
+			TbProductinfo_Eo tbProductinfo_Eo = productServiceImpl.getTbProductinfoEoByMccProductIDAndTBCustomer(product_id,tbCustomer);
+			//判断商品价格是否和订单价格一致
+			BigDecimal order_product_price=mccOrderProduct.getPrice();
+			//根据系统设定的价格模式，获取价格
+			BigDecimal erp_product_price=productServiceImpl.getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
+			//BigDecimal erp_product_price=productServiceImpl.getERPProductPrice( tbProductinfo_Eo, tbCustomer);
+			if(order_product_price.compareTo(erp_product_price)!=0) {
+				throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_B2B_ORDER_PRICE_NOT_EQ);
+			}
+			//3、商品信息相关校验
+			Map<String ,Boolean> map_p=new HashMap<>();
+			map_p.put("erp_flagcold", false);
+			map_p.put("erp_flagfreezing", false);
+			map_p.put("flagzzrs", false);
+			map_p.put("erp_flagephedrine", false);
+			map_p.put("flagnotcash", false);
+			map_p.put("erp_flagspecial", false);
+			checkProduct(tbProductinfo_Eo,map_p);
+			//现金模式  不允许非现金的药品交易 或者含有麻黄碱  也不能现金交易
+			if(itypeid==BusinessInterfaceType.B2BToERPOnLine.getCode())
+				if(map_p.get("flagnotcash")||map_p.get("erp_flagephedrine"))
+			        throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_PRODUCT_NO_CASH_SALE);
+			//终止妊娠药品集合许可证效期
+			if(map_p.get("flagzzrs") && map.get("_bZZRSOver"))
+				throw new BusinessException(mccOrderProduct.toString(),ExceptionEnum.ERP_PRODUCT_ZZRSOVER);
+			
+			//麻黄碱或者特殊药品 冷藏 冷冻  不能和其他药品开在一起 
+			//if(map_p.get("erp_flagephedrine"))
+				char erp_flagcold=map_p.get("erp_flagcold")?'Y':'N';
+				char erp_flagfreezing=map_p.get("erp_flagfreezing")?'Y':'N';
+				char erp_flagephedrine=map_p.get("erp_flagephedrine")?'Y':'N';
+				char erp_flagspecial=map_p.get("erp_flagspecial")?'Y':'N';
+			
+
+			TbMccOrderProduct tbMccOrderProduct=new TbMccOrderProduct(mccOrderProduct,impid,
+					tbProductinfo_Eo.getIproductid(), tbProductinfo_Eo.getNumsaletaxrate(),tbProductinfo_Eo.getNumpurchasetaxrate(),
+					erp_flagcold, erp_flagfreezing, erp_flagephedrine, erp_flagspecial);
+			
+			
+			// 细表保存到接口细表
+			tbMccOrderProductMapper.insert(tbMccOrderProduct);
+			
+			//B2B订单的copy_flag设置为1
+			mccOrderMapper.updateMccOrderCopyFlag(order_id);
+		}
+		return impid;
+	
+	}
+
+	@Override
+	public void emptyCart(int customer_id) {
+		mccCartMapper.deleteByCustomerID(customer_id);
+	}
 
 	
 

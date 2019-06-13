@@ -26,7 +26,7 @@ public class MccProductMapperTest {
 	@Test
 	public void testInsert() {
 		////delete from mcc_product where erpiproductid=99999
-		MccProduct mccproduct=new MccProduct( "model", "sku", "location", 99999);
+		MccProduct mccproduct=new MccProduct( "model", "sku", "location", 99999,1);
 		mccProductMapper.insert(mccproduct);
 		System.out.println(mccproduct.getProduct_id());
 	}

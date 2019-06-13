@@ -1,0 +1,11 @@
+数据信息同步与下单业务分离须知
+
+
+打数据信息同步包  请先注释掉com.zjezyy.job.Task_Fast.java   部署到9   内网即可
+
+
+打下单业务包  请先注释掉com.zjezyy.job.Task_General.java    部署到117 对上网有要求
+
+
+
+选择正确的配置文件application.properties  后打包  分别部署到服务器上
