@@ -22,5 +22,29 @@ public class SystemMapperTest {
 		systemMapper.getERPBillcode(map);
 		System.out.println(map.get("v_billcode"));
 	}
+	
+	
+	@Test
+	public void testusp_CustomerProduct_Cansell() {
+		Map<String,Object> map=new HashMap<>();
+		map.put("CustomerID_in", 403);
+		map.put("ProductID_in", "5338");
+		map.put("SalesNoticeDetailID_in", 1806647);
+		map.put("ErrMsg_Out", "");
+		map.put("cur_Result", null);
+		//systemMapper.usp_CustomerProduct_Cansell(map);
+		System.out.println(map.get("ErrMsg_Out"));
+	}
+	
+	
+	@Test
+	public void testusp_CusProduct_WMSCansell() {
+		Map<String,String> map=new HashMap<>();
+		map.put("v_prefix", "XSDD");
+		map.put("v_billcode", "");
+		systemMapper.getERPBillcode(map);
+		System.out.println(map.get("v_billcode"));
+	}
+	
 
 }

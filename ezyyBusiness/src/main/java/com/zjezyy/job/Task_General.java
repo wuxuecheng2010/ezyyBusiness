@@ -29,7 +29,7 @@ import com.zjezyy.utils.business.LogUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+//@Component
 @Slf4j
 public class Task_General {
 
@@ -164,14 +164,26 @@ public class Task_General {
 		for(MccProduct mccProduct : list) {
 			if(mccProduct.getStatus()==1)
 			try {
-				Integer mcc_nummiddle= mccProduct.getNummiddle();
+				Integer mcc_numlarge= mccProduct.getNumlarge()==null||mccProduct.getNumlarge()==0?1:mccProduct.getNumlarge();
+				Integer mcc_nummiddle= mccProduct.getNummiddle()==null||mccProduct.getNummiddle()==0?1:mccProduct.getNummiddle();
+				Integer mcc_numsmall= mccProduct.getNumsmall()==null||mccProduct.getNumsmall()==0?1:mccProduct.getNumsmall();
+				
+				
 				Integer erpiproductid=mccProduct.getErpiproductid();
 				//TbProductinfo tbProductinfo=tbProductinfoMapper.getOne(erpiproductid);
 				TbProductPacking tbProductPacking=tbProductPackingMapper.getOne(erpiproductid);
-				Integer erp_nummiddle  =productServiceImpl.getProductNumMiddle(tbProductPacking);
-				if(mcc_nummiddle ==null ||erp_nummiddle!=mcc_nummiddle) {
-					mccProductMapper.setMccProductNumMiddle(mccProduct.getProduct_id(),erp_nummiddle);
-					log.info("B2B商品中包装信息被更新，商品ID：{},规格:{} 中包装{}变更成{}",mccProduct.getProduct_id(),mccProduct.getModel(),mcc_nummiddle,erp_nummiddle);
+				Integer erp_numlarge=tbProductPacking.getNumlarge()==null||tbProductPacking.getNumlarge()==0?1:tbProductPacking.getNumlarge();
+				Integer erp_nummiddle=tbProductPacking.getNummiddle()==null||tbProductPacking.getNummiddle()==0?1:tbProductPacking.getNummiddle();
+				Integer erp_numsmall=tbProductPacking.getNumsmall()==null||tbProductPacking.getNumsmall()==0?1:tbProductPacking.getNumsmall();
+				
+				//Integer erp_nummiddle  =productServiceImpl.getProductNumMiddle(tbProductPacking);
+				if(
+				mccProduct.getNumlarge() ==null||mccProduct.getNumlarge()==0 ||tbProductPacking.getNumlarge()!=mccProduct.getNumlarge() ||
+				mccProduct.getNummiddle() ==null||mccProduct.getNummiddle()==0 ||tbProductPacking.getNummiddle()!=mccProduct.getNummiddle()||
+				mccProduct.getNumsmall() ==null||mccProduct.getNumsmall()==0 ||tbProductPacking.getNumsmall()!=mccProduct.getNumsmall()) {
+					//mccProductMapper.setMccProductNumMiddle(mccProduct.getProduct_id(),erp_nummiddle);
+					mccProductMapper.setMccProductPackage(mccProduct.getProduct_id(), erp_numlarge, erp_nummiddle, erp_numsmall);
+					log.info("B2B商品中包装信息被更新，商品ID：{},规格:{} 大包装{}变更成{} ，中包装{}变更成{}，小包装{}变更成{}",mccProduct.getProduct_id(),mccProduct.getModel(),mcc_numlarge,erp_numlarge,mcc_nummiddle,erp_nummiddle,mcc_numsmall,erp_numsmall);
 				}
 				
 			} catch (Exception e) {

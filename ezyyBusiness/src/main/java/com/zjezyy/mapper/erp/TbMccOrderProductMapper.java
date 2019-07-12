@@ -23,6 +23,8 @@ public interface TbMccOrderProductMapper {
 	String INSERT_VALUES = "#{impdtlid ,jdbcType=INTEGER},#{impid ,jdbcType=INTEGER},#{mcc_order_id,jdbcType=INTEGER},#{mcc_order_product_id,jdbcType=INTEGER},#{mcc_product_id,jdbcType=INTEGER},  " + 
 			"			#{erp_iproductid,jdbcType=INTEGER},#{mcc_name,jdbcType=VARCHAR},#{mcc_model,jdbcType=VARCHAR},#{mcc_quantity,jdbcType=NUMERIC},#{mcc_price,jdbcType=NUMERIC},#{mcc_total,jdbcType=NUMERIC},#{mcc_tax,jdbcType=NUMERIC},#{erp_numsaletaxrate,jdbcType=NUMERIC},#{erp_numpurchasetaxrate,jdbcType=NUMERIC},#{erp_flagcold,jdbcType=CHAR}, #{erp_flagfreezing,jdbcType=CHAR}, #{erp_flagephedrine,jdbcType=CHAR}, #{erp_flagspecial,jdbcType=CHAR}";
 
+	String PRODUCT_TYPE="erp_numsaletaxrate||'-'||erp_flagcold||'-'||erp_flagfreezing||'-'|| erp_flagephedrine||'-'|| erp_flagspecial";
+	
 	String TABLE_NAME = "tb_mcc_order_product";
 	
 	@SelectKey(statement="select s_tb_mcc_order_product.nextval from dual", keyProperty="impdtlid", before=true, resultType=Integer.class)
@@ -30,13 +32,13 @@ public interface TbMccOrderProductMapper {
 	int insert(TbMccOrderProduct tbMccOrderProduct);
 	
 	
-	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where impid=#{impid}"})
+	@Select({"Select ",SELECT_FIELDS,",",PRODUCT_TYPE," product_type "," from ",TABLE_NAME," where impid=#{impid}"})
 	List<TbMccOrderProduct> getListByImpid(int impid);
 	
 	@Select({"Select distinct erp_numsaletaxrate"," from ",TABLE_NAME," where impid=#{impid}"})
 	List<BigDecimal> getSaleTaxRateList(int impid);
 	
-	@Select({"Select distinct erp_numsaletaxrate||'-'||erp_flagcold||'-'||erp_flagfreezing||'-'|| erp_flagephedrine||'-'|| erp_flagspecial "," from ",TABLE_NAME," where impid=#{impid}"})
+	@Select({"Select distinct ",PRODUCT_TYPE," from ",TABLE_NAME," where impid=#{impid}"})
 	List<String> getSaleTypeList(int impid);
 
 }

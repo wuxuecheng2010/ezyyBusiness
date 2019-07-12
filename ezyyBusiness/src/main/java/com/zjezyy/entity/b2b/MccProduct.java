@@ -47,7 +47,9 @@ public class MccProduct {
 	private String  date_added;
 	private String date_modified;
 	private Integer erpiproductid;
+	private Integer numlarge;
 	private Integer nummiddle;
+	private Integer numsmall;
 	public MccProduct() {
 		
 	}

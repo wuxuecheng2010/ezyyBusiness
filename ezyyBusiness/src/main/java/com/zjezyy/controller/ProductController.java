@@ -23,7 +23,7 @@ public class ProductController extends BaseController {
 	@Autowired
 	ProductService productServiceimpl;
 
-	//下单接口  http://localhost:8099/bi/api/customer/copy?icustomerid=442&credit=0
+	//接口  http://localhost:8099/bi/api/customer/copy?icustomerid=442&credit=0
 	@RequestMapping(value = "/copy", method = RequestMethod.GET)
 	public Result copyCustomerForB2B(HttpServletRequest request, HttpServletResponse response) {
 		int iproductid=-1;

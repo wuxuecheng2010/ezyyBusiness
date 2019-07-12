@@ -29,6 +29,8 @@ public class TbMccOrderProduct {
     private char erp_flagephedrine;
     private char erp_flagspecial;
     
+    private String product_type;//税率、冷藏等因数  字段拼接组合的特征值,用于分组销售订单明细数据
+    
     public TbMccOrderProduct() {
     	super();
     }

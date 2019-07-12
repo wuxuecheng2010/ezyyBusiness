@@ -77,10 +77,12 @@ public class AliPayServiceImpl implements PayService {
     				payinfo=new MccPayResult();
     				AlipayTradeQueryResponse resp = result.getResponse();
     				//tradeStatus=resp.getTradeStatus();
+    				
     				MccOrder mccOrder=mccOrderMapper.getOneByCode(ordercode);
 	                payinfo.setOrder_id(mccOrder.getOrder_id());
 	                payinfo.setOrdercode(ordercode);
-	                payinfo.setFee(resp.getBuyerPayAmount());
+	               // payinfo.setFee(resp.getBuyerPayAmount());
+	                payinfo.setFee(resp.getTotalAmount());
 	                payinfo.setPaydate(DateUtils.formatDateToDefaultStr(resp.getSendPayDate()));
 	                payinfo.setPayment(Payment.QRCODE_ALIPAY.getCode());
 	                payinfo.setPlordercode(resp.getTradeNo());

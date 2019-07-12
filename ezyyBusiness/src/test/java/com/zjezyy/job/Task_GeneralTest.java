@@ -39,5 +39,18 @@ public class Task_GeneralTest {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	//b2bProductPacksize
+	
+	@Test
+	public void testb2bProductPacksize() {
+		try {
+			task_General.b2bProductPacksize();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

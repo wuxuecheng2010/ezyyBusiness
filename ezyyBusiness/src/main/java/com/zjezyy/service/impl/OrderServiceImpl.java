@@ -22,6 +22,7 @@ import com.zjezyy.entity.b2b.MccOrderHistory;
 import com.zjezyy.entity.b2b.MccOrderProduct;
 import com.zjezyy.entity.b2b.MccOrderTbSalesNoticeRelate;
 import com.zjezyy.entity.b2b.MccPayResult;
+import com.zjezyy.entity.b2b.MccTbSalesNotice;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbLisenceCustomer_Eo;
@@ -36,6 +37,7 @@ import com.zjezyy.entity.erp.TbSalesNoticeS;
 import com.zjezyy.entity.erp.TbSalesOrder;
 import com.zjezyy.entity.erp.TbSalesOrderS;
 import com.zjezyy.entity.erp.TbStocks;
+import com.zjezyy.entity.erp.VwMccSalesNotice;
 import com.zjezyy.enums.BusinessInterfaceType;
 import com.zjezyy.enums.DeployPolicyEnum;
 import com.zjezyy.enums.ExceptionEnum;
@@ -50,6 +52,7 @@ import com.zjezyy.mapper.b2b.MccOrderMapper;
 import com.zjezyy.mapper.b2b.MccOrderProductMapper;
 import com.zjezyy.mapper.b2b.MccOrderTbSalesNoticeRelateMapper;
 import com.zjezyy.mapper.b2b.MccPayResultMapper;
+import com.zjezyy.mapper.b2b.MccTbSalesNoticeMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerMapper;
 import com.zjezyy.mapper.erp.TbLisenceCustomerMapper;
@@ -63,6 +66,7 @@ import com.zjezyy.mapper.erp.TbSalesNoticeSMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderSMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
+import com.zjezyy.mapper.erp.VwMccSalesNoticeMapper;
 import com.zjezyy.service.AuthorityService;
 import com.zjezyy.service.CustomerService;
 import com.zjezyy.service.OrderService;
@@ -145,6 +149,12 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	MccCartMapper mccCartMapper;
+	
+	@Autowired
+	VwMccSalesNoticeMapper vwMccSalesNoticeMapper;
+	
+	@Autowired
+	MccTbSalesNoticeMapper mccTbSalesNoticeMapper;
 	
 
 	@Value("${erp.system.default.user}")
@@ -305,8 +315,8 @@ public class OrderServiceImpl implements OrderService {
 		// 获取临时表数据
 		TbMccOrder tbMccOrder = tbMccOrderMapper.getOne(impid);
 		List<TbMccOrderProduct> tbMccOrderProductList = tbMccOrderProductMapper.getListByImpid(impid);
-		// 按照税率分组订单明细
-		// 1获取税率列表;
+		// 按照商品特征分组订单明细
+		// 1获取商品特征唯一性列表;
 		//List<BigDecimal> taxRateList = tbMccOrderProductMapper.getSaleTaxRateList(impid);
 		List<String> typeList = tbMccOrderProductMapper.getSaleTypeList(impid);
 		
@@ -552,8 +562,9 @@ public class OrderServiceImpl implements OrderService {
 						httpApproval(tbSalesNotice.getIbillid(),defaultuser);
 						//保存单据金额明细表
 						mccOrderTbSalesNoticeRelateMapper.update(tbSalesNotice.getIbillid());
+					} catch(com.alibaba.fastjson.JSONException e) {
+						e.printStackTrace();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						log.error("销售开票单据号：{}审核失败，请检查原因.",tbSalesNotice.getVcbillcode());
 					}
@@ -583,6 +594,12 @@ public class OrderServiceImpl implements OrderService {
 			mccPayResultMapper.insert( mccPayResult );
 		log.info(String.format("订单：%d %s", order_id,OrderComment.SUCCESS));
 		
+		//3、保存B2B订单与ERP销售开票单据号  4
+		List<VwMccSalesNotice> listVwMccSalesNotice =vwMccSalesNoticeMapper.getListByMccOrderIDAndType(order_id, 4);
+		for(VwMccSalesNotice vwMccSalesNotice:listVwMccSalesNotice) {
+			MccTbSalesNotice mccTbSalesNotice=new MccTbSalesNotice(vwMccSalesNotice);
+			mccTbSalesNoticeMapper.insert(mccTbSalesNotice);
+		}
 			
 	}
 	
@@ -763,7 +780,9 @@ public class OrderServiceImpl implements OrderService {
 		Result res=HttpClientUtil.postMap(salesnoticeApprovalUrl,map,map_head );
 		JSONObject jsonObject=null;
 		if(res!=null && res.getStatus()==0) {
-			jsonObject = JSON.parseObject(res.getMsg());
+			System.out.println("--httpApproval---res.getMsg()-----:"+res.getData().toString());
+			
+			jsonObject = JSON.parseObject(res.getData().toString());
 			int status=jsonObject.getInteger("status");
 			String msg=jsonObject.getString("msg");
 			if(status!=0) {
@@ -771,6 +790,9 @@ public class OrderServiceImpl implements OrderService {
 				log.error(error);
 				systemServiceImpl.sendTelMsg(error, tellist);
 				throw new BusinessException(msg,-9998);
+			}else {
+				String info=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核成功", salesnotice_ibillid);
+				log.info(info);
 			}
 		}else {
 			String error=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核失败，原因：%s", salesnotice_ibillid,ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL.getMsg());
@@ -1171,12 +1193,10 @@ public class OrderServiceImpl implements OrderService {
 			List<TbMccOrderProduct> _tbMccOrderProductList = new ArrayList<TbMccOrderProduct>();
 			map.put(type, _tbMccOrderProductList);
 			for (TbMccOrderProduct tbMccOrderProduct : tbMccOrderProductList) {
-				BigDecimal erp_numsaletaxrate = tbMccOrderProduct.getErp_numsaletaxrate();
-				String[] arrType=type.split("-");
-				BigDecimal type_=new BigDecimal(arrType[0]);
-				if (type_.compareTo(erp_numsaletaxrate) == 0) {
+				
+				String product_type=tbMccOrderProduct.getProduct_type();
+				if(type.equals(product_type))
 					_tbMccOrderProductList.add(tbMccOrderProduct);
-				}
 			}
 		}
 		return map;

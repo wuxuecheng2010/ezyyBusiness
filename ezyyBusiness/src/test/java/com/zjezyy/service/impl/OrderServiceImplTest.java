@@ -58,7 +58,8 @@ public class OrderServiceImplTest {
 	@Test
 	public void testMakeTbMccOrderToTbSalesOrder() {
 
-		orderServiceImpl.makeTbMccOrderToTbSalesOrder(22, 3);
+		//orderServiceImpl.makeTbMccOrderToTbSalesOrder(22, 3);
+		orderServiceImpl.makeTbMccOrderToTbSalesOrder(103, 4);
 	}
 
 	@Test

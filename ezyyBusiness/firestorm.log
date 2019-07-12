@@ -176,3 +176,204 @@ INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-
 INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
 INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
 INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-5} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-6} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-7} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-8} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-9} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-10} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-11} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-12} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+ERROR main com.alibaba.druid.pool.DruidDataSource - discard connection
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 52,773,537 milliseconds ago.  The last packet sent successfully to the server was 52,773,537 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3751)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2512)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
+	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
+	at com.sun.proxy.$Proxy205.query(Unknown Source)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	at com.sun.proxy.$Proxy88.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:83)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy121.getOneByCode(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
+	at com.sun.proxy.$Proxy122.getOneByCode(Unknown Source)
+	at com.zjezyy.service.impl.AliPayServiceImpl.payResultQuery(AliPayServiceImpl.java:80)
+	at com.zjezyy.service.impl.AliPayServiceImplTest.testPayResultQuery(AliPayServiceImplTest.java:33)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestExecutionCallbacks.evaluate(RunBeforeTestExecutionCallbacks.java:73)
+	at org.springframework.test.context.junit4.statements.RunAfterTestExecutionCallbacks.evaluate(RunAfterTestExecutionCallbacks.java:83)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestMethodCallbacks.evaluate(RunBeforeTestMethodCallbacks.java:75)
+	at org.springframework.test.context.junit4.statements.RunAfterTestMethodCallbacks.evaluate(RunAfterTestMethodCallbacks.java:86)
+	at org.springframework.test.context.junit4.statements.SpringRepeat.evaluate(SpringRepeat.java:84)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:251)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.runChild(SpringJUnit4ClassRunner.java:97)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.springframework.test.context.junit4.statements.RunBeforeTestClassCallbacks.evaluate(RunBeforeTestClassCallbacks.java:61)
+	at org.springframework.test.context.junit4.statements.RunAfterTestClassCallbacks.evaluate(RunAfterTestClassCallbacks.java:70)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.springframework.test.context.junit4.SpringJUnit4ClassRunner.run(SpringJUnit4ClassRunner.java:190)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:539)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:761)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:461)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:207)
+Caused by: java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
+	... 72 more
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited

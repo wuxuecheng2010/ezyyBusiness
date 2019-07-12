@@ -20,7 +20,7 @@ import com.zjezyy.service.SettingService;
 
 import lombok.extern.slf4j.Slf4j;
 
-//@Component
+@Component
 @Slf4j
 public class Task_Fast {
 
@@ -69,11 +69,13 @@ public class Task_Fast {
 
 					if (Payment.QRCODE_WXPAY.getCode().equals(payment_code))
 						orderServiceImpl.payResultQuery(wxPayServiceImpl, ordercode);
+					
 					if (Payment.WXPAY_WAP.getCode().equals(payment_code))
 						orderServiceImpl.payResultQuery(wxPayServiceImpl, ordercode);
 					
 					if (Payment.QRCODE_ALIPAY.getCode().equals(payment_code))
 						orderServiceImpl.payResultQuery(aliPayServiceImpl, ordercode);
+					
 					if (Payment.ALIPAY_WAP.getCode().equals(payment_code))
 						orderServiceImpl.payResultQuery(aliPayServiceImpl, ordercode);
 

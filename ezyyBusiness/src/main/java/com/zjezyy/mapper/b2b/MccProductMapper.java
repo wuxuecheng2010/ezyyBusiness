@@ -17,7 +17,7 @@ import com.zjezyy.entity.b2b.MccProduct_Eo;
 @Mapper
 public interface MccProductMapper {
 	
-	String SELECT_FIELDS="a.product_id,a.model,a.sku,a.upc,a.ean,a.jan,a.isbn,a.mpn,a.location,a.quantity,a.stock_status_id,a.image,a.manufacturer_id,a.shipping,a.price,a.points,a.tax_class_id,a.date_available,a.weight,a.weight_class_id,a.length,a.width,a.height,a.length_class_id,a.subtract,a.minimum,a.sort_order,a.status,a.viewed,a.date_added,a.date_modified,a.erpiproductid,a.nummiddle";
+	String SELECT_FIELDS="a.product_id,a.model,a.sku,a.upc,a.ean,a.jan,a.isbn,a.mpn,a.location,a.quantity,a.stock_status_id,a.image,a.manufacturer_id,a.shipping,a.price,a.points,a.tax_class_id,a.date_available,a.weight,a.weight_class_id,a.length,a.width,a.height,a.length_class_id,a.subtract,a.minimum,a.sort_order,a.status,a.viewed,a.date_added,a.date_modified,a.erpiproductid,a.numlarge,a.nummiddle,a.numsmall";
 	String TABLE_NAME="mcc_product a";
 	
 	String INSERT_FIELDS="model,sku,upc,ean,jan,isbn,mpn,location,quantity,stock_status_id,image,manufacturer_id,shipping,price,points,tax_class_id,date_available,weight,weight_class_id,length,width,height,length_class_id,subtract,minimum,sort_order,status,viewed,date_added,date_modified,erpiproductid,nummiddle";
@@ -67,6 +67,10 @@ public interface MccProductMapper {
 	
 	@Update({"update mcc_product set nummiddle=#{nummiddle} where product_id=#{product_id}"})
 	int  setMccProductNumMiddle(int product_id,Integer nummiddle);
+	
+	
+	@Update({"update mcc_product set numlarge=#{numlarge},nummiddle=#{nummiddle},numsmall=#{numsmall} where product_id=#{product_id}"})
+	int setMccProductPackage(int product_id,Integer numlarge,Integer nummiddle,Integer numsmall);
 	
 	
 	@Insert({"insert into ","mcc_product","("+INSERT_FIELDS+")","values","("+INSERT_VALUES+")"})

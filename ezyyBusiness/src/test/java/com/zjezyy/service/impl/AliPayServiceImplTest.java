@@ -30,6 +30,8 @@ public class AliPayServiceImplTest {
 		//orderServiceImpl.payResultQuery(aliPayServiceImpl, 152);
 		
 		//aliPayServiceImpl.payResultQuery(152);
+		aliPayServiceImpl.payResultQuery("201907100941498210052431");
+		
 	}
 
 }
