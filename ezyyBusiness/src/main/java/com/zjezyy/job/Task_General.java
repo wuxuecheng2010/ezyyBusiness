@@ -16,7 +16,6 @@ import com.zjezyy.entity.erp.TbProductPacking;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.enums.BusinessInterfaceType;
 import com.zjezyy.enums.EzyySettingKey;
-import com.zjezyy.enums.Payment;
 import com.zjezyy.mapper.b2b.MccOrderMapper;
 import com.zjezyy.mapper.b2b.MccProductMapper;
 import com.zjezyy.mapper.erp.TbProductPackingMapper;

@@ -296,14 +296,38 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return list;
 	}
+	
+	
+	/**
+	 * 
+	* @Title: isStockControl
+	* @Description: TODO(判断商品因为低储信息是否可以上架或者下架 )
+	* @param @param iproductid
+	* @param @return    参数
+	* @author wuxuecheng
+	* @return int    返回类型  1或者0   0代表低储 下架（库存改0）   1非低储上架
+	* @throws
+	 */
+	private int getProductStockControlForOnOff(int iproductid) {
+		BigDecimal numopen = new BigDecimal("-1");// 默认是不控制的
+		TbStockControl tbStockControl = tbStockControlMapper.getOne(iproductid);
+		if (tbStockControl != null)
+			numopen = tbStockControl.getNumopen();// >=0算低储 -1不算
+		
+		int x = numopen.compareTo(new BigDecimal("-1")) == 0 ? 1 : 0;
+		
+		return x;
+	}
 
 	@Override
 	public void doSynchronizeOnOff(MccProduct mccProduct) throws RuntimeException {
 		// 获取低储数据
-		BigDecimal numopen = new BigDecimal("-1");// 默认是不控制的
+		/*BigDecimal numopen = new BigDecimal("-1");// 默认是不控制的
 		TbStockControl tbStockControl = tbStockControlMapper.getOne(mccProduct.getErpiproductid());
 		if (tbStockControl != null)
 			numopen = tbStockControl.getNumopen();// >=0算低储 -1不算
+		int x = numopen.compareTo(new BigDecimal("-1")) == 0 ? 1 : 0;*/
+		int x=getProductStockControlForOnOff(mccProduct.getErpiproductid());
 
 		// 获取ERP价格集合信息
 		TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEo(mccProduct.getErpiproductid(),
@@ -311,7 +335,7 @@ public class ProductServiceImpl implements ProductService {
 
 		// 获取b2b商品信息状态
 		int status = mccProduct.getStatus();// 0 下架 1上架
-		int x = numopen.compareTo(new BigDecimal("-1")) == 0 ? 1 : 0;
+		
 
 		String info = "";
 		if (status != x) {// 低储因素有变化
@@ -319,8 +343,22 @@ public class ProductServiceImpl implements ProductService {
 			if (x == 0) {// 下架操作
 				// 如果原本是上架状态
 				if (status == 1) {
-					mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
-					info = String.format("B2B商品ID：%d,%s 因低储下架", mccProduct.getProduct_id(), status == 1 ? "上架" : "下架");
+					//mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
+					//info = String.format("B2B商品ID：%d,%s 因低储下架", mccProduct.getProduct_id(), status == 1 ? "上架" : "下架");
+				
+					//设置商品库存为0
+					//mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
+					mccProductMapper.setMccProductQuantity(mccProduct.getProduct_id(),BigDecimal.ZERO);
+					info = String.format("B2B商品ID：%d,%s 因低储库存更新为0", mccProduct.getProduct_id(), status == 1 ? "上架" : "下架（禁售，库存0）");
+				
+				
+				}else {
+					//如果商品目前是下架状态，如果检查到有B2B目录就可以恢复上架
+					if (existB2bPrice(tbProductinfo_Eo)) {
+						mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 1);
+						info = String.format("B2B商品ID：%d, 因维护B2B价格上架", mccProduct.getProduct_id());
+					}
+						
 				}
 
 			} else {
@@ -353,6 +391,17 @@ public class ProductServiceImpl implements ProductService {
 					info = String.format("B2B商品ID：%d, 因未维护价格下架", mccProduct.getProduct_id());
 				}
 			}
+			
+			if (status == 0) {
+				// 判断价格是否在 如果在就上线
+				if (existB2bPrice(tbProductinfo_Eo)) {
+					// 下架处理
+					mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 1);
+					info = String.format("B2B商品ID：%d, 因有维护价格上架", mccProduct.getProduct_id());
+				}
+			}
+			
+			
 		}
 		if (!"".equals(info))
 			log.info(info);
@@ -427,10 +476,30 @@ public class ProductServiceImpl implements ProductService {
 		BigDecimal erpqty = getTbProductStocks(list);
 		// 3、同步处理
 		if (b2bqty.compareTo(erpqty) != 0) {
-			updateMccProductQuantity(mccProduct, erpqty);
-			String info = String.format("B2B商品ID：%d, 库存%f-->%f ", mccProduct.getProduct_id(), mccProduct.getQuantity(),
-					erpqty);
-			log.info(info);
+			//判断商品是否低储,如果低储，库存变为0
+			if(getProductStockControlForOnOff(mccProduct.getErpiproductid())==0)//下架 库存设置0 不卖了
+			{
+				updateMccProductQuantity(mccProduct, BigDecimal.ZERO);
+				String info = String.format("B2B商品ID：%d, 库存%f-->%f (低储，库存改为0)", mccProduct.getProduct_id(), mccProduct.getQuantity(),
+						BigDecimal.ZERO);
+				log.info(info);
+				
+			}else {
+				updateMccProductQuantity(mccProduct, erpqty);
+				String info = String.format("B2B商品ID：%d, 库存%f-->%f ", mccProduct.getProduct_id(), mccProduct.getQuantity(),
+						erpqty);
+				log.info(info);
+			}
+				
+			
+		}else {//库存相等的情况下 有设置了低储  怎么办啊
+			if(getProductStockControlForOnOff(mccProduct.getErpiproductid())==0)//商品设置了低储，我们就设置库存为0
+			{
+				updateMccProductQuantity(mccProduct, BigDecimal.ZERO);
+				String info = String.format("B2B商品ID：%d, 库存%f-->%f (低储，库存改为0)", mccProduct.getProduct_id(), mccProduct.getQuantity(),
+						BigDecimal.ZERO);
+				log.info(info);
+			}
 		}
 
 	}

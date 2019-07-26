@@ -52,7 +52,7 @@ public class ProductServiceImplTest {
 
 	@Test
 	public void testDoSynchronizeOnOff() {
-		int erpIproductid=1380;
+		int erpIproductid=11447;
 		MccProduct	mccProduct =mccProductMapper.getOneByErpIproductid(erpIproductid);
 		productServiceImpl.doSynchronizeOnOff(mccProduct);
 		
