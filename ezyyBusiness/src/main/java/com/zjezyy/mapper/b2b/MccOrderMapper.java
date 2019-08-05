@@ -12,7 +12,7 @@ import com.zjezyy.entity.b2b.MccOrder;
 @Repository
 @Mapper
 public interface MccOrderMapper {
-	String SELECT_FIELDS="order_id,store_id,customer_id,store_name,customer_group_id,fullname,email,telephone,total,comment,shipping_zone,shipping_city,shipping_district,shipping_address,order_status_id,payment_method,payment_code,ordercode,copy_flag";
+	String SELECT_FIELDS="order_id,store_id,customer_id,store_name,customer_group_id,fullname,email,telephone,total,order_product_total,comment,shipping_zone,shipping_city,shipping_district,shipping_address,order_status_id,payment_method,payment_code,ordercode,copy_flag";
 	String TABLE_NAME="mcc_order";
 	
 	//根据订单号查订单

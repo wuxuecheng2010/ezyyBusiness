@@ -28,7 +28,7 @@ import com.zjezyy.utils.business.LogUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
-//@Component
+@Component
 @Slf4j
 public class Task_General {
 

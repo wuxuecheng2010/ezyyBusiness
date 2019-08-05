@@ -15,6 +15,7 @@ public class MccOrder {
 	private String email;
 	private String telephone;
 	private BigDecimal total;
+	private BigDecimal order_product_total;
 	private String comment;
 	private String shipping_zone;
 	private String shipping_city;

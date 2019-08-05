@@ -23,6 +23,7 @@ public class TbMccOrder {
 	private String mcc_email;
 	private String mcc_telephone;
 	private BigDecimal mcc_total;
+	private BigDecimal mcc_order_product_total;
 	private String mcc_shipping_zone;
 	private String mcc_shipping_city;
 	private String mcc_shipping_district;
@@ -51,6 +52,7 @@ public class TbMccOrder {
 		this.mcc_email=mccOrder.getEmail();
 		this.mcc_telephone=mccOrder.getTelephone();
 		this.mcc_total=mccOrder.getTotal();
+		this.mcc_order_product_total=mccOrder.getOrder_product_total();
 		this.mcc_shipping_zone=mccOrder.getShipping_zone();
 		this.mcc_shipping_city=mccOrder.getShipping_city();
 		this.mcc_shipping_district=mccOrder.getShipping_district();

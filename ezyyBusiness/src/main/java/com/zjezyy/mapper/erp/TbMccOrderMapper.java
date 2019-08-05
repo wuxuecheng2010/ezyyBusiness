@@ -16,11 +16,11 @@ import com.zjezyy.entity.erp.TbMccOrder;
 public interface TbMccOrderMapper {
 	
 	
-	String SELECT_FIELDS="impid,mcc_order_id,mcc_store_id,mcc_store_name,mcc_customer_id,impdate,mcc_customer_group_id,mcc_fullname,mcc_email,mcc_telephone,mcc_total,erp_icustomerid,erp_vccustomername,mcc_shipping_zone,mcc_shipping_city,mcc_shipping_district,mcc_shipping_address,mcc_comment";
+	String SELECT_FIELDS="impid,mcc_order_id,mcc_store_id,mcc_store_name,mcc_customer_id,impdate,mcc_customer_group_id,mcc_fullname,mcc_email,mcc_telephone,mcc_total,mcc_order_product_total,erp_icustomerid,erp_vccustomername,mcc_shipping_zone,mcc_shipping_city,mcc_shipping_district,mcc_shipping_address,mcc_comment";
 	
-	String INSERT_FIELDS="impid,mcc_order_id,mcc_store_id,mcc_store_name,mcc_customer_id,impdate,mcc_customer_group_id,mcc_fullname,mcc_email,mcc_telephone,mcc_total,erp_icustomerid,erp_vccustomername,mcc_shipping_zone,mcc_shipping_city,mcc_shipping_district,mcc_shipping_address,mcc_comment";
+	String INSERT_FIELDS="impid,mcc_order_id,mcc_store_id,mcc_store_name,mcc_customer_id,impdate,mcc_customer_group_id,mcc_fullname,mcc_email,mcc_telephone,mcc_total,mcc_order_product_total,erp_icustomerid,erp_vccustomername,mcc_shipping_zone,mcc_shipping_city,mcc_shipping_district,mcc_shipping_address,mcc_comment";
 	
-	String INSERT_VALUES="#{impid},#{mcc_order_id},#{mcc_store_id},#{mcc_store_name},#{mcc_customer_id},sysdate,#{mcc_customer_group_id},#{mcc_fullname},#{mcc_email},#{mcc_telephone},#{mcc_total},#{erp_icustomerid},#{erp_vccustomername},#{mcc_shipping_zone},#{mcc_shipping_city},#{mcc_shipping_district},#{mcc_shipping_address},#{mcc_comment}";
+	String INSERT_VALUES="#{impid},#{mcc_order_id},#{mcc_store_id},#{mcc_store_name},#{mcc_customer_id},sysdate,#{mcc_customer_group_id},#{mcc_fullname},#{mcc_email},#{mcc_telephone},#{mcc_total},#{mcc_order_product_total},#{erp_icustomerid},#{erp_vccustomername},#{mcc_shipping_zone},#{mcc_shipping_city},#{mcc_shipping_district},#{mcc_shipping_address},#{mcc_comment}";
 	
 	String TABLE_NAME="tb_mcc_order";
 	
