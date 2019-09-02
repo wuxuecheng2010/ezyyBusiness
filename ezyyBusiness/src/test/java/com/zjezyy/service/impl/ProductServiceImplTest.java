@@ -52,7 +52,7 @@ public class ProductServiceImplTest {
 
 	@Test
 	public void testDoSynchronizeOnOff() {
-		int erpIproductid=11447;
+		int erpIproductid=4007;
 		MccProduct	mccProduct =mccProductMapper.getOneByErpIproductid(erpIproductid);
 		productServiceImpl.doSynchronizeOnOff(mccProduct);
 		
@@ -60,9 +60,17 @@ public class ProductServiceImplTest {
 	
 	@Test
 	public void testDoSynchronizePrice() {
-		int erpIproductid=1380;
-		MccProduct	mccProduct =mccProductMapper.getOneByErpIproductid(erpIproductid);
+		//int erpIproductid=13692;
+		MccProduct mccProduct=mccProductMapper.getOne(13692, 0);
+		//MccProduct	mccProduct =mccProductMapper.getOneByErpIproductid(erpIproductid);
 		productServiceImpl.doSynchronizePrice(mccProduct);
+		
+	}
+	
+	@Test
+	public void testdoSynchronizeProductInfo() {
+		
+		productServiceImpl.doSynchronizeProductInfo(17639,0,0);
 		
 	}
 	

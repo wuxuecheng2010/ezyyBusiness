@@ -57,6 +57,8 @@ public class MccProduct {
 	
 public MccProduct(String model,String sku,String location,int erpiproductid,int nummiddle) {
 
+	if(model==null || "".equals(model))
+		model=".";
 	this.model = model;
 	this.sku = sku;
 	this.upc = "";
@@ -72,7 +74,7 @@ public MccProduct(String model,String sku,String location,int erpiproductid,int 
 	
 	this.manufacturer_id = 0;
 	this.shipping = true;
-	this.price =  new BigDecimal("0");
+	this.price =  new BigDecimal("99999.99");
 	this.points =0;
 	this.weight = new BigDecimal("0");
 	this.weight_class_id = 1;

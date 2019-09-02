@@ -28,7 +28,7 @@ import com.zjezyy.utils.business.LogUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+//@Component
 @Slf4j
 public class Task_General {
 
@@ -65,10 +65,37 @@ public class Task_General {
 	@Value("${spring.profiles.active}")
 	private String mode;
 
+	
+	//0、同步erp商品信息到b2b 全部
+	@Scheduled(initialDelay = 1000, fixedRate = 3600000)
+	public void productforb2b() {
+		
+		// 获得当前类名
+		String clazz = Thread.currentThread().getStackTrace()[1].getClassName();
+		// 获得当前方法名
+		String method = Thread.currentThread().getStackTrace()[1].getMethodName();
+		//查询不在导入B2b日志表中的所有商品信息
+		//保存到B2b以及保存导入日志
+		
+		List<TbProductinfo> list=tbProductinfoMapper.getProductListAll();
+		for(TbProductinfo tbProductinfo:list) {
+			
+			try {
+				productServiceImpl.doSynchronizeProductInfo(tbProductinfo.getIproductid(), 0, 0);
+				//productServiceImpl.setTbProductinfoIydstate(tbProductinfo);
+				//into = String.format("ERP商品ID：%d修改iydstate状态为1，准备导入到B2B", tbProductinfo.getIproductid());
+				//log.info(into);
+			} catch (Exception e) {
+				LogUtil.logForERPProduct(clazz, method, e, tbProductinfo);
+			}
+			
+		}
+		
+	}
 
-	// 1、低储信息、b2b价格是否维护 同步B2B上下架
+	// 1、 同步B2B上下架(根据低储信息、b2b集合是否维护)
 	@Scheduled(initialDelay = 1000, fixedRate = 150000)
-	public void lowStorage() throws Exception {
+	public void onOff() throws Exception {
 		
 		
 		// 获得当前类名
@@ -77,7 +104,8 @@ public class Task_General {
 		String method = Thread.currentThread().getStackTrace()[1].getMethodName();
 
 		// 1、查询b2b所有商品
-		List<MccProduct> list = productServiceImpl.getAllMccProductID();
+		//List<MccProduct> list = productServiceImpl.getAllMccProductID();
+		List<MccProduct> list =mccProductMapper.getAll();
 		// 2、遍历商品 是否为低储 如果低储下架商品
 		for (MccProduct mccProduct : list) {
 			try {
@@ -90,9 +118,9 @@ public class Task_General {
 
 	}
 
-	// 2、同步B2B商品价格 如果发现ERP没有B2B价格集合 直接下架
-	@Scheduled(initialDelay = 2000, fixedRate = 150000)
-	public void b2bPrice() throws Exception {
+	// 2、同步B2B商品的价格字段  如果发现ERP没有维护B2B价格集合（脏数据） 直接下架
+	//@Scheduled(initialDelay = 2000, fixedRate = 150000)
+	/*public void b2bPrice() throws Exception {
 		//测试模式不执行
 		//if(!"dev".equals(mode)) {
 					// 获得当前类名
@@ -112,10 +140,10 @@ public class Task_General {
 						}
 					}
 		//}
-	}
+	}*/
 
-	// 3、同步B2B商品信息 根据价格集合 有维护B2B商品价格体系的，同步到B2b来 上下架关系 由高低储和价格需信息来决定 此处只关心商品数据
-	@Scheduled(initialDelay = 3000, fixedRate = 150000)
+	// 3、(由0来处理了)同步B2B商品信息 根据价格集合 有维护B2B商品价格体系的，同步到B2b来 上下架关系 由高低储和价格需信息来决定 此处只关心商品数据
+	/*//@Scheduled(initialDelay = 3000, fixedRate = 150000)
 	public void b2bProduct() throws Exception {
 
 		// 获得当前类名
@@ -145,14 +173,14 @@ public class Task_General {
 			
 		}
 
-		/*// 3、调用http请求处理数据 php服务
-		Result ress=HttpClientUtil.get(productRemoteServiceUrl,null);
+		// 3、调用http请求处理数据 php服务
+		//Result ress=HttpClientUtil.get(productRemoteServiceUrl,null);
 		
 		
 		//String respStr = HttpClientUtil.get(productRemoteServiceUrl,null);
-		if (ress != null)
-			log.info(ress.getMsg());*/
-	}
+		//if (ress != null)
+			//log.info(ress.getMsg());
+	}*/
 	
 	
 	//3.1、同步B2B的中包装信息

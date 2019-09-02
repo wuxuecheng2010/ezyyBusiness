@@ -45,7 +45,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 	@Override
 	public TbProducer getTbProducerByID(int iproducerid) {
 
-		String key = TbUnit.Prefix_Redis_Key + TbUnit.Prefix_Redis_Key_Separtor + iproducerid;
+		String key = TbProducer.Prefix_Redis_Key + TbProducer.Prefix_Redis_Key_Separtor + iproducerid;
 		TbProducer tbProducer = (TbProducer) redisUtil.get(key);
 		
 		if (tbProducer == null) {

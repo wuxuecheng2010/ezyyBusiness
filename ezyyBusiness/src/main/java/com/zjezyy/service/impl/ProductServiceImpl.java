@@ -26,8 +26,10 @@ import com.zjezyy.entity.erp.TbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbProductPacking;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
+import com.zjezyy.entity.erp.TbProductinfo_Eo1;
 import com.zjezyy.entity.erp.TbStockControl;
 import com.zjezyy.entity.erp.TbStocks;
+import com.zjezyy.entity.erp.TbUnit;
 import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.LanguageEnum;
@@ -108,8 +110,11 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	TbStocksMapper tbStocksMapper;
 
-	@Value("${b2b.product.price.icustomerkindid}")
-	private Integer icustomerkindid;
+	//@Value("${b2b.product.price.icustomerkindid}")
+	//private Integer icustomerkindid;
+	
+	@Value("${b2b.product.price.icustomersetid}")
+	private Integer icustomersetid;
 
 	/*@Value("${b2b.product.price.pricetype}")
 	private String pricetype;*/
@@ -167,7 +172,8 @@ public class ProductServiceImpl implements ProductService {
 		String pricemodel=SettingServiceImpl.getEzyySettingValue(EzyySettingKey.PRODUCT_PRICE_CUSTOMER_MODEL);
 		TbProductinfo_Eo tbProductinfo_Eo=null;
 		if(pricemodel==null||"".equals(pricemodel)||"0".equals(pricemodel)) {
-			 tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, icustomerkindid);
+			 //tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, icustomerkindid);
+			 tbProductinfo_Eo = tbProductinfoMapper.getOneEoDirty(erpiproductid);
 		}else {
 			 //客户价格体系的价格
 			int myicustomerkindid=tbCustomer.getIcustomerkindid();
@@ -175,13 +181,13 @@ public class ProductServiceImpl implements ProductService {
 			//先去特殊集合找是否有这个客户  没有就直接用默认的客户集合
 			TbCustomerKindList tbCustomerKindList=tbCustomerKindListMapper.getOne(tbCustomer.getIcustomerid());
 			if(tbCustomerKindList==null) {
-				tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, myicustomerkindid);
+				tbProductinfo_Eo = tbProductinfoMapper.getOneEo_(erpiproductid, myicustomerkindid);
 			}else {
 				//特殊集合
 				int _myicustomerkindid=tbCustomerKindList.getIcustomerkindid();
-				TbProductinfo_Eo _tbProductinfo_Eo=tbProductinfoMapper.getOneEo(erpiproductid, _myicustomerkindid);
+				TbProductinfo_Eo _tbProductinfo_Eo=tbProductinfoMapper.getOneEo_(erpiproductid, _myicustomerkindid);
 				if(_tbProductinfo_Eo==null) {//没找到 就去默认的找
-					tbProductinfo_Eo = tbProductinfoMapper.getOneEo(erpiproductid, myicustomerkindid);
+					tbProductinfo_Eo = tbProductinfoMapper.getOneEo_(erpiproductid, myicustomerkindid);
 				}else {
 					//找到了就赋值
 					tbProductinfo_Eo=_tbProductinfo_Eo;
@@ -217,9 +223,13 @@ public class ProductServiceImpl implements ProductService {
 				break;
 			}
 		}
-		if (price.compareTo(new BigDecimal(0)) == 0 || price.compareTo(new BigDecimal(0)) == -1) {
-			throw new BusinessException(ExceptionEnum.ERP_PRODUCT_PRICE_LQ_ZERO);
+		if (price==null) {
+			price = BigDecimal.ZERO;
 		}
+		
+		/*if (price.compareTo(new BigDecimal(0)) == 0 || price.compareTo(new BigDecimal(0)) == -1) {
+			throw new BusinessException(ExceptionEnum.ERP_PRODUCT_PRICE_LQ_ZERO);
+		}*/
 		return price;
 	}
 
@@ -329,16 +339,38 @@ public class ProductServiceImpl implements ProductService {
 		int x = numopen.compareTo(new BigDecimal("-1")) == 0 ? 1 : 0;*/
 		int x=getProductStockControlForOnOff(mccProduct.getErpiproductid());
 
-		// 获取ERP价格集合信息
-		TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEo(mccProduct.getErpiproductid(),
-				icustomerkindid);
+		// 获取ERP集合信息
+		//TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEo(mccProduct.getErpiproductid(),icustomerkindid);
+		TbProductinfo_Eo1 tbProductinfo_Eo1 = tbProductinfoMapper.getOneEo1ByCustomerSet(mccProduct.getErpiproductid(),icustomersetid);
 
 		// 获取b2b商品信息状态
 		int status = mccProduct.getStatus();// 0 下架 1上架
 		
-
 		String info = "";
-		if (status != x) {// 低储因素有变化
+		if(tbProductinfo_Eo1==null) {//下架
+			if(status==1) {
+				mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
+				info = String.format("B2B商品Product_id：%d,ERPIPRODUCTID:%d, 被移除B2B目录", mccProduct.getProduct_id(),mccProduct.getErpiproductid());
+			}
+			   
+		}else {
+			//如果低储  则清库存
+			if(status==0) {
+				mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 1);
+				info = String.format("B2B商品Product_id：%d,ERPIPRODUCTID:%d, 被加入到B2B目录", mccProduct.getProduct_id(),mccProduct.getErpiproductid());
+			}
+			   
+			if(x==0) {
+				mccProductMapper.setMccProductQuantity(mccProduct.getProduct_id(),BigDecimal.ZERO);
+				info = String.format("B2B商品Product_id：%d,ERPIPRODUCTID:%d 低储，库存清0", mccProduct.getProduct_id(),mccProduct.getErpiproductid());
+			}
+		}
+		
+		
+		//===========================
+
+		
+		/*if (status != x) {// 低储因素有变化
 
 			if (x == 0) {// 下架操作
 				// 如果原本是上架状态
@@ -354,9 +386,9 @@ public class ProductServiceImpl implements ProductService {
 				
 				}else {
 					//如果商品目前是下架状态，如果检查到有B2B目录就可以恢复上架
-					if (existB2bPrice(tbProductinfo_Eo)) {
+					if (existB2bProduct(tbProductinfo_Eo1)) {
 						mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 1);
-						info = String.format("B2B商品ID：%d, 因维护B2B价格上架", mccProduct.getProduct_id());
+						info = String.format("B2B商品ID：%d, 因维护B2B商品集合上架", mccProduct.getProduct_id());
 					}
 						
 				}
@@ -365,11 +397,11 @@ public class ProductServiceImpl implements ProductService {
 				// 上架操作 判断价格集合是否维护 确定是否上架
 
 				// 没维护价格
-				if (!existB2bPrice(tbProductinfo_Eo)) {
+				if (!existB2bProduct(tbProductinfo_Eo1)) {
 					// 下架处理
 					if (status == 1) {
 						mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
-						info = String.format("B2B商品ID：%d, 因没有维护B2B价格下架", mccProduct.getProduct_id());
+						info = String.format("B2B商品ID：%d, 因没有维护B2B商品集合下架", mccProduct.getProduct_id());
 					}
 				} else {
 					// 如果原本是下架的
@@ -385,55 +417,68 @@ public class ProductServiceImpl implements ProductService {
 				// 只管在线状态 如果是下线状态 不管价格有没有变
 			if (status == 1) {
 				// 判断价格是否在 如果在不管 不在就下线
-				if (!existB2bPrice(tbProductinfo_Eo)) {
+				if (!existB2bProduct(tbProductinfo_Eo1)) {
 					// 下架处理
 					mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
-					info = String.format("B2B商品ID：%d, 因未维护价格下架", mccProduct.getProduct_id());
+					info = String.format("B2B商品ID：%d, 因未维护商品集合下架", mccProduct.getProduct_id());
 				}
 			}
 			
 			if (status == 0) {
 				// 判断价格是否在 如果在就上线
-				if (existB2bPrice(tbProductinfo_Eo)) {
+				if (existB2bProduct(tbProductinfo_Eo1)) {
 					// 下架处理
 					mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 1);
-					info = String.format("B2B商品ID：%d, 因有维护价格上架", mccProduct.getProduct_id());
+					info = String.format("B2B商品ID：%d, 因有维护商品集合上架", mccProduct.getProduct_id());
 				}
 			}
 			
 			
-		}
+		}*/
+		//===========================
 		if (!"".equals(info))
 			log.info(info);
 
 	}
 
 	// 判断是否存在B2b价格集合信息
-	private boolean existB2bPrice(TbProductinfo_Eo tbProductinfo_Eo) {
+	private boolean existB2bPrice_(TbProductinfo_Eo tbProductinfo_Eo) {
 		boolean flag = !(tbProductinfo_Eo == null // 记录不存在
 				|| getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo) == null// 价格没有维护
 				|| getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo).compareTo(BigDecimal.ZERO) <= 0); // 价格<=0
+		return flag;
+	}
+	
+	// 判断是否存在B2b商品集合信息
+	private boolean existB2bProduct(TbProductinfo_Eo1 tbProductinfo_Eo1) {
+		//boolean flag = !(tbProductinfo_Eo1 == null // 记录不存在
+		//		|| getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo) == null// 价格没有维护
+		//		|| getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo).compareTo(BigDecimal.ZERO) <= 0); // 价格<=0
+		boolean flag =!(tbProductinfo_Eo1 == null);
 		return flag;
 	}
 
 	@Override
 	public void doSynchronizePrice(MccProduct mccProduct) throws RuntimeException {
 		// 获取ERP价格集合信息
-		TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEo(mccProduct.getErpiproductid(),
-				icustomerkindid);
+		//TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEo(mccProduct.getErpiproductid(),icustomerkindid);
+		TbProductinfo_Eo tbProductinfo_Eo = tbProductinfoMapper.getOneEoDirty(mccProduct.getErpiproductid());
+		
 		BigDecimal mcc_price = mccProduct.getPrice();
-		BigDecimal erp_price = getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);
+		//
+		BigDecimal erp_price = getERPProductPriceByTbProductinfoEo(tbProductinfo_Eo);	
+		
 		String info = "";
-		if (existB2bPrice(tbProductinfo_Eo)) {
+		if (existB2bPrice_(tbProductinfo_Eo)) {
 			if (erp_price.compareTo(mcc_price) != 0) {
 				updateMccProductPrice(mccProduct, tbProductinfo_Eo);
-				info = String.format("B2B商品ID：%d, 价格%f-->%f ", mccProduct.getProduct_id(), mcc_price, erp_price);
+				info = String.format("B2B商品Product_id：%d, 价格%f-->%f ", mccProduct.getProduct_id(), mcc_price, erp_price);
 			}
 		} else {
 			// 下架
 			if (mccProduct.getStatus() == 1) {
 				mccProductMapper.setMccProductOnOff(mccProduct.getProduct_id(), 0);
-				info = String.format("B2B商品ID：%d, 因没有维护B2B价格下架", mccProduct.getProduct_id());
+				info = String.format("B2B商品Product_id：%d, 因没有任何价格集合信息而下架", mccProduct.getProduct_id());
 			}
 
 		}
@@ -453,7 +498,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<TbProductinfo> getProductsForB2B() throws RuntimeException {
-		return tbProductinfoMapper.getProductListForB2B(icustomerkindid);
+		return tbProductinfoMapper.getProductListForB2B(icustomersetid);
 	}
 
 	@Override
@@ -665,7 +710,6 @@ public class ProductServiceImpl implements ProductService {
 		if(mccProduct==null ) {
 			makeTbProductinfoToMccProduct(tbProductinfo,store_id,layout_id,tbProductPacking);
 		}else {
-			//log.info("####iproductid:%d"+iproductid);
 			updateMccProductByTbProductinfo(tbProductinfo);
 		}
 		
@@ -684,6 +728,7 @@ public class ProductServiceImpl implements ProductService {
 	public void makeTbProductinfoToMccProduct(TbProductinfo tbProductinfo,int store_id,int layout_id,TbProductPacking tbProductPacking) throws RuntimeException {
 		//1、保存 mcc_product
 		int nummiddle=getProductNumMiddle(tbProductPacking);
+		TbUnit tbunit=baseInfoServiceImpl.getTbUnitByID(tbProductinfo.getIproductunitid());
 		MccProduct mccProduct=new MccProduct(tbProductinfo.getVcstandard(), 
 				baseInfoServiceImpl.getTbUnitByID(tbProductinfo.getIproductunitid()).getVcunitname(), 
 				baseInfoServiceImpl.getTbProducerByID(tbProductinfo.getIproducerid()).getVcproducername(), 
@@ -713,7 +758,7 @@ public class ProductServiceImpl implements ProductService {
 		//6 mcc_url_alias
 		
 		//7、 修改ERP商品状态
-		this.setTbProductinfoIydstate(tbProductinfo, productToB2bState);
+		//this.setTbProductinfoIydstate(tbProductinfo, productToB2bState);
 		String msg=String.format("商品ID：%d 商品通用名：%s 规格：%s,成功加入到B2B", tbProductinfo.getIproductid(),tbProductinfo.getVcuniversalname(),tbProductinfo.getVcstandard());
 		log.info(msg);
 		
@@ -745,10 +790,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void updateMccProductByTbProductinfo(TbProductinfo tbProductinfo) throws RuntimeException {
 		
-		Integer iydstate=tbProductinfo.getIydstate();
-		if(iydstate==null || iydstate!=2)
+		//Integer iydstate=tbProductinfo.getIydstate();
+		//if(iydstate==null || iydstate!=2)
 			//7、 修改ERP商品状态
-			this.setTbProductinfoIydstate(tbProductinfo, productToB2bState);
+			//this.setTbProductinfoIydstate(tbProductinfo, productToB2bState);
 		//其他的更新  比如名称规格等  此次不管
 	}
 

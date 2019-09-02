@@ -31,6 +31,34 @@ public class Task_GeneralTest {
 	}
 	
 	@Test
+	public void testproductforb2b() {
+		try {
+			task_General.productforb2b();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@Test
+	public void testlowStorage() {
+
+		try {
+			//task_General.lowStorage();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		
+	}
+	
+	
+	
+	
+	@Test
 	public void testunpayOrderStatusQuery() {
 		try {
 			task_Fast.unpayOrderStatusQuery();
@@ -51,6 +79,19 @@ public class Task_GeneralTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@Test
+	public void testb2bPrice() {
+		
+		try {
+		//	task_General.b2bPrice();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

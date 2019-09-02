@@ -31,6 +31,7 @@ import com.zjezyy.entity.erp.TbMccOrder;
 import com.zjezyy.entity.erp.TbMccOrderProduct;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
+import com.zjezyy.entity.erp.TbProductinfo_Eo1;
 import com.zjezyy.entity.erp.TbReceivables_Eo;
 import com.zjezyy.entity.erp.TbSalesNotice;
 import com.zjezyy.entity.erp.TbSalesNoticeS;
@@ -349,11 +350,11 @@ public class OrderServiceImpl implements OrderService {
 				f+=(float)0.1;
 				f=(float)Math.round(f*10)/10;
 				int iproductid=tbMccOrderProduct.getErp_iproductid();
-				TbProductinfo_Eo tbProductinfo_Eo=tbProductinfoMapper.getOneEo(iproductid, icustomerkindid);
+				TbProductinfo_Eo1 tbProductinfo_Eo1=tbProductinfoMapper.getOneEo1(iproductid);
 				
-				TbSalesOrderS tbSalesOrderS=new TbSalesOrderS(tbMccOrderProduct,ibillid, numqueue, tbProductinfo_Eo.getIproductunitid(), 
-						defaultuser, tbProductinfo_Eo.getVcproductcode(), tbProductinfo_Eo.getVcuniversalname(), 
-						tbProductinfo_Eo.getVcstandard(), tbProductinfo_Eo.getVcunitname(), tbProductinfo_Eo.getVcproducername());
+				TbSalesOrderS tbSalesOrderS=new TbSalesOrderS(tbMccOrderProduct,ibillid, numqueue, tbProductinfo_Eo1.getIproductunitid(), 
+						defaultuser, tbProductinfo_Eo1.getVcproductcode(), tbProductinfo_Eo1.getVcuniversalname(), 
+						tbProductinfo_Eo1.getVcstandard(), tbProductinfo_Eo1.getVcunitname(), tbProductinfo_Eo1.getVcproducername());
 				tbSalesOrderSMapper.insert(tbSalesOrderS);
 				tbSalesOrderSList.add(tbSalesOrderS);
 			}
