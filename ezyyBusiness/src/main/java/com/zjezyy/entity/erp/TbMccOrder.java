@@ -30,6 +30,8 @@ public class TbMccOrder {
 	private String mcc_shipping_address;
 	private String mcc_comment;
 	
+	public static final  String Prefix_Redis_Key="TbMccOrder";
+	public static final  String Prefix_Redis_Key_Separtor="-";
 	
 	public TbMccOrder() {
 		super();

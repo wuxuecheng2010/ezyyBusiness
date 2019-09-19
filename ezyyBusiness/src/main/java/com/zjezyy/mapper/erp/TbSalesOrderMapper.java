@@ -37,4 +37,15 @@ public interface TbSalesOrderMapper {
 	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where isourceid = #{impid} and itypeid=#{itypeid}"})
 	List<TbSalesOrder> getListByImpidAndTypeID(int impid,int itypeid);
 	
+	
+	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where itypeid = #{itypeid} and ifb=#{ifb} and flagperform='Y' and dtcreationdate>sysdate-#{days}"})
+	List<TbSalesOrder> getPerformListByTypeIDAndIFBAndDays(int itypeid,int ifb,int days);
+	
+	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where isourceid=#{isourceid} and itypeid=#{itypeid}"})
+	List<TbSalesOrder> getListBySourceID(int isourceid,int itypeid);
+	
+	
+	@Update({"update tb_salesorder t set t.ifb = #{ifb} where ibillid =#{ibillid}"})
+	int updateIFBState(int ibillid,int ifb);
+	
 }

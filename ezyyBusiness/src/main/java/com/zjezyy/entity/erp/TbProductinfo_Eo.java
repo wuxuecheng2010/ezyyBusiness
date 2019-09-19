@@ -22,4 +22,33 @@ public class TbProductinfo_Eo extends TbProductinfo {
 				.toString();
 		return productname;
 	}
+   public TbProductinfo_Eo() {}
+   public TbProductinfo_Eo(TbProductinfo tbProductinfo,BigDecimal numprice,BigDecimal numlowprice,BigDecimal numassesscost,BigDecimal numguidprice) {
+	   setIproductid(tbProductinfo.getIproductid());
+	   setIproductkindid(tbProductinfo.getIproductkindid());
+	   setVcproductname(tbProductinfo.getVcproductname());
+	   setVceasycode(tbProductinfo.getVceasycode());
+	   setVcproductcode(tbProductinfo.getVcproductcode());
+	   setVcuniversalname(tbProductinfo.getVcuniversalname());
+	   setVcstandard(tbProductinfo.getVcstandard());
+	   setIproductunitid(tbProductinfo.getIproductunitid());
+	   setIproducerid(tbProductinfo.getIproducerid());
+	   setNumsaletaxrate(tbProductinfo.getNumsaletaxrate());
+	   setNumpurchasetaxrate(tbProductinfo.getNumpurchasetaxrate());
+	   setNumcountryprice(tbProductinfo.getNumcountryprice());
+	   setNumwarningdays(tbProductinfo.getNumwarningdays());
+	   setImanagementid(tbProductinfo.getImanagementid());//经营分类
+	   setIstorageoptionid(tbProductinfo.getIstorageoptionid());//储存条件
+	   setIydstate(tbProductinfo.getIydstate());//导入标志  1入药店  2入b2b
+	   setFlagcold(tbProductinfo.getFlagcold());//是否冷藏
+	   setFlagfreezing(tbProductinfo.getFlagfreezing());//是否冷冻
+	   
+	   this.numprice=numprice;
+	   this.numlowprice=numlowprice;
+	   this.numassesscost=numassesscost;
+	   this.numguidprice=numguidprice;
+   }
+   
+   
+   
 }

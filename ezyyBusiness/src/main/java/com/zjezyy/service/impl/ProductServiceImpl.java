@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.zjezyy.entity.b2b.MccCustomer;
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.b2b.MccProductDescription;
 import com.zjezyy.entity.b2b.MccProductToCategory;
@@ -19,6 +20,8 @@ import com.zjezyy.entity.b2b.MccProductToStore;
 import com.zjezyy.entity.b2b.MccProduct_Eo;
 import com.zjezyy.entity.b2b.MccTbCustomerKind;
 import com.zjezyy.entity.b2b.MccTbCustomerKindPrice;
+import com.zjezyy.entity.b2b.MccTbCustomerproductprice;
+import com.zjezyy.entity.erp.SysPriorPrice;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbCustomerKind;
 import com.zjezyy.entity.erp.TbCustomerKindList;
@@ -34,6 +37,7 @@ import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.LanguageEnum;
 import com.zjezyy.exception.BusinessException;
+import com.zjezyy.mapper.b2b.MccCustomerMapper;
 import com.zjezyy.mapper.b2b.MccProductDescriptionMapper;
 import com.zjezyy.mapper.b2b.MccProductMapper;
 import com.zjezyy.mapper.b2b.MccProductToCategoryMapper;
@@ -41,6 +45,7 @@ import com.zjezyy.mapper.b2b.MccProductToLayoutMapper;
 import com.zjezyy.mapper.b2b.MccProductToStoreMapper;
 import com.zjezyy.mapper.b2b.MccTbCustomerKindMapper;
 import com.zjezyy.mapper.b2b.MccTbCustomerKindPriceMapper;
+import com.zjezyy.mapper.b2b.MccTbCustomerproductpriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindListMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
@@ -51,6 +56,7 @@ import com.zjezyy.mapper.erp.TbStocksMapper;
 import com.zjezyy.service.BaseInfoService;
 import com.zjezyy.service.ProductService;
 import com.zjezyy.service.SettingService;
+import com.zjezyy.service.SystemService;
 import com.zjezyy.utils.DateUtils;
 import com.zjezyy.utils.RedisUtil;
 
@@ -81,6 +87,9 @@ public class ProductServiceImpl implements ProductService {
 	MccTbCustomerKindPriceMapper mccTbCustomerKindPriceMapper;
 	
 	@Autowired
+	MccCustomerMapper mccCustomerMapper;
+	
+	@Autowired
 	MccProductDescriptionMapper mccProductDescriptionMapper;
 	@Autowired
 	MccProductToStoreMapper mccProductToStoreMapper;
@@ -97,6 +106,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	SettingService SettingServiceImpl;
+	
+	@Autowired
+	SystemService systemServiceImpl;
 
 	// @Autowired
 	// private RedisTemplate redisTemplate;
@@ -125,8 +137,8 @@ public class ProductServiceImpl implements ProductService {
 	@Value("${erp.product.to.b2b.state}")
 	private int productToB2bState;
 	
-
-	
+	@Autowired
+	MccTbCustomerproductpriceMapper mccTbCustomerproductpriceMapper;
 	
 
 	@Override
@@ -165,6 +177,7 @@ public class ProductServiceImpl implements ProductService {
 	* @return TbProductinfo_Eo    返回类型
 	* @throws
 	*/
+	@Override
 	public TbProductinfo_Eo getTbProductinfoEoByIproductIDAndTBCustomer(TbCustomer tbCustomer, Integer erpiproductid)
 			throws RuntimeException {
 		//根据价格模式   B2B统一价  和  客户集合价
@@ -305,6 +318,19 @@ public class ProductServiceImpl implements ProductService {
 			redisUtil.lSet(key, list, productRedisTime);
 		}
 		return list;
+	}
+	
+	
+	@Override
+	public MccProduct getMccProductByErpIproductid(Integer erpIproductid) {
+		// TbProductinfo tbProductinfo=tbProductinfoMapper.getOne(iproductid);
+		String key = MccProduct.Prefix_Redis_Key + MccProduct.Prefix_Redis_Key_Separtor+"erpiproductid:"+erpIproductid ;
+		MccProduct mccProduct = (MccProduct) redisUtil.get(key);
+		if (mccProduct == null) {
+			mccProduct = mccProductMapper.getOneByErpIproductid(erpIproductid);
+			redisUtil.set(key, mccProduct, productRedisTime);
+		}
+		return mccProduct;
 	}
 	
 	
@@ -548,6 +574,13 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 	}
+	
+	@Override
+	public void doSynchronizeStock(Integer erpiproductid) throws RuntimeException{
+		MccProduct mccProduct=mccProductMapper.getOneByErpIproductid(erpiproductid);
+		doSynchronizeStock(mccProduct);
+	}
+	
 
 	@Override
 	public BigDecimal getTbProductStocks(List<TbStocks> list) throws RuntimeException {
@@ -826,5 +859,111 @@ public class ProductServiceImpl implements ProductService {
 			
 		
 	}
+
+	@Override
+	public void doSynchronizeCustomerProductPrice() throws RuntimeException {
+		List<MccCustomer> cuslist=mccCustomerMapper.getAll();//所有客户
+		for(MccCustomer mccCustomer:cuslist) {
+			Integer icustomerid=mccCustomer.getErp_icustomerid();
+			if(icustomerid==null) {
+				String msg=String.format("B2B客户Customer_ID：%d 客户名称：%s 缺少对应的ERP客户ID", mccCustomer.getCustomer_id(),mccCustomer.getFullname());
+				log.error(msg);
+				continue;
+			}
+				
+			List<MccProduct> prolist=	mccProductMapper.getAllOnProduct();
+			for(MccProduct mccProduct:prolist) {
+				Integer erpiproductid=mccProduct.getErpiproductid();
+				if(erpiproductid==null) {
+					String msg=String.format("B2B商品Product_ID：%d  缺少对应的ERP商品ID", mccProduct.getProduct_id());
+					log.error(msg);
+					continue;
+				}
+				
+				//更新或者保存价格信息
+				try {
+					saveCustomerProductPrice( mccCustomer, mccProduct );
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		
+		}
+		
+	}
+	
+	private void  saveCustomerProductPrice(MccCustomer mccCustomer,MccProduct mccProduct ) throws Exception {
+		//获取价格
+		 SysPriorPrice sysPriorPrice =systemServiceImpl.getSysPriorPrice(mccCustomer.getErp_icustomerid(), mccProduct.getErpiproductid());
+		//检查价格是否存在
+		 MccTbCustomerproductprice mccTbCustomerproductprice=mccTbCustomerproductpriceMapper.getOneByERP(mccCustomer.getErp_icustomerid(), mccProduct.getErpiproductid());
+		 BigDecimal priorPrice=getPriorPrice(sysPriorPrice);
+		 String msg="";
+		 if(mccTbCustomerproductprice==null) {
+			 
+			 if(sysPriorPrice!=null) {
+				 MccTbCustomerproductprice mccTbCustomerproductprice_=new MccTbCustomerproductprice(mccCustomer, mccProduct,priorPrice);
+				 mccTbCustomerproductpriceMapper.insert(mccTbCustomerproductprice_);
+				 msg=String.format("B2B MccTbCustomerproductprice 增加 Customer_id: %d Product_ID: %d 成功",mccCustomer.getCustomer_id(),mccProduct.getProduct_id() );
+			 }
+			 
+		 }else {
+			 if(sysPriorPrice==null) {
+				 //删除价格
+				// mccTbCustomerproductpriceMapper.delete(mccTbCustomerproductprice.getId());
+				 mccTbCustomerproductprice.setPrice(BigDecimal.ZERO);
+				 mccTbCustomerproductpriceMapper.update(mccTbCustomerproductprice);
+				 msg=String.format("B2B MccTbCustomerproductprice 清零 Customer_id: %d Product_ID: %d 成功",mccCustomer.getCustomer_id(),mccProduct.getProduct_id() );
+			 }else {
+				 //比较后不等作更新
+				if( mccTbCustomerproductprice.getPrice().compareTo(getPriorPrice(sysPriorPrice))!=0) {
+					mccTbCustomerproductprice.setPrice(getPriorPrice(sysPriorPrice));
+					mccTbCustomerproductpriceMapper.update(mccTbCustomerproductprice);
+					msg=String.format("B2B MccTbCustomerproductprice 更新 Customer_id: %d Product_ID: %d 成功",mccCustomer.getCustomer_id(),mccProduct.getProduct_id() );
+				} 
+				 
+			 }
+			 
+		 }
+		if(!"".equals(msg))
+		    log.info(msg);
+	}
+	
+	private BigDecimal getPriorPrice(SysPriorPrice sysPriorPrice) {
+		if(sysPriorPrice==null)
+			return BigDecimal.ZERO;
+		
+		return sysPriorPrice.getNumbargainingprice()==null?(sysPriorPrice.getNumguidprice()==null?BigDecimal.ZERO:sysPriorPrice.getNumguidprice()):sysPriorPrice.getNumbargainingprice();
+	}
+
+	@Override
+	public MccProduct getMccProductByProductID(Integer product_id) {
+		String key = MccProduct.Prefix_Redis_Key + MccProduct.Prefix_Redis_Key_Separtor + product_id;
+		// TbProductinfo tbProductinfo = (TbProductinfo)
+		// redisTemplate.opsForValue().get(key);
+		MccProduct mccProduct = (MccProduct) redisUtil.get(key);
+		if (mccProduct == null) {
+			mccProduct = mccProductMapper.getOne(product_id,LanguageEnum.zh_cn.getCode());
+			redisUtil.set(key, mccProduct, productRedisTime);
+			// redisTemplate.opsForValue().set(key, tbProductinfo);
+			// redisTemplate.expire(key, productRedisTime, TimeUnit.SECONDS);
+		}
+		return mccProduct;
+	}
+
+	@Override
+	public TbProductinfo_Eo getTbProductinfoEoDirtyByProductID(int iproductid) {
+		TbProductinfo_Eo tbProductinfo_Eo=tbProductinfoMapper.getOneEoDirty(iproductid);
+		
+	    if(tbProductinfo_Eo==null) {
+	    	//创建tbProductinfo_Eo实例
+	    	 TbProductinfo tbProductinfo=this.getTbProductinfoById(iproductid);
+	    	 tbProductinfo_Eo=new TbProductinfo_Eo( tbProductinfo,BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE);
+	    }
+	    return tbProductinfo_Eo;
+	}
+	
 
 }

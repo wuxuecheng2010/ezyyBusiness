@@ -2,6 +2,7 @@ package com.zjezyy.mapper.b2b;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -22,5 +23,10 @@ public interface MccOrderProductMapper {
 	//根据订单号查明细
 	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where order_id = #{order_id}"})
 	List<MccOrderProduct> getListByOrderId(int order_id);
+	
+	
+	String insql="INSERT INTO mcc_order_product SET order_id = #{order_id,jdbcType=INTEGER}, product_id = #{product_id,jdbcType=INTEGER}, name = #{name,jdbcType=VARCHAR}, model = #{model,jdbcType=VARCHAR}, quantity = #{quantity,jdbcType=DECIMAL}, price = #{price,jdbcType=DECIMAL}, total = #{total,jdbcType=DECIMAL}, tax = '0', reward = '0'";
+	@Insert({insql})
+	int insert(MccOrderProduct mccOrderProduct);
 	
 }

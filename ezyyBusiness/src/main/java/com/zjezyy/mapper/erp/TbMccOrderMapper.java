@@ -1,5 +1,6 @@
 package com.zjezyy.mapper.erp;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
@@ -11,6 +12,7 @@ import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
 
 import com.zjezyy.entity.erp.TbMccOrder;
+import com.zjezyy.entity.erp.TbSalesOrder;
 @Repository
 @Mapper
 public interface TbMccOrderMapper {
@@ -33,6 +35,8 @@ public interface TbMccOrderMapper {
 	
 	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where mcc_order_id=#{order_id}"})
 	TbMccOrder getOneByOrderID(int order_id);
+	
+
 	
 
 	

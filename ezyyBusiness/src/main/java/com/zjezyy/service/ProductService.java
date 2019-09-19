@@ -13,7 +13,7 @@ import com.zjezyy.entity.erp.TbStocks;
 public interface ProductService {
 //TbProductinfo_Eo getTbProductinfoEoByMccProductId(int product_id) throws RuntimeException;
 TbProductinfo_Eo getTbProductinfoEoByMccProductIDAndTBCustomer(int product_id,TbCustomer tbCustomer) throws RuntimeException;
-
+TbProductinfo_Eo getTbProductinfoEoDirtyByProductID(int iproductid);
 
 BigDecimal getERPProductPriceByTbProductinfoEo(TbProductinfo_Eo tbProductinfoEo) throws RuntimeException;
 
@@ -38,10 +38,14 @@ void setTbProductinfoIydstate(TbProductinfo tbProductinfo,int iydstate);
 List<MccProduct> getAllB2BOnProduct()throws RuntimeException;
 
 void doSynchronizeStock(MccProduct mccProduct)throws RuntimeException;
+void doSynchronizeStock(Integer erpiproductid) throws RuntimeException;
+
 BigDecimal getTbProductStocks(List<TbStocks> list)throws RuntimeException;
 void updateMccProductQuantity(MccProduct mccProduct,BigDecimal erpqty)throws RuntimeException;
 
 void doSynchronizeCustomerKindPrice()throws RuntimeException;
+
+void doSynchronizeCustomerProductPrice() throws RuntimeException;
 
 
 void doSynchronizeProductInfo(int iproductid,int store_id,int layout_id)throws RuntimeException;
@@ -52,5 +56,17 @@ void updateMccProductByTbProductinfo(TbProductinfo tbProductinfo)throws RuntimeE
 void doSynchronizeCustomerKind() throws RuntimeException;
 
 Integer getProductNumMiddle(TbProductPacking tbProductPacking);
+
+
+TbProductinfo_Eo getTbProductinfoEoByIproductIDAndTBCustomer(TbCustomer tbCustomer, Integer erpiproductid)
+		throws RuntimeException;
+
+
+MccProduct getMccProductByErpIproductid(Integer erpIproductid);
+
+
+MccProduct getMccProductByProductID(Integer product_id);
+
+
 
 }

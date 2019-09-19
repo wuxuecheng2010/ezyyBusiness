@@ -17,6 +17,8 @@ public enum EzyySettingKey {
 	ORDER_EXPIRE_TIME("order_pay_expire_time","b2b订单付款时限  单位    分钟"),
 	ORDER_UNPAY_STATUS("order_unpay_status","订单未付款的状态码"),
 	ORDER_PAYED_STATUS("order_payed_status","订单付款后的状态码"),
+	ORDER_SHIPPED_STATUS("order_shipped_status","销售开票flagapp被wms反写成Y后即认为已配送"),
+	ORDER_EXECING_STATUS("order_execing_status","销售开票flagapp被wms反写成Y后即认为已配送"),
 	ORDER_EXPIRE_STATUS("order_expire_status","订单取消状态码（超时即为取消）"),
 	ORDER_INIT_STATUS("order_init_status","订单初始状态"),
 	B2B_MANAGER_TELS("b2b_manager_tels","b2b网站管理者，接收系统重要错误信息"),

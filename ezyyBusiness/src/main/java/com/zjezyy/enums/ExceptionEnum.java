@@ -21,6 +21,7 @@ public enum ExceptionEnum {
     B2B_ORDER_NOT_IN_ERP_TMP(-1102,"B2B订单未在接口表中找到"),
     B2B_ORDER_NOT_PAYED(-1103,"B2B订单不是支付状态"),
     B2B_ORDER_IS_NOT_INIT_STATUS(-1104,"B2B订单状态不为初始状态"),
+    B2B_ORDER_IS_NOT_INIT_CREDIT_STATUS(-1105,"B2B订单状态不为信用订单初始状态"),
     
     B2B_PRODUCT_UNRELATED(-1201,"B2B商品信息不完整"),//B2B商品与ERP商品未做关联
     B2B_PRODUCT_RELATED_ERROR(-1202,"B2B商品信息有误"),//B2B商品与ERP商品关联不正确
@@ -38,6 +39,8 @@ public enum ExceptionEnum {
     ERP_ORDER_NOT_EXISIT(-2104,"销售订单不存在"),//
     ERP_ORDER_ITYPEID_WRONG(-2105,"销售订单单据类型不为4"),// 单据itypeid不=4 参考BusinessInterfaceType
     ERP_ORDER_TBMCC_NOT_EXISIT(-2106,"销售订单中间表数据不存在"),
+    YD_ORDER_IS_IN_B2B(-2107,"药店订单已经传递到B2B"),
+    YD_ORDER_DTL_EMPTY(-2108,"药店订单明细没有"),
     
     ERP_PRODUCT_PRICE_LQ_ZERO(-2201,"商品价格未设定"),//ERP商品价格<=0
     ERP_PRODUCT_STOCK_SHORT(-2202,"商品库存不足"),

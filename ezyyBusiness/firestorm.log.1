@@ -1,7 +1,393 @@
-ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 62,416,985 milliseconds ago.  The last packet sent successfully to the server was 62,416,987 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 13 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 15 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.GeneratedConstructorAccessor92.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.GeneratedConstructorAccessor92.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.GeneratedConstructorAccessor92.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.GeneratedConstructorAccessor92.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.GeneratedConstructorAccessor92.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
+com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at sun.reflect.GeneratedConstructorAccessor92.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.GeneratedConstructorAccessor91.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
+	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
+	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
+	... 12 more
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
+	... 14 more
+ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 98,569,237 milliseconds ago.  The last packet sent successfully to the server was 98,569,237 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
 	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
 	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
@@ -48,7 +434,7 @@ com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet success
 	at com.zjezyy.service.impl.OrderServiceImpl$$FastClassBySpringCGLIB$$d4e9c7e0.invoke(<generated>)
 	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:684)
-	at com.zjezyy.service.impl.OrderServiceImpl$$EnhancerBySpringCGLIB$$e9d0130c.getUnPayMccOrderList(<generated>)
+	at com.zjezyy.service.impl.OrderServiceImpl$$EnhancerBySpringCGLIB$$71d670f5.getUnPayMccOrderList(<generated>)
 	at com.zjezyy.job.Task_Fast.unpayOrderStatusQuery(Task_Fast.java:61)
 	at sun.reflect.GeneratedMethodAccessor64.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -70,721 +456,11 @@ Caused by: java.net.SocketException: Software caused connection abort: socket wr
 	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
 	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
 	... 55 more
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
 ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
 com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
 
-The last packet successfully received from the server was 60,250,140 milliseconds ago.  The last packet sent successfully to the server was 0 milliseconds ago.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3562)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3462)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3905)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
-	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
-	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
-	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
-	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
-	at com.sun.proxy.$Proxy203.query(Unknown Source)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
-	at sun.reflect.GeneratedMethodAccessor59.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
-	at com.sun.proxy.$Proxy84.selectList(Unknown Source)
-	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
-	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:139)
-	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:76)
-	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
-	at com.sun.proxy.$Proxy90.getSettingListByCode(Unknown Source)
-	at sun.reflect.GeneratedMethodAccessor154.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy91.getSettingListByCode(Unknown Source)
-	at com.zjezyy.service.impl.SettingServiceImpl.getEzyySettings(SettingServiceImpl.java:65)
-	at com.zjezyy.service.impl.SettingServiceImpl.getEzyySettingValue(SettingServiceImpl.java:79)
-	at com.zjezyy.job.Task_Fast.unpayOrderStatusQuery(Task_Fast.java:58)
-	at sun.reflect.GeneratedMethodAccessor64.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:84)
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketException: Software caused connection abort: recv failed
-	at java.net.SocketInputStream.socketRead0(Native Method)
-	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
-	at java.net.SocketInputStream.read(SocketInputStream.java:171)
-	at java.net.SocketInputStream.read(SocketInputStream.java:141)
-	at com.mysql.jdbc.util.ReadAheadInputStream.fill(ReadAheadInputStream.java:101)
-	at com.mysql.jdbc.util.ReadAheadInputStream.readFromUnderlyingStreamIfNecessary(ReadAheadInputStream.java:144)
-	at com.mysql.jdbc.util.ReadAheadInputStream.read(ReadAheadInputStream.java:174)
-	at com.mysql.jdbc.MysqlIO.readFully(MysqlIO.java:3011)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3472)
-	... 54 more
-ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet successfully received from the server was 62,167,601 milliseconds ago.  The last packet sent successfully to the server was 0 milliseconds ago.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3562)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3462)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3905)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
-	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
-	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
-	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
-	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
-	at com.sun.proxy.$Proxy203.query(Unknown Source)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
-	at sun.reflect.GeneratedMethodAccessor59.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
-	at com.sun.proxy.$Proxy84.selectList(Unknown Source)
-	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
-	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:139)
-	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:76)
-	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
-	at com.sun.proxy.$Proxy90.getSettingListByCode(Unknown Source)
-	at sun.reflect.GeneratedMethodAccessor154.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy91.getSettingListByCode(Unknown Source)
-	at com.zjezyy.service.impl.SettingServiceImpl.getEzyySettings(SettingServiceImpl.java:65)
-	at com.zjezyy.service.impl.SettingServiceImpl.getEzyySettingValue(SettingServiceImpl.java:79)
-	at com.zjezyy.job.Task_Fast.unpayOrderStatusQuery(Task_Fast.java:58)
-	at sun.reflect.GeneratedMethodAccessor64.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:84)
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketException: Software caused connection abort: recv failed
-	at java.net.SocketInputStream.socketRead0(Native Method)
-	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
-	at java.net.SocketInputStream.read(SocketInputStream.java:171)
-	at java.net.SocketInputStream.read(SocketInputStream.java:141)
-	at com.mysql.jdbc.util.ReadAheadInputStream.fill(ReadAheadInputStream.java:101)
-	at com.mysql.jdbc.util.ReadAheadInputStream.readFromUnderlyingStreamIfNecessary(ReadAheadInputStream.java:144)
-	at com.mysql.jdbc.util.ReadAheadInputStream.read(ReadAheadInputStream.java:174)
-	at com.mysql.jdbc.MysqlIO.readFully(MysqlIO.java:3011)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3472)
-	... 54 more
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-ERROR http-nio-8099-exec-5 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 159,091,439 milliseconds ago.  The last packet sent successfully to the server was 159,091,439 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3751)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2512)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
-	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
-	at com.atomikos.jdbc.AtomikosXAPooledConnection.testUnderlyingConnection(AtomikosXAPooledConnection.java:104)
-	at com.atomikos.datasource.pool.AbstractXPooledConnection.createConnectionProxy(AbstractXPooledConnection.java:55)
-	at com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation.concurrentlyTryToUse(ConnectionPoolWithConcurrentValidation.java:59)
-	at com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation.retrieveFirstAvailableConnection(ConnectionPoolWithConcurrentValidation.java:41)
-	at com.atomikos.datasource.pool.ConnectionPool.retrieveFirstAvailableConnectionAndGrowPoolIfNecessary(ConnectionPool.java:153)
-	at com.atomikos.datasource.pool.ConnectionPool.findOrWaitForAnAvailableConnection(ConnectionPool.java:141)
-	at com.atomikos.datasource.pool.ConnectionPool.borrowConnection(ConnectionPool.java:132)
-	at com.atomikos.jdbc.AbstractDataSourceBean.getConnection(AbstractDataSourceBean.java:346)
-	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:151)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:115)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:78)
-	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:82)
-	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:68)
-	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:338)
-	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:84)
-	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:62)
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
-	at com.sun.proxy.$Proxy203.query(Unknown Source)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
-	at sun.reflect.GeneratedMethodAccessor66.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
-	at com.sun.proxy.$Proxy84.selectOne(Unknown Source)
-	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
-	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:83)
-	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
-	at com.sun.proxy.$Proxy88.getOne(Unknown Source)
-	at sun.reflect.GeneratedMethodAccessor148.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy89.getOne(Unknown Source)
-	at com.zjezyy.service.impl.AuthorityServiceImpl.genToken(AuthorityServiceImpl.java:40)
-	at com.zjezyy.controller.AuthorizeController.getToken(AuthorizeController.java:32)
-	at com.zjezyy.controller.AuthorizeController$$FastClassBySpringCGLIB$$5c51c98f.invoke(<generated>)
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:56)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)
-	at com.zjezyy.aspect.HttpAspect.doAround(HttpAspect.java:65)
-	at sun.reflect.GeneratedMethodAccessor139.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)
-	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)
-	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:55)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:92)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
-	at com.zjezyy.controller.AuthorizeController$$EnhancerBySpringCGLIB$$7ca794f1.getToken(<generated>)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:891)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:877)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.zjezyy.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:49)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.servlet.resource.ResourceUrlEncodingFilter.doFilter(ResourceUrlEncodingFilter.java:60)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketException: Software caused connection abort: socket write error
-	at java.net.SocketOutputStream.socketWrite0(Native Method)
-	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
-	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
-	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
-	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
-	... 134 more
-ERROR http-nio-8099-exec-5 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 168,949,613 milliseconds ago.  The last packet sent successfully to the server was 168,949,613 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3751)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2512)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
-	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
-	at com.atomikos.jdbc.AtomikosXAPooledConnection.testUnderlyingConnection(AtomikosXAPooledConnection.java:104)
-	at com.atomikos.datasource.pool.AbstractXPooledConnection.createConnectionProxy(AbstractXPooledConnection.java:55)
-	at com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation.concurrentlyTryToUse(ConnectionPoolWithConcurrentValidation.java:59)
-	at com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation.retrieveFirstAvailableConnection(ConnectionPoolWithConcurrentValidation.java:41)
-	at com.atomikos.datasource.pool.ConnectionPool.retrieveFirstAvailableConnectionAndGrowPoolIfNecessary(ConnectionPool.java:156)
-	at com.atomikos.datasource.pool.ConnectionPool.findOrWaitForAnAvailableConnection(ConnectionPool.java:141)
-	at com.atomikos.datasource.pool.ConnectionPool.borrowConnection(ConnectionPool.java:132)
-	at com.atomikos.jdbc.AbstractDataSourceBean.getConnection(AbstractDataSourceBean.java:346)
-	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:151)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:115)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:78)
-	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:82)
-	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:68)
-	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:338)
-	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:84)
-	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:62)
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
-	at com.sun.proxy.$Proxy203.query(Unknown Source)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
-	at sun.reflect.GeneratedMethodAccessor66.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
-	at com.sun.proxy.$Proxy84.selectOne(Unknown Source)
-	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
-	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:83)
-	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
-	at com.sun.proxy.$Proxy88.getOne(Unknown Source)
-	at sun.reflect.GeneratedMethodAccessor148.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy89.getOne(Unknown Source)
-	at com.zjezyy.service.impl.AuthorityServiceImpl.genToken(AuthorityServiceImpl.java:40)
-	at com.zjezyy.controller.AuthorizeController.getToken(AuthorizeController.java:32)
-	at com.zjezyy.controller.AuthorizeController$$FastClassBySpringCGLIB$$5c51c98f.invoke(<generated>)
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:56)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)
-	at com.zjezyy.aspect.HttpAspect.doAround(HttpAspect.java:65)
-	at sun.reflect.GeneratedMethodAccessor139.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)
-	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)
-	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:55)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:92)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
-	at com.zjezyy.controller.AuthorizeController$$EnhancerBySpringCGLIB$$7ca794f1.getToken(<generated>)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:891)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:877)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.zjezyy.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:49)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.servlet.resource.ResourceUrlEncodingFilter.doFilter(ResourceUrlEncodingFilter.java:60)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketException: Software caused connection abort: socket write error
-	at java.net.SocketOutputStream.socketWrite0(Native Method)
-	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
-	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
-	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
-	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
-	... 134 more
-ERROR http-nio-8099-exec-5 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 168,949,643 milliseconds ago.  The last packet sent successfully to the server was 168,949,643 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3751)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2512)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
-	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
-	at com.atomikos.jdbc.AtomikosXAPooledConnection.testUnderlyingConnection(AtomikosXAPooledConnection.java:104)
-	at com.atomikos.datasource.pool.AbstractXPooledConnection.createConnectionProxy(AbstractXPooledConnection.java:55)
-	at com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation.concurrentlyTryToUse(ConnectionPoolWithConcurrentValidation.java:59)
-	at com.atomikos.datasource.pool.ConnectionPoolWithConcurrentValidation.retrieveFirstAvailableConnection(ConnectionPoolWithConcurrentValidation.java:41)
-	at com.atomikos.datasource.pool.ConnectionPool.retrieveFirstAvailableConnectionAndGrowPoolIfNecessary(ConnectionPool.java:153)
-	at com.atomikos.datasource.pool.ConnectionPool.findOrWaitForAnAvailableConnection(ConnectionPool.java:141)
-	at com.atomikos.datasource.pool.ConnectionPool.borrowConnection(ConnectionPool.java:132)
-	at com.atomikos.jdbc.AbstractDataSourceBean.getConnection(AbstractDataSourceBean.java:346)
-	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:151)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:115)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:78)
-	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:82)
-	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:68)
-	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:338)
-	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:84)
-	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:62)
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
-	at com.sun.proxy.$Proxy203.query(Unknown Source)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
-	at sun.reflect.GeneratedMethodAccessor66.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
-	at com.sun.proxy.$Proxy84.selectOne(Unknown Source)
-	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
-	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:83)
-	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
-	at com.sun.proxy.$Proxy88.getOne(Unknown Source)
-	at sun.reflect.GeneratedMethodAccessor148.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy89.getOne(Unknown Source)
-	at com.zjezyy.service.impl.AuthorityServiceImpl.genToken(AuthorityServiceImpl.java:40)
-	at com.zjezyy.controller.AuthorizeController.getToken(AuthorizeController.java:32)
-	at com.zjezyy.controller.AuthorizeController$$FastClassBySpringCGLIB$$5c51c98f.invoke(<generated>)
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:746)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:56)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)
-	at com.zjezyy.aspect.HttpAspect.doAround(HttpAspect.java:65)
-	at sun.reflect.GeneratedMethodAccessor139.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)
-	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)
-	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:55)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:92)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:688)
-	at com.zjezyy.controller.AuthorizeController$$EnhancerBySpringCGLIB$$7ca794f1.getToken(<generated>)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:209)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:136)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:102)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:891)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:991)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:925)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:974)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:877)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:851)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at com.zjezyy.filter.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:49)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.servlet.resource.ResourceUrlEncodingFilter.doFilter(ResourceUrlEncodingFilter.java:60)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketException: Software caused connection abort: socket write error
-	at java.net.SocketOutputStream.socketWrite0(Native Method)
-	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
-	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
-	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
-	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
-	... 134 more
-ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 159,098,364 milliseconds ago.  The last packet sent successfully to the server was 159,098,365 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3751)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2512)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
-	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
-	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
-	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
-	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
-	at com.sun.proxy.$Proxy203.query(Unknown Source)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
-	at sun.reflect.GeneratedMethodAccessor59.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
-	at com.sun.proxy.$Proxy84.selectList(Unknown Source)
-	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:230)
-	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:139)
-	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:76)
-	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
-	at com.sun.proxy.$Proxy117.getUnPayMccOrderList(Unknown Source)
-	at sun.reflect.GeneratedMethodAccessor65.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
-	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
-	at com.sun.proxy.$Proxy118.getUnPayMccOrderList(Unknown Source)
-	at com.zjezyy.service.impl.OrderServiceImpl.getUnPayMccOrderList(OrderServiceImpl.java:525)
-	at com.zjezyy.service.impl.OrderServiceImpl$$FastClassBySpringCGLIB$$d4e9c7e0.invoke(<generated>)
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:684)
-	at com.zjezyy.service.impl.OrderServiceImpl$$EnhancerBySpringCGLIB$$1ea9191a.getUnPayMccOrderList(<generated>)
-	at com.zjezyy.job.Task_Fast.unpayOrderStatusQuery(Task_Fast.java:61)
-	at sun.reflect.GeneratedMethodAccessor64.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:84)
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketException: Software caused connection abort: socket write error
-	at java.net.SocketOutputStream.socketWrite0(Native Method)
-	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
-	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
-	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
-	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
-	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
-	... 55 more
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
-INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
-INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
-ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
-com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet successfully received from the server was 9,118 milliseconds ago.  The last packet sent successfully to the server was 9,120 milliseconds ago.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+The last packet successfully received from the server was 18,409,260 milliseconds ago.  The last packet sent successfully to the server was 18,409,262 milliseconds ago.
+	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
 	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
 	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
@@ -853,354 +529,788 @@ Caused by: java.net.SocketException: Connection reset by peer: socket write erro
 	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
 	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
 	... 55 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+ERROR pool-3-thread-1 com.alibaba.druid.pool.DruidDataSource - discard connection
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 40,320,730 milliseconds ago.  The last packet sent successfully to the server was 40,320,731 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
 	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
 	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
 	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3751)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2512)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2495)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1903)
+	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1242)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:63)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:326)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+	at com.github.pagehelper.PageInterceptor.intercept(PageInterceptor.java:143)
+	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:61)
+	at com.sun.proxy.$Proxy203.query(Unknown Source)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:148)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:141)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:77)
+	at sun.reflect.GeneratedMethodAccessor66.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:433)
+	at com.sun.proxy.$Proxy84.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:166)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:83)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:59)
+	at com.sun.proxy.$Proxy132.getOne(Unknown Source)
+	at sun.reflect.GeneratedMethodAccessor87.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:343)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:197)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:185)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
+	at com.sun.proxy.$Proxy133.getOne(Unknown Source)
+	at com.zjezyy.service.impl.ProductServiceImpl.doSynchronizeCustomerKindPrice(ProductServiceImpl.java:564)
+	at com.zjezyy.service.impl.ProductServiceImpl$$FastClassBySpringCGLIB$$9c5615f.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:684)
+	at com.zjezyy.service.impl.ProductServiceImpl$$EnhancerBySpringCGLIB$$54125f38.doSynchronizeCustomerKindPrice(<generated>)
+	at com.zjezyy.job.Task_General.customerkindprice(Task_General.java:260)
+	at sun.reflect.GeneratedMethodAccessor288.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:84)
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:294)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:155)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at com.mysql.jdbc.MysqlIO.send(MysqlIO.java:3733)
+	... 55 more
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO pool-3-thread-1 com.zjezyy.utils.wx.HttpUtil - Error connecting to https://api.mch.weixin.qq.com/pay/orderquery: Read timed out
+INFO pool-3-thread-1 com.zjezyy.utils.wx.HttpUtil - Error connecting to https://api.mch.weixin.qq.com/pay/orderquery: Read timed out
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO localhost-startStop-1 com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-3} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-4} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-1} inited
+INFO main com.alibaba.druid.pool.DruidDataSource - {dataSource-2} inited
+ERROR Druid-ConnectionPool-Create-1374498664 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:oracle:thin:@//127.0.0.1:1521/orcl, errorCode 28001, state 99999
+java.sql.SQLException: ORA-28001: the password has expired
+
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:392)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:385)
+	at oracle.jdbc.driver.T4CTTIfun.processError(T4CTTIfun.java:938)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.processError(T4CTTIoauthenticate.java:480)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:655)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:249)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:416)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:825)
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:596)
+	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:715)
+	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:385)
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:30)
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:564)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
 	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+ERROR Druid-ConnectionPool-Create-1374498664 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:oracle:thin:@//127.0.0.1:1521/orcl, errorCode 28001, state 99999
+java.sql.SQLException: ORA-28001: the password has expired
 
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:392)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:385)
+	at oracle.jdbc.driver.T4CTTIfun.processError(T4CTTIfun.java:938)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.processError(T4CTTIoauthenticate.java:480)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:655)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:249)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:416)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:825)
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:596)
+	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:715)
+	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:385)
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:30)
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:564)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
 	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+ERROR Druid-ConnectionPool-Create-1374498664 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:oracle:thin:@//127.0.0.1:1521/orcl, errorCode 28001, state 99999
+java.sql.SQLException: ORA-28001: the password has expired
 
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:392)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:385)
+	at oracle.jdbc.driver.T4CTTIfun.processError(T4CTTIfun.java:938)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.processError(T4CTTIoauthenticate.java:480)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:655)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:249)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:416)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:825)
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:596)
+	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:715)
+	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:385)
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:30)
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:564)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
 	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+ERROR Druid-ConnectionPool-Create-1374498664 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:oracle:thin:@//127.0.0.1:1521/orcl, errorCode 28001, state 99999
+java.sql.SQLException: ORA-28001: the password has expired
 
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:450)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:392)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:385)
+	at oracle.jdbc.driver.T4CTTIfun.processError(T4CTTIfun.java:938)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.processError(T4CTTIoauthenticate.java:480)
+	at oracle.jdbc.driver.T4CTTIfun.receive(T4CTTIfun.java:655)
+	at oracle.jdbc.driver.T4CTTIfun.doRPC(T4CTTIfun.java:249)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:416)
+	at oracle.jdbc.driver.T4CTTIoauthenticate.doOAUTH(T4CTTIoauthenticate.java:825)
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:596)
+	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:715)
+	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:385)
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:30)
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:564)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
 	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
 	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more
-ERROR Druid-ConnectionPool-Create-1151750 com.alibaba.druid.pool.DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/myopencart?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false, errorCode 0, state 08001
-com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.Util.getInstance(Util.java:408)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:919)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2105)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2030)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:778)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:386)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1461)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-Caused by: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-	at sun.reflect.GeneratedConstructorAccessor90.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:990)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:342)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2197)
-	at com.mysql.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:2046)
-	... 13 more
-Caused by: java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:211)
-	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:301)
-	... 15 more

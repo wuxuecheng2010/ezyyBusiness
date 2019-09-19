@@ -60,7 +60,8 @@ public class TbSalesNoticeS {
 	
 	public TbSalesNoticeS(int ibillid,float numqueue,BigDecimal numapplications,
 			TbSalesOrderS tbSalesOrderS,TbStocks tbStocks,
-			TbCustomerKindPrice tbCustomerKindPrice,
+			//TbCustomerKindPrice tbCustomerKindPrice,
+			TbProductinfo_Eo tbProductinfo_Eo,
 			BigDecimal numlastprice,BigDecimal numcountryprice
 			) {
 		
@@ -98,9 +99,9 @@ public class TbSalesNoticeS {
 		
 		this.numguideprice=tbSalesOrderS.getNumprice();
 		this.numlastprice=numlastprice;
-		this.numlowprice=tbCustomerKindPrice.getNumlowprice();
+		this.numlowprice=tbProductinfo_Eo.getNumlowprice();
 		this.numcountryprice=numcountryprice;
-		this.numassesscost=tbCustomerKindPrice.getNumassesscost();
+		this.numassesscost=tbProductinfo_Eo.getNumassesscost();
 		
 		this.numwriteoff=BigDecimal.ZERO;
 		this.numreturn=BigDecimal.ZERO;

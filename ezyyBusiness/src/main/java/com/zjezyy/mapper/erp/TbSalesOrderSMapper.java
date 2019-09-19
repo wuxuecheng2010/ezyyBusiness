@@ -34,4 +34,8 @@ public interface TbSalesOrderSMapper {
 	@Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where ibillid=#{ibillid}"})
 	List<TbSalesOrderS>  getTbSalesOrderSList(int ibillid);
 	
+	
+	@Select({"select ",SELECT_FIELDS,"from ",TABLE_NAME,"where isid=( select max(isid) from tb_salesorders where isourceid=#{isourceid})"})
+	TbSalesOrderS  getOneByISourceID(int isourceid);
+	
 }

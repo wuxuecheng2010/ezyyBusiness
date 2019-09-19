@@ -93,5 +93,40 @@ public class Task_GeneralTest {
 		}
 		
 	}
+	
+	
+	@Test
+	public void testcreditOrderToERP() {
+		try {
+			task_General.creditOrderToERP();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	public void testerpToB2B() {
+		
+		try {
+			task_General.erpToB2B();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	public void testydOrderToMccOrder() {
+		
+		try {
+			task_General.ydOrderToMccOrder();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

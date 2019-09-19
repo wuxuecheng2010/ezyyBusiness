@@ -13,6 +13,7 @@ import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbProductinfo_Eo1;
+import com.zjezyy.entity.erp.TbSalesOrder;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.mapper.b2b.MccProductMapper;
 import com.zjezyy.service.SettingService;
@@ -117,6 +118,7 @@ public class TbProductinfoMapperTest {
 		int n	=tbProductinfoMapper.getProductListCount();
 		System.out.println(n);
 	}
+
 
 
 }

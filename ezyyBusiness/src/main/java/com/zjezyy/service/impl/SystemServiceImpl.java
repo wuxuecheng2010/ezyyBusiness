@@ -1,5 +1,6 @@
 package com.zjezyy.service.impl;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zjezyy.entity.Result;
+import com.zjezyy.entity.erp.SysPriorPrice;
 import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.exception.BusinessException;
 import com.zjezyy.mapper.erp.SystemMapper;
@@ -100,5 +102,22 @@ public class SystemServiceImpl implements SystemService {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public SysPriorPrice getSysPriorPrice(int icustomerid,int iproductid) throws RuntimeException {
+		SysPriorPrice sysPriorPrice=null;
+		Map<String, Object> map = new HashMap<>();
+		map.put("customerid_in", icustomerid);
+		map.put("productid_in", iproductid);
+		map.put("cur_result", null);
+		systemMapper.getCustomerProductPrice(map);
+		List<SysPriorPrice> list = (List<SysPriorPrice>) map.get("cur_result");
+		if (list != null && list.size() > 0) {
+			sysPriorPrice=list.get(0);
+		}
+		return sysPriorPrice;
+	}
+
+
 
 }

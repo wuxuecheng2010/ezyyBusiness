@@ -14,11 +14,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbCustomerKindPrice;
 import com.zjezyy.entity.erp.TbProductinfo;
+import com.zjezyy.entity.erp.TbProductinfo_Eo;
 import com.zjezyy.entity.erp.TbSalesNotice;
 import com.zjezyy.entity.erp.TbSalesNoticeS;
 import com.zjezyy.entity.erp.TbSalesOrder;
 import com.zjezyy.entity.erp.TbSalesOrderS;
 import com.zjezyy.entity.erp.TbStocks;
+import com.zjezyy.service.ProductService;
 import com.zjezyy.service.SystemService;
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -50,7 +52,8 @@ public class TbSalesNoticeSMapperTest {
 	
 	@Autowired
 	TbCustomerMapper tbCustomerMapper;
-	
+	@Autowired
+	ProductService productServiceImpl;
 	
 	@Value("${erp.salesnotice.vcbillcode.prefix}")
 	private String prefix;
@@ -80,6 +83,7 @@ public class TbSalesNoticeSMapperTest {
 			BigDecimal numquantity=new BigDecimal(1);
 			List<TbStocks> stocklist= tbStocksMapper.getListByIproductid(tbSalesOrderS.getIproductid());
 			TbCustomerKindPrice tbCustomerKindPrice=tbCustomerKindPriceMapper.getOne(tbSalesOrderS.getIproductid(), icustomerkindid);
+			TbProductinfo_Eo tbProductinfo_Eo=productServiceImpl.getTbProductinfoEoByIproductIDAndTBCustomer( tbCustomer,  tbSalesOrderS.getIproductid());
 			int lastid=tbSalesNoticeSMapper.getLastId(tbSalesOrderS.getIproductid(), tbCustomer.getIcustomerid());
 			TbSalesNoticeS tbSalesNoticeS=tbSalesNoticeSMapper.getOne(lastid);
 			BigDecimal numlastprice=tbSalesNoticeS==null?null:tbSalesNoticeS.getNumprice();
@@ -89,7 +93,7 @@ public class TbSalesNoticeSMapperTest {
 			TbSalesNoticeS _tbSalesNoticeS=new TbSalesNoticeS( 
 					ibillid, numqueue, numquantity,
 					 tbSalesOrderS, stocklist.get(0),
-					 tbCustomerKindPrice,
+					 tbProductinfo_Eo,
 					 numlastprice, numcountryprice
 					);
 			tbSalesNoticeSMapper.insert(_tbSalesNoticeS);

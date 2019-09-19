@@ -4,12 +4,20 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
+import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface SystemMapper {
+	
+
 	
 	/**
 	 * 调用存储过程，获取ERP单号
@@ -22,6 +30,62 @@ public interface SystemMapper {
 	void getERPBillcode(Map<String,String> params);
 
 	
+/**将返回类型为cursor的存储过程放在普通放入存储过程中调用   应对返回类型为cursor的存储
+ * 测试  可以  但是cursor列名有变  需要跟着修改  这个很麻烦  不用这种方式了
+ * 
+CREATE OR REPLACE PROCEDURE getunittest_ (
+ i_iunitid   IN  NUMBER,
+  vcunitname   OUT VARCHAR2
+ ) 
+ is
+  o_cursor    SYS_REFCURSOR;
+  
+  cursor c_unit is SELECT iunitid,vcunitname,vceasycode from tb_unit where 1=2;
+  r           c_unit%rowtype;
+ BEGIN
+ -- 调用存储过程的 存储过程
+ vcunitname:='';
+ getunittest(i_iunitid,o_cursor  );
+
+  loop
+     fetch o_cursor into r;
+     EXIT WHEN o_cursor%NOTFOUND;
+     vcunitname:=r.vcunitname;
+    --return ;
+   end loop;
+
+ END getunittest_;
+ */
+	
+	@Select({ "call getUnitTest_(#{i_iunitid,mode=IN,jdbcType=INTEGER},"
+		,"#{vcunitname,mode=OUT,jdbcType=VARCHAR})" })
+	@Options(statementType=StatementType.CALLABLE)
+	void getUnitTest_(Map<String,String> params);
+	
+
+	
+	
+/*	//带返回类型为cursor的存储过程  可以
+ * //参考  https://blog.csdn.net/weixin_43532158/article/details/95320159
+ * 存储过程如下：
+ * create or replace procedure getUnitTest(
+			  i_iunitid   IN  NUMBER,
+			  o_cursor   OUT SYS_REFCURSOR
+			) is
+			begin
+			   OPEN  o_cursor FOR SELECT iunitid,vcunitname,vceasycode from tb_unit where iunitid= i_iunitid ;
+			end getUnitTest;
+			*/
+	@Results(id="tbunit", value={
+			@Result(column="iunitid", property="iunitid", id=true,jdbcType=JdbcType.INTEGER),
+		    @Result(column="vcunitname", property="vcunitname",jdbcType=JdbcType.VARCHAR),
+		    @Result(column="vceasycode ", property="vceasycode",jdbcType=JdbcType.VARCHAR)
+	})
+	@ResultType(com.zjezyy.entity.erp.TbUnit.class)
+	@Options(statementType=StatementType.CALLABLE)
+	@Select({ "call getunittest(#{i_iunitid,mode=IN,jdbcType=INTEGER},",
+	"#{o_cursor,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet,resultMap=tbunit})" })
+	void getUnitTest(Map<String,Object> params);
 	
 	/*以下2个方法根据配置参数去使用  参考ERP E:\Works\csharpworks\srcs\erpNew\CSFramework4.Server\CSFramework4.Server.DataAccess\DAL_DataDict\dalPRODUCTINFO.cs
 	判断是否启用了新的开票规则---------------------------------------
@@ -59,5 +123,21 @@ public interface SystemMapper {
 		 "#{cur_Result,mode=OUT,jdbcType=CURSOR})" })
 		@Options(statementType=StatementType.CALLABLE)
 		void usp_CusProduct_WMSCansell(Map<String,Object> map);*/
+	
+	
+	
+	@Results(id="syspriorprice", value={
+			@Result(column="numbargainingprice", property="numbargainingprice", jdbcType=JdbcType.DECIMAL),
+		    @Result(column="numguidprice", property="numguidprice",jdbcType=JdbcType.DECIMAL)
+	})
+	@ResultType(com.zjezyy.entity.erp.SysPriorPrice.class)
+	@Options(statementType=StatementType.CALLABLE)
+	@Select({ "call usp_customerproduct_sellprice(#{customerid_in,mode=IN,jdbcType=INTEGER},",
+	"#{productid_in,mode=IN,jdbcType=INTEGER},",
+	"#{cur_result,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet,resultMap=syspriorprice})" })
+	void getCustomerProductPrice(Map<String,Object> params);
+	
+	
+	
 	
 }

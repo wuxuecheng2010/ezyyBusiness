@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import com.zjezyy.entity.b2b.MccAddress;
+import com.zjezyy.entity.b2b.MccAddress_Eo;
 @Repository
 @Mapper
 public interface MccAddressMapper {
@@ -27,5 +28,10 @@ public interface MccAddressMapper {
 	@Insert({"insert into ",TABLE_NAME,"("+INSERT_FIELDS+")","values","("+INSERT_VALUES+")"})
 	@Options(useGeneratedKeys=true,keyProperty="address_id",keyColumn="address_id")
 	int insert(MccAddress mccAddress);
+	
+	
+	@Select({"select ", SELECT_FIELDS," ,city_name,country_name,district_name,zone_name ", " from ", " mcc_address_v ", " where customer_id = #{customer_id}  order by  address_id desc limit 1"})
+	MccAddress_Eo getOneBy(int customer_id);
+	
 	
 }

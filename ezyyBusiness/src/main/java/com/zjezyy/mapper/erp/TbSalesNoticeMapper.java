@@ -37,8 +37,11 @@ public interface TbSalesNoticeMapper {
 	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where ibillid=#{ibillid}"})
 	TbSalesNotice getOne(int ibillid);
 	
+	//@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where isourceid=#{isourceid}"})
+	//TbSalesNotice getOneBySourceID(int isourceid);
+	
 	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where isourceid=#{isourceid}"})
-	TbSalesNotice getOneBySourceID(int isourceid);
+	List<TbSalesNotice> getListBySourceID(int isourceid);
 	
 	@Select({"select ",SELECT_FIELDS," from tb_salesnotice where isourceid in (" , 
 			"select ibillid from tb_salesorder where itypeid=#{itypeid} and   isourceid in (" , 

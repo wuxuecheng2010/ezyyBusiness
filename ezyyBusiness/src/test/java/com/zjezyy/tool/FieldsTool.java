@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 public class FieldsTool {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		 Class<?> clazz=	Class.forName("com.zjezyy.entity.b2b.MccTbSalesNotice");
+		 Class<?> clazz=	Class.forName("com.zjezyy.entity.b2b.MccOrderTotal");
 		 String select="";
 		 String insertv="";
 		 int i=0;

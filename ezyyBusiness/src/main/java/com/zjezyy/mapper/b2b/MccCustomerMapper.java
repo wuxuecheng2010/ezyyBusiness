@@ -1,5 +1,7 @@
 package com.zjezyy.mapper.b2b;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -26,5 +28,8 @@ public interface MccCustomerMapper {
 	
 	@Delete({"delete  from ",TABLE_NAME," where customer_id=#{customer_id}"})
 	int delete(int customer_id);
+	
+	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME})
+	List<MccCustomer> getAll();
 	
 }
