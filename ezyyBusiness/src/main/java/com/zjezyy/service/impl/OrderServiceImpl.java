@@ -52,6 +52,7 @@ import com.zjezyy.enums.ExceptionEnum;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.IFBState;
 import com.zjezyy.enums.LanguageEnum;
+import com.zjezyy.enums.MessageGroup;
 import com.zjezyy.enums.OrderComment;
 import com.zjezyy.enums.PayResult;
 import com.zjezyy.enums.Payment;
@@ -102,6 +103,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+
+	
 	@Autowired
 	SystemService systemServiceImpl;
 	
@@ -727,6 +730,9 @@ public class OrderServiceImpl implements OrderService {
 		//更新订单状态
 		mccOrderMapper.updateMccOrderStatus(order_id, order_status_id);
 		
+		//检查是否存在这样的记录了  存在则不保存
+		int count=mccOrderHistoryMapper.countByOrderIDAndStatusID(order_id, Integer.valueOf(order_status_id));
+		if(count==0) {
 		//创建订单历史信息
 		MccOrderHistory mccOrderHistory=new MccOrderHistory();
 		mccOrderHistory.setComment(comment.getComment());
@@ -734,6 +740,7 @@ public class OrderServiceImpl implements OrderService {
 		mccOrderHistory.setOrder_id(order_id);
 		mccOrderHistory.setOrder_status_id(Integer.valueOf(order_status_id));
 		mccOrderHistoryMapper.insert(mccOrderHistory);
+		}
 		
 	}
 
@@ -890,16 +897,18 @@ public class OrderServiceImpl implements OrderService {
 			if(status!=0) {
 				String error=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核失败，影响发货，请人工退款或者继续人工审核,原因：%s", salesnotice_ibillid,msg);
 				log.error(error);
-				systemServiceImpl.sendTelMsg(error, tellist);
+				for(String tel:tellist)
+					systemServiceImpl.sendTelMsg(MessageGroup.B2B付款通知,error, tel);
 				throw new BusinessException(msg,-9998);
 			}else {
-				String info=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核成功", salesnotice_ibillid);
+				String info=String.format("B2B订单成功付款，销售开票 ibillid：%d 审核成功", salesnotice_ibillid);
 				log.info(info);
 			}
 		}else {
 			String error=String.format("B2B订单成功付款，但是销售开票 ibillid：%d 审核失败，原因：%s", salesnotice_ibillid,ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL.getMsg());
 			log.error(error);
-			systemServiceImpl.sendTelMsg(error, tellist);
+			for(String tel:tellist)
+				systemServiceImpl.sendTelMsg(MessageGroup.B2B付款通知,error, tel);
 			throw new BusinessException(res.getMsg(),ExceptionEnum.ERP_SALESNOTICE_HTTP_APPROVAL_FAIL);
 		}
 		

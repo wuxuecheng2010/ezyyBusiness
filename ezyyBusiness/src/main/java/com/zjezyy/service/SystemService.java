@@ -1,10 +1,7 @@
 package com.zjezyy.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-
 import com.zjezyy.entity.erp.SysPriorPrice;
+import com.zjezyy.enums.MessageGroup;
 
 public interface SystemService {
 	
@@ -22,7 +19,7 @@ public interface SystemService {
  	int getTypeId(String bif)throws RuntimeException;
  	
  	//发送手机短信
- 	void sendTelMsg(String msg,List<String> tels);
+ 	void sendTelMsg(MessageGroup  messageGroup,String msg,String tel);
  	
  	//获取客户商品价格
  	SysPriorPrice getSysPriorPrice(int icustomerid,int iproductid);

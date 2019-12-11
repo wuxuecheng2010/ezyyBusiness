@@ -41,7 +41,7 @@ public interface TbSalesOrderMapper {
 	@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where itypeid = #{itypeid} and ifb=#{ifb} and flagperform='Y' and dtcreationdate>sysdate-#{days}"})
 	List<TbSalesOrder> getPerformListByTypeIDAndIFBAndDays(int itypeid,int ifb,int days);
 	
-	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where isourceid=#{isourceid} and itypeid=#{itypeid}"})
+	@Select({"Select ",SELECT_FIELDS," from ",TABLE_NAME," where isourceid=#{isourceid} and itypeid=#{itypeid} and dtcreationdate>sysdate-90"})
 	List<TbSalesOrder> getListBySourceID(int isourceid,int itypeid);
 	
 	

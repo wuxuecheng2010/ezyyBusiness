@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.zjezyy.config.DBConfigERP;
+import com.zjezyy.config.DBConfigERP2;
 import com.zjezyy.config.DBConfigB2B;
 import com.zjezyy.config.DBConfigWMS;
 
@@ -20,7 +21,7 @@ import com.zjezyy.config.DBConfigWMS;
 @SpringBootApplication
 @MapperScan(basePackages="com.zjezyy.mapper")
 @EnableScheduling
-@EnableConfigurationProperties(value= {DBConfigERP.class,DBConfigWMS.class,DBConfigB2B.class})
+@EnableConfigurationProperties(value= {DBConfigERP.class,DBConfigERP2.class,DBConfigWMS.class,DBConfigB2B.class})
 
 public class EzyyBusinessApplication {
 

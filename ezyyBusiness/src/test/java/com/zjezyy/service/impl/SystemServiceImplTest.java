@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zjezyy.enums.MessageGroup;
 import com.zjezyy.service.SystemService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,11 @@ public class SystemServiceImplTest {
 		System.out.println(x);
 	}
 	
+	@Test
+	public void testsendTelMsg() {
+		
+		systemServiceImpl.sendTelMsg(MessageGroup.转仓单超时通知,"Hello WCY", "15990683720");
+	}
 	
 	
 	

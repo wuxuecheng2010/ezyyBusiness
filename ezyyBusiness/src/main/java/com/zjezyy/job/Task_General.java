@@ -1,6 +1,5 @@
 package com.zjezyy.job;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,16 +28,24 @@ import com.zjezyy.service.OrderService;
 import com.zjezyy.service.PayService;
 import com.zjezyy.service.ProductService;
 import com.zjezyy.service.SettingService;
+import com.zjezyy.service.StorePositionChangeService;
 import com.zjezyy.utils.business.LogUtil;
 
 import lombok.extern.slf4j.Slf4j;
-
-@Component
+/*
+@Scheduled(fixedRate = 6000) ：上一次开始执行时间点之后6秒再执行
+@Scheduled(fixedDelay = 6000) ：上一次执行完毕时间点之后6秒再执行
+@Scheduled(initialDelay=1000, fixedRate=6000) ：第一次延迟1秒后执行，之后按fixedRate的规则每6秒执行一次
+*/
+//@Component
 @Slf4j
 public class Task_General {
 
 	@Autowired
 	ProductService productServiceImpl;
+	
+	@Autowired
+	StorePositionChangeService storePositionChangeServiceImpl;
 
 	@Autowired
 	OrderService orderServiceImpl;
@@ -342,7 +349,7 @@ public class Task_General {
 		BusinessInterfaceType[] busarray = { BusinessInterfaceType.B2BToERPOnLine,
 				BusinessInterfaceType.B2BToERPUnderLine };
 		// BusinessInterfaceType[] busarray={BusinessInterfaceType.B2BToERPOnLine};
-		int days = 7;
+		int days = 30;
 
 		for (BusinessInterfaceType businessInterfaceType : busarray) {
 			int itypeid = businessInterfaceType.getCode();
@@ -379,5 +386,13 @@ public class Task_General {
 	// productServiceImpl.doSynchronizeCustomerProductPrice();
 
 	// }
+	
+	
+	//WMS或者ERP相关业务通知  每天一次
+	@Scheduled(initialDelay = 10000,fixedRate = 86400)
+	public void dayOnceTimer() throws Exception {
+		//转仓通知信息
+		storePositionChangeServiceImpl.notifyTimeOutOrder();
+	}
 
 }

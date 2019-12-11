@@ -3,6 +3,7 @@ package com.zjezyy.mapper.b2b;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import com.zjezyy.entity.b2b.MccOrderHistory;
@@ -21,5 +22,8 @@ public interface MccOrderHistoryMapper {
 	@Insert({"insert into ",TABLE_NAME,"("+INSERT_FIELDS+")","values","("+INSERT_VALUES+")"})
 	@Options(useGeneratedKeys=true,keyProperty="order_history_id",keyColumn="order_history_id")
 	int insert(MccOrderHistory mccOrderHistory);
+	
+	@Select({" select count(1) num from mcc_order_history where order_id=#{order_id} and order_status_id=#{order_status_id}"})
+	int countByOrderIDAndStatusID(int order_id, int order_status_id);
 	
 }

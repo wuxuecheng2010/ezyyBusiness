@@ -26,5 +26,14 @@ public class MccOrderHistoryMapperTest {
 		mccOrderHistoryMapper.insert(mccOrderHistory);
 		System.out.println(mccOrderHistory.getOrder_history_id());
 	}
+	
+	@Test
+	public void testcountByOrderIDAndStatusID() {
+		
+	int i=	mccOrderHistoryMapper.countByOrderIDAndStatusID(2885, 2);
+		System.out.println(i);
+	}
+	
+	
 
 }
