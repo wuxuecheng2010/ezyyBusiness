@@ -43,7 +43,7 @@ public class Task_General {
 
 	@Autowired
 	ProductService productServiceImpl;
-	
+	   
 	@Autowired
 	StorePositionChangeService storePositionChangeServiceImpl;
 
