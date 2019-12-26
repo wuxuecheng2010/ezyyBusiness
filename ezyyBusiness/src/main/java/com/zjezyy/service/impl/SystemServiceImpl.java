@@ -137,6 +137,25 @@ public class SystemServiceImpl implements SystemService {
 		}
 		return sysPriorPrice;
 	}
+	
+	
+	//获取客户可以销售的商品库存数据
+	@Override
+	public Map<String, Object> getCustomerCanBuyProduct(int icustomerid, int iproductid) throws RuntimeException {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("customerid_in", String.valueOf(icustomerid));
+		map.put("productid_in", String.valueOf(iproductid));
+		map.put("salesnoticedetailid_in", "-1");
+		map.put("errmsg_out", null);
+		map.put("cur_result", null);
+		systemMapper.getCustomerCanBuyProduct(map);
+		//List<SysCustomerProductCanSale> list = (List<SysCustomerProductCanSale>) map.get("cur_result");
+		//String errmsg_out=(String) map.get("errmsg_out");
+		return map;
+	}
+	
+	
 
 	@Override
 	public void sendTelMsg(MessageGroup  messageGroup,String msg, String  tel) {

@@ -29,6 +29,7 @@ import com.zjezyy.entity.b2b.MccPayResult;
 import com.zjezyy.entity.b2b.MccProduct;
 import com.zjezyy.entity.b2b.MccProduct_Eo;
 import com.zjezyy.entity.b2b.MccTbSalesNotice;
+import com.zjezyy.entity.erp.SysCustomerProductCanSale;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbLisenceCustomer_Eo;
 import com.zjezyy.entity.erp.TbManagement;
@@ -71,6 +72,7 @@ import com.zjezyy.mapper.b2b.MccOrderTotalMapper;
 import com.zjezyy.mapper.b2b.MccPayResultMapper;
 import com.zjezyy.mapper.b2b.MccProductMapper;
 import com.zjezyy.mapper.b2b.MccTbSalesNoticeMapper;
+import com.zjezyy.mapper.erp.SystemMapper;
 import com.zjezyy.mapper.erp.TbCustomerKindPriceMapper;
 import com.zjezyy.mapper.erp.TbCustomerMapper;
 import com.zjezyy.mapper.erp.TbLisenceCustomerMapper;
@@ -461,6 +463,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			
 			
+			
 			TbCustomer tbCustomer =tbCustomerMapper.getOne(tbSalesOrder.getIcustomerid());
 			String vcbillcode=systemServiceImpl.genBillCodeForTransactional(salesnoticeBillPrefix);
 			int itypeid=2 ;//单据类型 默认1 直接开票 2从订单导入 3招标网导入 4缺货导入,5销售冲价
@@ -480,6 +483,10 @@ public class OrderServiceImpl implements OrderService {
 			List<TbSalesOrderS> list=entry.getValue();
 			float numqueue=1.0f;
 			for(TbSalesOrderS tbSalesOrderS:list) {
+				
+				//判断客户是否有该商品的销售权限 经营范围等
+				checkCustomerCansale(tbCustomer, tbSalesOrderS);
+				
 				//BigDecimal _price=tbSalesOrderS.getNumprice();
 				//BigDecimal _quantity=tbSalesOrderS.getNumquantity()
 				//BigDecimal numquantity=new BigDecimal(1);
@@ -534,6 +541,38 @@ public class OrderServiceImpl implements OrderService {
 			
 		}
 		
+	}
+
+	/**
+	* @Title: checkCustomerCansale
+	* @Description: TODO(这里用一句话描述这个方法的作用)
+	* @param @param tbCustomer
+	* @param @param tbSalesOrderS
+	* @param @throws RuntimeException
+	* @param @throws BusinessException    参数
+	* @author wuxuecheng
+	* @return void    返回类型
+	* @throws
+	*/
+	public void checkCustomerCansale(TbCustomer tbCustomer, TbSalesOrderS tbSalesOrderS)
+			throws RuntimeException, BusinessException {
+		Map<String,Object> cansalMap=systemServiceImpl.getCustomerCanBuyProduct(tbCustomer.getIcustomerid(), tbSalesOrderS.getIproductid());
+		List<SysCustomerProductCanSale> cansallist = (List<SysCustomerProductCanSale>) cansalMap.get("cur_result");
+		String errmsg_out=(String) cansalMap.get("errmsg_out");
+		
+		String ErrMsg="商品:%s %s,下单过程中出现以下问题: %s,请取消此商品后再下单";
+		if(errmsg_out!=null) {
+			throw new BusinessException(String.format(ErrMsg,tbSalesOrderS.getVcuniversalname(),tbSalesOrderS.getVcstandard() ,errmsg_out),-2);
+		}
+		
+		if(cansallist==null||cansallist.size()==0) {
+			throw new BusinessException(String.format(ErrMsg, tbSalesOrderS.getVcuniversalname(),tbSalesOrderS.getVcstandard(),"无可售库存"),-3);
+		}
+		
+		String numopen=cansallist.get(0).getNumopen();
+		if("0".equals(numopen)) {
+			throw new BusinessException(String.format(ErrMsg, tbSalesOrderS.getVcuniversalname(),tbSalesOrderS.getVcstandard(),"无可售库存"),-4);
+		}
 	}
 	
 	private boolean checkStockEnough(List<TbStocks> stocklist, TbSalesOrderS tbSalesOrderS) {

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zjezyy.entity.erp.SysCustomerProductCanSale;
 import com.zjezyy.entity.erp.SysPriorPrice;
 import com.zjezyy.entity.erp.TbUnit;
 
@@ -80,4 +81,23 @@ public class SystemMapperTest {
 
 	}
 
+	
+	@Test
+	public void testgetCustomerCanBuyProduct() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("customerid_in", "2161");
+		map.put("productid_in", "1727");
+		map.put("salesnoticedetailid_in", "-1");
+		map.put("errmsg_out", null);
+		map.put("cur_result", null);
+		systemMapper.getCustomerCanBuyProduct(map);
+		List<SysCustomerProductCanSale> list = (List<SysCustomerProductCanSale>) map.get("cur_result");
+		String errmsg_out=(String) map.get("errmsg_out");
+		if (list != null && list.size() > 0)
+			System.out.println(list.get(0).getNumopen());
+
+	}
+	
+	
+	
 }

@@ -1,5 +1,7 @@
 package com.zjezyy.service;
 
+import java.util.Map;
+
 import com.zjezyy.entity.erp.SysPriorPrice;
 import com.zjezyy.enums.MessageGroup;
 
@@ -23,5 +25,7 @@ public interface SystemService {
  	
  	//获取客户商品价格
  	SysPriorPrice getSysPriorPrice(int icustomerid,int iproductid);
+
+	Map<String, Object> getCustomerCanBuyProduct(int icustomerid, int iproductid) throws RuntimeException;
  	
 }

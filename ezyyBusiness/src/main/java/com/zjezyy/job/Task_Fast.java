@@ -20,7 +20,7 @@ import com.zjezyy.service.SettingService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+//@Component
 @Slf4j
 public class Task_Fast {
 

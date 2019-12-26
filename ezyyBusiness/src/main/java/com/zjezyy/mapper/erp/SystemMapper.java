@@ -139,5 +139,19 @@ CREATE OR REPLACE PROCEDURE getunittest_ (
 	
 	
 	
+	@Results(id="syscuspro", value={
+			@Result(column="numopen", property="numopen", jdbcType=JdbcType.DECIMAL),
+		    @Result(column="vcuniversalname", property="vcuniversalname",jdbcType=JdbcType.VARCHAR)
+	})
+	@ResultType(com.zjezyy.entity.erp.SysCustomerProductCanSale.class)
+	@Options(statementType=StatementType.CALLABLE)
+	@Select({ "call usp_CusProduct_WMSCansell(#{customerid_in,mode=IN,jdbcType=INTEGER},",
+	"#{productid_in,mode=IN,jdbcType=INTEGER},",
+	"#{salesnoticedetailid_in,mode=IN,jdbcType=INTEGER},",
+	 "#{errmsg_out,mode=OUT,jdbcType=VARCHAR},",	
+	"#{cur_result,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet,resultMap=syscuspro})" })
+	void getCustomerCanBuyProduct(Map<String,Object> params);
+	
+	
 	
 }

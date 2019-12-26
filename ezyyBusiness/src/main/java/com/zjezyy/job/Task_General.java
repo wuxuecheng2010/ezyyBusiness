@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Scheduled(fixedDelay = 6000) ：上一次执行完毕时间点之后6秒再执行
 @Scheduled(initialDelay=1000, fixedRate=6000) ：第一次延迟1秒后执行，之后按fixedRate的规则每6秒执行一次
 */
-//@Component
+@Component
 @Slf4j
 public class Task_General {
 
@@ -389,7 +389,7 @@ public class Task_General {
 	
 	
 	//WMS或者ERP相关业务通知  每天一次
-	@Scheduled(initialDelay = 10000,fixedRate = 86400)
+	@Scheduled(initialDelay = 10000,fixedRate = 86400000)
 	public void dayOnceTimer() throws Exception {
 		//转仓通知信息
 		storePositionChangeServiceImpl.notifyTimeOutOrder();
