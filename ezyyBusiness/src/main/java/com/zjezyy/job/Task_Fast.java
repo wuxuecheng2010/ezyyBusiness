@@ -53,7 +53,7 @@ public class Task_Fast {
 	
 
 	// 5、定时检查支付状态 及相应处理
-	@Scheduled(initialDelay = 50, fixedRate = 3000)
+	@Scheduled(initialDelay = 50, fixedDelay = 3000)
 	public void unpayOrderStatusQuery() throws Exception {
 		int order_expire_time=Integer.valueOf(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_EXPIRE_TIME));
 		int order_unpay_status=Integer.valueOf(settingServiceImpl.getEzyySettingValue(EzyySettingKey.ORDER_UNPAY_STATUS));

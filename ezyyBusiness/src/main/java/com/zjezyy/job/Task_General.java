@@ -83,7 +83,7 @@ public class Task_General {
 	private String mode;
 
 	// 0、同步erp商品信息到b2b 全部
-	@Scheduled(initialDelay = 1000, fixedRate = 3600000)
+	@Scheduled(initialDelay = 120000, fixedDelay = 3600000)
 	public void productforb2b() {
 
 		// 获得当前类名
@@ -111,7 +111,7 @@ public class Task_General {
 	}
 
 	// 1、 同步B2B上下架(根据低储信息、b2b集合是否维护)
-	@Scheduled(initialDelay = 1000, fixedRate = 150000)
+	@Scheduled(initialDelay = 100000, fixedDelay = 150000)
 	public void onOff() throws Exception {
 
 		// 获得当前类名
@@ -186,7 +186,7 @@ public class Task_General {
 	 */
 
 	// 3.1、同步B2B的中包装信息
-	@Scheduled(initialDelay = 300, fixedRate = 250000)
+	@Scheduled(initialDelay = 300000, fixedDelay = 250000)
 	public void b2bProductPacksize() throws Exception {
 		// 获取B2B商品列表
 		List<MccProduct> list = mccProductMapper.getAll();
@@ -238,7 +238,7 @@ public class Task_General {
 	}
 
 	// 4、同步B2B库存
-	@Scheduled(initialDelay = 4000, fixedRate = 150000)
+	@Scheduled(initialDelay = 400000, fixedDelay = 150000)
 	public void b2bStock() throws Exception {
 
 		// 获得当前类名
@@ -261,7 +261,7 @@ public class Task_General {
 	}
 
 	// 6、定时检查支付状态 超时未付款处理
-	@Scheduled(initialDelay = 100, fixedRate = 3000)
+	@Scheduled(initialDelay = 1000, fixedDelay = 3000)
 	public void unpayExpireOrderStatusQuery() throws Exception {
 		// log.info("6、定时检查支付状态 及相应处理");
 		int order_expire_time = Integer
@@ -286,7 +286,7 @@ public class Task_General {
 	}
 
 	// 7、根据客户集合信息
-	@Scheduled(initialDelay = 150, fixedRate = 3000)
+	@Scheduled(initialDelay = 180000, fixedDelay = 3000)
 	public void customerkind() throws Exception {
 
 		productServiceImpl.doSynchronizeCustomerKind();
@@ -294,7 +294,7 @@ public class Task_General {
 	}
 
 	// 8、根据客户集合 同步商品价格体系
-	@Scheduled(initialDelay = 200, fixedRate = 3000)
+	@Scheduled(initialDelay = 210000, fixedDelay = 3000)
 	public void customerkindprice() throws Exception {
 
 		productServiceImpl.doSynchronizeCustomerKindPrice();
@@ -303,7 +303,7 @@ public class Task_General {
 
 	// 9、系统内或者授信客户单据传递ERP操作
 	// --20190910 ok
-	@Scheduled(initialDelay = 3000, fixedRate = 18000)
+	@Scheduled(initialDelay = 3000, fixedDelay = 18000)
 	public void creditOrderToERP() throws Exception {
 
 		// 1、获取授信客户订单列表
@@ -322,7 +322,7 @@ public class Task_General {
 	}
 
 	// 10、药店单据往B2B系统传递任务
-	@Scheduled(initialDelay = 6000, fixedRate = 18000)
+	@Scheduled(initialDelay = 6000, fixedDelay = 18000)
 	public void ydOrderToMccOrder() throws Exception {
 		
 		//1、获取药店订单数据
@@ -342,7 +342,7 @@ public class Task_General {
 	}
 
 	// 11、ERP单据处理结果信息反馈B2B
-	@Scheduled(initialDelay = 9000, fixedRate = 27000)
+	@Scheduled(initialDelay = 9000, fixedDelay = 18000)
 	public void erpToB2B() throws Exception {
 
 		// 业务类型
@@ -389,7 +389,7 @@ public class Task_General {
 	
 	
 	//WMS或者ERP相关业务通知  每天一次
-	@Scheduled(initialDelay = 10000,fixedRate = 86400000)
+	@Scheduled(initialDelay = 10000,fixedDelay = 86400000)
 	public void dayOnceTimer() throws Exception {
 		//转仓通知信息
 		storePositionChangeServiceImpl.notifyTimeOutOrder();
