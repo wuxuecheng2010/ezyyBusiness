@@ -18,11 +18,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.zjezyy.entity.erp.TbCustomer;
 import com.zjezyy.entity.erp.TbSalesOrderS;
 import com.zjezyy.entity.erp.TbStocks;
+import com.zjezyy.entity.pms.TmpPurchaseHT;
 import com.zjezyy.enums.BusinessInterfaceType;
 import com.zjezyy.enums.DeployPolicyEnum;
 import com.zjezyy.mapper.erp.TbCustomerMapper;
 import com.zjezyy.mapper.erp.TbSalesOrderSMapper;
 import com.zjezyy.mapper.erp.TbStocksMapper;
+import com.zjezyy.mapper.pms.TmpPurchaseHTMapper;
 import com.zjezyy.service.OrderService;
 import com.zjezyy.service.PayService;
 import com.zjezyy.service.SystemService;
@@ -40,6 +42,9 @@ public class OrderServiceImplTest {
 	SystemService systemServiceImpl;
 	@Autowired
 	TbCustomerMapper tbCustomerMapper;
+	
+	@Autowired
+	TmpPurchaseHTMapper tmpPurchaseHTMapper;
 	
 	@Resource(name="wxPayServiceImpl")
 	PayService wxPayServiceImpl;
@@ -71,6 +76,30 @@ public class OrderServiceImplTest {
 	@Test
 	public void testmakeTbMccOrderToTbSalesOrder() {
 		orderServiceImpl.makeTbMccOrderToTbSalesOrder(43, 3);
+		
+	}
+	
+	@Test
+	public void testydOrderToMccOrder() {
+		
+
+		
+		//1、获取药店订单数据
+    	 List<TmpPurchaseHT> list= tmpPurchaseHTMapper.getListNotSendToMcc();
+				
+		//2、往B2B传输订单	
+    	 for(TmpPurchaseHT tmpPurchaseHT:list) {
+    		 try {
+    			 log.info("药店采购合同单号:{}，开始处理.", tmpPurchaseHT.getVcbillno());
+    			 orderServiceImpl.ydOrderToMccOrder(tmpPurchaseHT);
+    			 log.info("药店采购合同单号:{}，处理结束.", tmpPurchaseHT.getVcbillno());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	 }
+    	 
+	
+		
 		
 	}
 	

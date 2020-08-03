@@ -10,9 +10,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.zjezyy.entity.b2b.MccOrder;
+import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.enums.EzyySettingKey;
 import com.zjezyy.enums.Payment;
 import com.zjezyy.mapper.b2b.MccOrderMapper;
+import com.zjezyy.mapper.erp.TbProductinfoMapper;
 import com.zjezyy.service.OrderService;
 import com.zjezyy.service.PayService;
 import com.zjezyy.service.ProductService;
@@ -20,7 +22,7 @@ import com.zjezyy.service.SettingService;
 
 import lombok.extern.slf4j.Slf4j;
 
-//@Component
+@Component
 @Slf4j
 public class Task_Fast {
 
@@ -39,6 +41,8 @@ public class Task_Fast {
 	@Autowired
 	MccOrderMapper mccOrderMapper;
 	
+	@Autowired
+	TbProductinfoMapper tbProductinfoMapper;
 	
 	@Resource(name = "aliPayServiceImpl")
 	PayService aliPayServiceImpl;
@@ -93,6 +97,13 @@ public class Task_Fast {
 	}
 
 	
-
+//心跳
+	@Scheduled(initialDelay = 50, fixedDelay = 3600000)
+	public void beat() throws Exception {
+		int iproductid=1;
+		TbProductinfo tbProductinfo = tbProductinfoMapper.getOne(iproductid);
+		
+		
+	}
 
 }
