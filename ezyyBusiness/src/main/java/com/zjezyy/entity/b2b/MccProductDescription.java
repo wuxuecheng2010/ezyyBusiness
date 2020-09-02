@@ -1,7 +1,10 @@
 package com.zjezyy.entity.b2b;
 
+import java.util.regex.Pattern;
+
 import com.zjezyy.entity.erp.TbProductinfo;
 import com.zjezyy.enums.LanguageEnum;
+import com.zjezyy.utils.DataUtil;
 
 import lombok.Data;
 
@@ -37,7 +40,10 @@ public class MccProductDescription {
      public MccProductDescription(int product_id,LanguageEnum language,TbProductinfo tbProductinfo) {
     	 
     	this.product_id=product_id;
- 		this.name = tbProductinfo.getVcuniversalname();
+    	String vcuniversalname=tbProductinfo.getVcuniversalname();
+    	vcuniversalname=DataUtil.formatNameSubfix(vcuniversalname);
+    	
+ 		this.name = vcuniversalname;
  		String title=new StringBuilder().append(tbProductinfo.getVcproductname()).append(" ").append(tbProductinfo.getVcproductname()).toString();
  		this.meta_title = title;
  		this.meta_keyword = title;
@@ -50,6 +56,6 @@ public class MccProductDescription {
  		
 	}
 	
-	
+     
 
 }

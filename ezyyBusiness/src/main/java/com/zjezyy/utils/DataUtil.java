@@ -3,6 +3,7 @@ package com.zjezyy.utils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,5 +26,29 @@ public class DataUtil {
         return resultMap;
     }
 	
+    
+    
+  //末尾数是数字的删除  循环删除，直到“”
+    public static String formatNameSubfix(String vcuniversalname) {
+
+
+		if(vcuniversalname!=null && vcuniversalname.length()>0)
+		{
+			String subfix=vcuniversalname.substring(vcuniversalname.length()-1,vcuniversalname.length());
+			Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$"); 
+		    boolean flag= pattern.matcher(subfix).matches(); 
+			if(flag) {
+				vcuniversalname=vcuniversalname.substring(0,vcuniversalname.length()-1);
+				vcuniversalname=formatNameSubfix(vcuniversalname);
+			}else {
+				
+				return  vcuniversalname;
+			}
+				
+		}
+		
+		return vcuniversalname;
+	} 
+    
 
 }
