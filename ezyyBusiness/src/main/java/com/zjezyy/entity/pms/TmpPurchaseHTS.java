@@ -18,7 +18,7 @@ public class TmpPurchaseHTS {
 	private BigDecimal numprice; 
 	private BigDecimal nummoney; 
 	private BigDecimal numnumberdh; 
-	private Integer isourceid; 
+	private String isourceid; 
 	private BigDecimal numlow; 
 	private BigDecimal numhigh; 
 	private BigDecimal numstock; 
